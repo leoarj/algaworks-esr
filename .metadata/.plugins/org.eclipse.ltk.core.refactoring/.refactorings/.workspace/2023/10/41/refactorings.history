@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;algafood-api&apos;" deleteContents="true" description="Delete resource &apos;algafood-api&apos;" element1="/algafood-api" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1697305451864"/>
-</session>
