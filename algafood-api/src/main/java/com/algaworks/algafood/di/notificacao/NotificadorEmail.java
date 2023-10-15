@@ -1,16 +1,16 @@
 package com.algaworks.algafood.di.notificacao;
 
-//import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 
 /*
- * Se anotarmos mais de um canditato com @Primary,
- * obteremos uma "org.springframework.beans.factory.NoUniqueBeanDefinitionException".
+ * Qualificando como "normal" o bean "NotificadorEmail".
+ * Qualificação deve estar presente também na classe consumidora da dependência.
  */
 
-//@Primary
+@Qualifier("normal")
 @Component
 public class NotificadorEmail implements Notificador {
 	
@@ -20,3 +20,4 @@ public class NotificadorEmail implements Notificador {
 				cliente.getNome(), cliente.getEmail(), mensagem);
 	}
 }
+

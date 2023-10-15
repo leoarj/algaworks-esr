@@ -1,15 +1,16 @@
 package com.algaworks.algafood.di.notificacao;
 
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 
 /*
- * Anotação @Primary para dizer qual bean tem precedência no gerenciamento e injeção.
+ * Qualificando como "urgente" o bean "NotificadorSMS".
+ * Qualificação deve estar presente também na classe consumidora da dependência.
  */
 
-@Primary
+@Qualifier("urgente")
 @Component
 public class NotificadorSMS implements Notificador {
 	
