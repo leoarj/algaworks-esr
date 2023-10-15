@@ -9,7 +9,13 @@ import com.algaworks.algafood.di.modelo.Cliente;
  * anotação @Autowired.
  */
 
-@Component
+/*
+ * NotificadorEmail não estando como componente.
+ * Como classe que o utiliza anotou como required = false,
+ * então não há problemas no boot da aplicação.
+ */
+
+//@Component
 public class NotificadorEmail implements Notificador {
 	
 	@Override

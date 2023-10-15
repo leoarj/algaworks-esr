@@ -14,7 +14,11 @@ import com.algaworks.algafood.di.notificacao.Notificador;
 @Component
 public class AtivacaoClienteService {
 
-	//@Autowired
+	/*
+	 * Torna a dependência opcional.
+	 */
+	
+	@Autowired(required = false)
 	private Notificador notificador;
 	
 	/*
@@ -27,20 +31,24 @@ public class AtivacaoClienteService {
 	 * mesmo que o tipo dos argumentos sejam diferentes.
 	 */
 	
-	@Autowired
-	public AtivacaoClienteService(Notificador notificador) {
-		this.notificador = notificador;
-		
-		System.out.println("AtivacaoClienteService: " + notificador);
-	}
+//	@Autowired
+//	public AtivacaoClienteService(Notificador notificador) {
+//		this.notificador = notificador;
+//		
+//		System.out.println("AtivacaoClienteService: " + notificador);
+//	}
 	
-	public AtivacaoClienteService(String qualquer) {}
+//	public AtivacaoClienteService(String qualquer) {}
 
 
 	public void ativarCliente(Cliente cliente) {
 		cliente.ativar();
 		
-		notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+		if (notificador != null) {
+			notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+		} else {
+			System.out.println("Não existe notificador, mas cliente foi ativado");
+		}
 	}
 	
 //	@Autowired
