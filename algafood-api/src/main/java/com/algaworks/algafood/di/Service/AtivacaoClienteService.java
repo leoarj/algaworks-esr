@@ -5,6 +5,12 @@ package com.algaworks.algafood.di.Service;
 import com.algaworks.algafood.di.modelo.Cliente;
 import com.algaworks.algafood.di.notificacao.Notificador;
 
+/*
+ * Com uma classe de Config para retonar um bean de AtivacaoClienteService,
+ * não há necessidade de anotar AtivacaoClienteService com @Component,
+ * removendo assim um acoplamento com o Spring.
+ */
+
 //@Component
 public class AtivacaoClienteService {
 

@@ -4,6 +4,14 @@ package com.algaworks.algafood.di.notificacao;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 
+/*
+ * Com uma classe de Config para retonar um bean de NotificadorEmail,
+ * não há necessidade de anotar NotificadorEmail com @Component,
+ * removendo assim um acoplamento com o Spring.
+ * 
+ * Obs.: Utilizar essa dependência como referência de interface (Notificador).
+ */
+
 //@Component
 public class NotificadorEmail implements Notificador {
 

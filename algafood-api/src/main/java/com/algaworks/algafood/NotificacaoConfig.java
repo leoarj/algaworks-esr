@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 import com.algaworks.algafood.di.notificacao.NotificadorEmail;
 
+/*
+ * Classe de definição exclusiva para NotificadorEmail.
+ */
+
 @Configuration
 public class NotificacaoConfig {
 

@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Bean;
 import com.algaworks.algafood.di.Service.AtivacaoClienteService;
 import com.algaworks.algafood.di.notificacao.NotificadorEmail;
 
+/*
+ * Exemplo de classe de config para gerenciar beans de NotificadorEmail e AtivacaoClienteService.
+ */
+
 //@Configuration
 public class AlgaConfig {
 
