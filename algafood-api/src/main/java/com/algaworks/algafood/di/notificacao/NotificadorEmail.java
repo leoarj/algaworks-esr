@@ -1,16 +1,15 @@
 package com.algaworks.algafood.di.notificacao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 
 /*
- * Qualificando como "normal" o bean "NotificadorEmail".
+ * Qualificando com anotação customizada o bean "NotificadorEmail".
  * Qualificação deve estar presente também na classe consumidora da dependência.
  */
 
-@Qualifier("normal")
+@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
 @Component
 public class NotificadorEmail implements Notificador {
 	

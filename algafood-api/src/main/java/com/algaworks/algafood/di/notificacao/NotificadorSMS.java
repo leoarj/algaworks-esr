@@ -1,16 +1,15 @@
 package com.algaworks.algafood.di.notificacao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 
 /*
- * Qualificando como "urgente" o bean "NotificadorSMS".
+ * Qualificando com anotação customizada o bean "NotificadorSMS".
  * Qualificação deve estar presente também na classe consumidora da dependência.
  */
 
-@Qualifier("urgente")
+@TipoDoNotificador(NivelUrgencia.URGENTE)
 @Component
 public class NotificadorSMS implements Notificador {
 	
