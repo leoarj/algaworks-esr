@@ -1,59 +1,38 @@
 package com.algaworks.algafood.di.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 import com.algaworks.algafood.di.notificacao.Notificador;
 
-/*
- * Revertendo NotificadorEmail anotado com @Component para testar
- * anotação @Autowired.
- */
-
 @Component
 public class AtivacaoClienteService {
 
 	/*
-	 * Torna a dependência opcional.
-	 */
-	
-	@Autowired(required = false)
-	private Notificador notificador;
-	
-	/*
-	 * Uso mais comum é no construtor, por questões de convenção
-	 * e clareza das dependências da classe.
+	 * Injetado beans como uma lista, para realizar a desambiguação.
+	 * Útil nos casos em que todas as implementações da dependência
+	 * podem ou devem ser executadas.
 	 * 
-	 * Como há dois construtores como exemplo,
-	 * um deles deve ser anotado com @Autowired para que o container
-	 * saiba em qual gerenciar a injeção de dependência,
-	 * mesmo que o tipo dos argumentos sejam diferentes.
+	 * Observar que o consumo das dependências deve ser modificado para uma iteração.
 	 */
 	
-//	@Autowired
-//	public AtivacaoClienteService(Notificador notificador) {
-//		this.notificador = notificador;
-//		
-//		System.out.println("AtivacaoClienteService: " + notificador);
-//	}
+	@Autowired
+	private List<Notificador> notificadores;
 	
-//	public AtivacaoClienteService(String qualquer) {}
-
 
 	public void ativarCliente(Cliente cliente) {
 		cliente.ativar();
 		
-		if (notificador != null) {
-			notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
-		} else {
-			System.out.println("Não existe notificador, mas cliente foi ativado");
-		}
+		notificadores.forEach(
+				notificador -> notificador.notificar(cliente, "Seu cadastro no sistema está ativo!"));
+		
+//		for (Notificador notificador : notificadores) {
+//			notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+//		}
+		
 	}
-	
-//	@Autowired
-//	public void setNotificador(Notificador notificador) {
-//		this.notificador = notificador;
-//	}
 	
 }
