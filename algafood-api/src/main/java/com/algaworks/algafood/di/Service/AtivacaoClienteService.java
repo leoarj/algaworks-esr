@@ -1,11 +1,11 @@
 package com.algaworks.algafood.di.Service;
 
-import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
 import com.algaworks.algafood.di.notificacao.Notificador;
 
-@Component
+//@Component
 public class AtivacaoClienteService {
 
 	private Notificador notificador;
@@ -20,7 +20,7 @@ public class AtivacaoClienteService {
 	public void ativarCliente(Cliente cliente) {
 		cliente.ativar();
 		
-		notificador.notificarCliente(cliente, "Seu cadastro no sistema está ativo!");
+		notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
 	}
 	
 }
