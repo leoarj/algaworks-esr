@@ -16,7 +16,7 @@ public class AtivacaoClienteService {
 	 * Mesma anotação deve estar no bean fornecido.
 	 */
 	
-	@TipoDoNotificador(NivelUrgencia.URGENTE)
+	@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
 	@Autowired
 	private Notificador notificador;
 	
