@@ -9,9 +9,9 @@ import com.algaworks.algafood.di.modelo.Cliente;
 * Anotação @Profile diz que o componente ficará disponível em determinado ambiente (desenvolvimento).
 */
 
-@Profile("dev")
-@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
-@Component
+//@Profile("dev")
+//@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
+//@Component // Comentado para não ser escaneado e gerenciado pelo container.
 public class NotificadorEmailMock implements Notificador {
 	
 	public NotificadorEmailMock() {

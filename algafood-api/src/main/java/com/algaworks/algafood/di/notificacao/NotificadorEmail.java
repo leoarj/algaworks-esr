@@ -10,7 +10,7 @@ import com.algaworks.algafood.di.modelo.Cliente;
 * Anotação @Profile diz que o componente ficará disponível em determinado ambiente (produção).
 */
 
-@Profile("prod")
+//@Profile("prod")
 @TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
 @Component
 public class NotificadorEmail implements Notificador {
@@ -21,9 +21,9 @@ public class NotificadorEmail implements Notificador {
 	@Autowired
 	private NotificadorProperties properties;
 	
-	public NotificadorEmail() {
-		System.out.println("NotificadorEmail REAL");
-	}
+//	public NotificadorEmail() {
+//		System.out.println("NotificadorEmail REAL");
+//	}
 	
 	@Override
 	public void notificar(Cliente cliente, String mensagem) {
