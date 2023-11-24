@@ -1,50 +1,29 @@
 package com.algaworks.algafood.di.Service;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.di.modelo.Cliente;
-import com.algaworks.algafood.di.notificacao.NivelUrgencia;
-import com.algaworks.algafood.di.notificacao.Notificador;
-import com.algaworks.algafood.di.notificacao.TipoDoNotificador;
 
-//@Component
+@Component
 public class AtivacaoClienteService {
 	
-	/*
-	 * Qualificando qual bean será injetado.
-	 * Mesma anotação deve estar no bean fornecido.
-	 */
+	// Removido do serviço de ativação a responsabilidade específica de notificar.
 	
-	@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
+	/**
+	 * Componente do Spring para disparar eventos dentro da aplicação.
+	 * Esses eventos vão ser capturados por outros componentes
+	 * e decidirão o que executar com base no evento recebido.
+	 * */
 	@Autowired
-	private Notificador notificador;
-	
-	/**
-	 * Anotação @PostConstruct indica um método
-	 * que deve ser executado após a criação do objeto.
-	 */
-	//@PostConstruct
-	public void init() {
-		System.out.println("INIT " + notificador);
-	}
-	
-	/**
-	 * Anotação @PreDestroy indica um método
-	 * que deve ser executado antes da destruição do objeto.
-	 */
-	//@PreDestroy
-	public void destroy() {
-		System.out.println("DESTROY");
-	}
+	private ApplicationEventPublisher eventPublisher;
 	
 	public void ativarCliente(Cliente cliente) {
 		cliente.ativar();
 		
-		notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+		//notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+		eventPublisher.publishEvent(new ClienteAtivadoEvent(cliente));
 		
 	}
 	
