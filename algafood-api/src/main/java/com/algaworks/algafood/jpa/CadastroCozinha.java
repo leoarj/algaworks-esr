@@ -23,6 +23,10 @@ public class CadastroCozinha {
 				.getResultList();
 	}
 	
+	public Cozinha buscar(Long id) {
+		return manager.find(Cozinha.class, id);
+	}
+	
 	// Anotação @Transactional para que as alterações seja efetuadas dentro de uma transação.
 	@Transactional
 	public Cozinha adicionar(Cozinha cozinha) {
