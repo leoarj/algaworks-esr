@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.algaworks.algafood.AlgafoodApiApplication;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.repository.CozinhaReposity;
 
 public class ExclusaoCozinhaMain {
 
@@ -14,12 +15,12 @@ public class ExclusaoCozinhaMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+		CozinhaReposity cozinhaReposity = applicationContext.getBean(CozinhaReposity.class);
 		
 		Cozinha cozinha = new Cozinha();
 		cozinha.setId(1L);
 		
-		cadastroCozinha.remover(cozinha);
+		cozinhaReposity.remover(cozinha);
 	}
 	
 }
