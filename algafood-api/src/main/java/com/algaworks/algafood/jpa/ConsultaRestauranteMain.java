@@ -21,6 +21,9 @@ public class ConsultaRestauranteMain {
 		
 		List<Restaurante> restaurantes = restauranteRepository.listar();
 		
-		restaurantes.forEach(restaurante -> System.out.println(restaurante.getNome()));
+		// restaurantes.forEach(restaurante -> System.out.println(restaurante.getNome()));
+		
+		restaurantes.forEach(restaurante -> System.out.printf("%s - %f - %s%n",
+				restaurante.getNome(), restaurante.getTaxaFrete(), restaurante.getCozinha().getNome()));
 	}
 }
