@@ -5,11 +5,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaReposity;
 
+@Component
 public class CozinhaRepositoryImpl implements CozinhaReposity {
 
 	// Anotação @PersistenceContext para injetar entity manager.
