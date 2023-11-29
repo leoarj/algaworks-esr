@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
@@ -25,9 +26,10 @@ public class Restaurante {
 	
 	private String nome;
 	
-	@Column(name = "taxa_frete") // Não necessário, apenas para referência.
+	@Column(name = "taxa_frete", nullable = true) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
 	@ManyToOne
+	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
 }
