@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +19,18 @@ public class CozinhaController {
 
 	private final CozinhaReposity cozinhaReposity;
 	
-	@GetMapping
+	/*
+	 * Apenas para teste de negociação de conteúdo
+	 * com o header Accept.
+	 * */
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cozinha> listar() {
+		return cozinhaReposity.listar();
+	}
+	
+	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
+	public List<Cozinha> listar2() {
 		return cozinhaReposity.listar();
 	}
 	
