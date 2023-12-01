@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonRootName("gastronomia")
+@JsonRootName("gastronomia") // Para personalizar o nome da raíz do body na serialização.
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -24,8 +24,8 @@ public class Cozinha {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@JsonIgnore
-	@JsonProperty("titulo")
+	//@JsonIgnore // Para ignorar a propriedade na serialização.
+	@JsonProperty("titulo") // Para personalizar o nome da propriedde na serialização.
 	@Column(nullable = false)
 	private String nome;
 }
