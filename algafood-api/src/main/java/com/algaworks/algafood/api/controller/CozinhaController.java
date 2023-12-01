@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,14 @@ public class CozinhaController {
 		return cozinhaReposity.listar();
 	}
 	
-	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-	public List<Cozinha> listar2() {
-		return cozinhaReposity.listar();
+//	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
+//	public List<Cozinha> listar2() {
+//		return cozinhaReposity.listar();
+//	}
+	
+	@GetMapping("/{cozinhaId}")
+	public Cozinha buscar(@PathVariable Long cozinhaId) {
+		return cozinhaReposity.buscar(cozinhaId);
 	}
 	
 }
