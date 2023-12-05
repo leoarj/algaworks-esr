@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.model.CozinhasXmlWrapper;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaReposity;
+import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 public class CozinhaController {
 
 	private final CozinhaReposity cozinhaReposity;
+	
+	private final CadastroCozinhaService cadastroCozinhaService;
 	
 	/*
 	 * Apenas para teste de negociação de conteúdo
@@ -80,7 +83,7 @@ public class CozinhaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-		return cozinhaReposity.salvar(cozinha);
+		return cadastroCozinhaService.salvar(cozinha);
 	}
 	
 	@PutMapping("/{cozinhaId}")
