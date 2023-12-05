@@ -55,13 +55,19 @@ public class CozinhaController {
 		
 		// Classe HttpHeaders pode ser utilizada para definição de cabeçalhos na resposta.
 		// HttpHeaders possui cabeçalhos padrão que podem ser utilizados. 
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.LOCATION, "http://api.algafood.local:8080/cozinhas");
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add(HttpHeaders.LOCATION, "http://api.algafood.local:8080/cozinhas");
+//		
+//		return ResponseEntity
+//				.status(HttpStatus.FOUND)
+//				.headers(headers)
+//				.build();
 		
-		return ResponseEntity
-				.status(HttpStatus.FOUND)
-				.headers(headers)
-				.build();
+		if (cozinha != null) {
+			return ResponseEntity.ok(cozinha);
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 	
 }
