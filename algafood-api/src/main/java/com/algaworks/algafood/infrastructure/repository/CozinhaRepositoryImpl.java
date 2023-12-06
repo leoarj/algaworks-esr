@@ -5,14 +5,15 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.repository.CozinhaReposity;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
 @Component
-public class CozinhaRepositoryImpl implements CozinhaReposity {
+public class CozinhaRepositoryImpl implements CozinhaRepository {
 
 	// Anotação @PersistenceContext para injetar entity manager.
 	@PersistenceContext
@@ -39,8 +40,17 @@ public class CozinhaRepositoryImpl implements CozinhaReposity {
 	
 	@Transactional
 	@Override
-	public void remover(Cozinha cozinha) {
-		cozinha = buscar(cozinha.getId());
+	public void remover(Long id) {
+		Cozinha cozinha = buscar(id);
+		
+		if (cozinha == null) {
+			/*
+			 * Exception específica do Spring para dizer que
+			 * um número esperado de resultados não foi encontrado.
+			 */
+			throw new EmptyResultDataAccessException(1);
+		}
+		
 		manager.remove(cozinha);
 	}
 }

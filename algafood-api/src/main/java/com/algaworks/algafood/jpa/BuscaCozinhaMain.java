@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.algaworks.algafood.AlgafoodApiApplication;
 import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.repository.CozinhaReposity;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
 public class BuscaCozinhaMain {
 
@@ -15,7 +15,7 @@ public class BuscaCozinhaMain {
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		CozinhaReposity cozReposity = applicationContext.getBean(CozinhaReposity.class);
+		CozinhaRepository cozReposity = applicationContext.getBean(CozinhaRepository.class);
 		
 		Cozinha cozinha = cozReposity.buscar(1L);
 		
