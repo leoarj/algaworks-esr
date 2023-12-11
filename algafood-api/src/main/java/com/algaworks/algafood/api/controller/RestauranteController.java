@@ -114,8 +114,8 @@ public class RestauranteController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		//merge(campos, restauranteAtual);
-		restauranteAtual = merge2(campos, restauranteAtual);
+		merge(campos, restauranteAtual);
+		//restauranteAtual = merge2(campos, restauranteAtual);
 		
 		return atualizar(restauranteId, restauranteAtual);
 	}
