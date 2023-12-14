@@ -25,8 +25,8 @@ public class InclusaoRestauranteMain {
 		Restaurante restaurante2 = new Restaurante();
 		restaurante2.setNome("Restaurante Bem Servido");
 		
-		restaurante1 = restauranteRepository.salvar(restaurante1);
-		restaurante2 = restauranteRepository.salvar(restaurante2);
+		restaurante1 = restauranteRepository.save(restaurante1);
+		restaurante2 = restauranteRepository.save(restaurante2);
 		
 		Stream.of(restaurante1, restaurante2)
 			.forEach(cozinha -> System.out.printf("%d - %s\n", cozinha.getId(), cozinha.getNome()));

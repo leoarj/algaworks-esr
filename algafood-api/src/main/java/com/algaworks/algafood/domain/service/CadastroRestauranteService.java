@@ -26,7 +26,7 @@ public class CadastroRestauranteService {
 		
 		restaurante.setCozinha(cozinha); // Atualiza restaurante com cozinha vinda do respositório (managed).
 		
-		return restauranteRepository.salvar(restaurante);
+		return restauranteRepository.save(restaurante);
 	}
 	
 }
