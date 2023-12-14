@@ -19,9 +19,9 @@ public class TesteController {
 
 	private final CozinhaRepository cozinhaRepository;
 
-	// Utilizando @RequestParam para injetar parâmetro da requisição no argumento
-	@GetMapping("/cozinhas/por-nome")
-	public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
-		return cozinhaRepository.consultarPorNome(nome);
-	}
+//	// Utilizando @RequestParam para injetar parâmetro da requisição no argumento
+//	@GetMapping("/cozinhas/por-nome")
+//	public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
+//		return cozinhaRepository.consultarPorNome(nome);
+//	}
 }

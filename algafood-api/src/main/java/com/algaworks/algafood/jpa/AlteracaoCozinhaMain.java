@@ -21,7 +21,7 @@ public class AlteracaoCozinhaMain {
 		cozinha.setId(1L);
 		cozinha.setNome("Brasileira");
 		
-		cozinhaReposity.salvar(cozinha);
+		cozinhaReposity.save(cozinha);
 	}
 	
 }
