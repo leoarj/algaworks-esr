@@ -11,7 +11,12 @@ import com.algaworks.algafood.domain.model.Cozinha;
 @Repository
 public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
-	List<Cozinha> findTodasByNome(String nome);
+	/**
+	 * Documentação do Spring sobre query methods:
+	 * https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
+	 */
+	
+	List<Cozinha> findTodasByNomeContaining(String nome);
 	
 	Optional<Cozinha> findByNome(String nome);
 	
