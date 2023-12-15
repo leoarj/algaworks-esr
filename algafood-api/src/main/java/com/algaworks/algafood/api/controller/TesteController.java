@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,14 @@ public class TesteController {
 
 	private final CozinhaRepository cozinhaRepository;
 
-//	// Utilizando @RequestParam para injetar parâmetro da requisição no argumento
-//	@GetMapping("/cozinhas/por-nome")
-//	public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
-//		return cozinhaRepository.consultarPorNome(nome);
-//	}
+	// Utilizando @RequestParam para injetar parâmetro da requisição no argumento
+	@GetMapping("/cozinhas/por-nome")
+	public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
+		return cozinhaRepository.findTodasByNome(nome);
+	}
+	
+	@GetMapping("/cozinhas/unica-por-nome")
+	public Optional<Cozinha> cozinhaPorNome(@RequestParam("nome") String nome) {
+		return cozinhaRepository.findByNome(nome);
+	}
 }
