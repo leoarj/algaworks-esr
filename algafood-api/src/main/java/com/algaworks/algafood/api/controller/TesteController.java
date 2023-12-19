@@ -13,8 +13,6 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
-import static com.algaworks.algafood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
-import static com.algaworks.algafood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 import lombok.RequiredArgsConstructor;
 
@@ -77,7 +75,6 @@ public class TesteController {
 	public List<Restaurante> restaurantesComFreteGratis(String nome) {		
 		// Repassando specifications para o repositório.
 		// As regras de comparação estão encapsuladas nas specs.
-		return restauranteRepository.findAll(comFreteGratis()
-				.and(comNomeSemelhante(nome)));
+		return restauranteRepository.findComFreteGratis(nome);
 	}
 }
