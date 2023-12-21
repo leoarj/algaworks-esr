@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,6 +43,9 @@ public class Restaurante {
 	@ManyToOne
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
+	
+	@Embedded
+	private Endereco endereco;
 	
 	/**
 	 * @JoinTable para definir a tabela de associação.
