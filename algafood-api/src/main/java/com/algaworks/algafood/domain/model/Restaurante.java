@@ -16,6 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -47,6 +49,7 @@ public class Restaurante {
 	 * joinColumns para definir nome da chave estrangeira referente a primeira entidade.
 	 * inverseJoinColumns para definir nome da chave estrangeira referente a segunda entidade.
 	 */
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
