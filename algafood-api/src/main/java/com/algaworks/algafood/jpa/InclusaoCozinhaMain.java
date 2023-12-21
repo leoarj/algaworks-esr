@@ -25,8 +25,8 @@ public class InclusaoCozinhaMain {
 		Cozinha cozinha2 = new Cozinha();
 		cozinha2.setNome("Japonesa");
 		
-		cozinha1 = cozinhaReposity.salvar(cozinha1);
-		cozinha2 = cozinhaReposity.salvar(cozinha2);
+		cozinha1 = cozinhaReposity.save(cozinha1);
+		cozinha2 = cozinhaReposity.save(cozinha2);
 		
 		Stream.of(cozinha1, cozinha2)
 			.forEach(cozinha -> System.out.printf("%d - %s\n", cozinha.getId(), cozinha.getNome()));

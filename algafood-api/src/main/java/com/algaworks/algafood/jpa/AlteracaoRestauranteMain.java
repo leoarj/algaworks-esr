@@ -21,7 +21,7 @@ public class AlteracaoRestauranteMain {
 		restaurante.setId(1L);
 		restaurante.setNome("Restaurante do Japonês");
 		
-		restauranteRepository.salvar(restaurante);
+		restauranteRepository.save(restaurante);
 	}
 	
 }

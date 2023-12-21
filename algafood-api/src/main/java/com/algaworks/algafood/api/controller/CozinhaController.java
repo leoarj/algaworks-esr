@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -34,13 +35,13 @@ public class CozinhaController {
 	
 	@GetMapping
 	public List<Cozinha> listar() {
-		return cozinhaReposity.listar();
+		return cozinhaReposity.findAll();
 	}
 	
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
 		//return cozinhaReposity.buscar(cozinhaId);
-		Cozinha cozinha = cozinhaReposity.buscar(cozinhaId);
+		Optional<Cozinha> cozinha = cozinhaReposity.findById(cozinhaId);
 		
 		// ResponseEntity pode ser utilizado para se ter um melhor controle da resposta HTTP.
 		//return ResponseEntity.status(HttpStatus.OK).body(cozinha);
@@ -56,8 +57,8 @@ public class CozinhaController {
 //				.headers(headers)
 //				.build();
 		
-		if (cozinha != null) {
-			return ResponseEntity.ok(cozinha);
+		if (cozinha.isPresent()) {
+			return ResponseEntity.ok(cozinha.get());
 		}
 		
 		return ResponseEntity.notFound().build();
@@ -72,22 +73,22 @@ public class CozinhaController {
 	@PutMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, 
 			@RequestBody Cozinha cozinha) {
-		Cozinha cozinhaAtual = cozinhaReposity.buscar(cozinhaId);
+		Optional<Cozinha> cozinhaAtual = cozinhaReposity.findById(cozinhaId);
 		
-		if (cozinhaAtual != null) {
+		if (cozinhaAtual.isPresent()) {
 			// Classe utilitária do Spring para operações com beans.
-			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+			BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
 			
-			cozinhaAtual = cozinhaReposity.salvar(cozinhaAtual);
+			Cozinha cozinhaSalva = cadastroCozinhaService.salvar(cozinhaAtual.get());
 			
-			return ResponseEntity.ok(cozinhaAtual);
+			return ResponseEntity.ok(cozinhaSalva);
 		}
 		
 		return ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
+	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
 		try {
 			cadastroCozinhaService.excluir(cozinhaId);
 			return ResponseEntity.noContent().build();
@@ -96,7 +97,8 @@ public class CozinhaController {
 			return ResponseEntity.notFound().build();
 			
 		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+					.body(e.getMessage());
 		}
 	}
 }
