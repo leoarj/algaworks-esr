@@ -44,6 +44,7 @@ public class Restaurante {
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
 	
+	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 	
