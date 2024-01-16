@@ -35,7 +35,15 @@ public class RestauranteController {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	@GetMapping
 	public List<Restaurante> listar() {
-		return restauranteRepository.findAll();
+		//return restauranteRepository.findAll();
+		
+		// Para testes de carregamento Lazy
+		List<Restaurante> restaurantes = restauranteRepository.findAll();
+		
+		//System.out.println("O nome da cozinha é:");
+		//restaurantes.get(0).getCozinha().getNome();
+		
+		return restaurantes;
 	}
 	
 	@GetMapping("/{restauranteId}")

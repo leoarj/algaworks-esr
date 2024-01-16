@@ -25,6 +25,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,8 +47,9 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = true) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
+	@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
 	//@JsonIgnore
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
 	
