@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -47,24 +48,15 @@ public class RestauranteController {
 	}
 	
 	@GetMapping("/{restauranteId}")
-	public ResponseEntity<Restaurante> buscar(@PathVariable Long restauranteId) {
-		Optional<Restaurante> restaurante = restauranteRepository.findById(restauranteId);
-		
-		if (restaurante.isPresent()) {
-			return ResponseEntity.ok(restaurante.get());
-		}
-		
-		return ResponseEntity.notFound().build();
+	public Restaurante buscar(@PathVariable Long restauranteId) {
+		return cadastroRestauranteService.buscarOuFalhar(restauranteId);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
-		try {
-			restaurante = cadastroRestauranteService.salvar(restaurante);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
+		return cadastroRestauranteService.salvar(restaurante);
 		
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(restaurante);
-		} catch(EntidadeNaoEncontradaException e) {
 			/**
 			 * Está tratando entidade náo encontrada (Cozinha)
 			 * como bad-request e não como not-found devido ao fato
@@ -74,29 +66,17 @@ public class RestauranteController {
 			 * e passar o status 404-NOT-FOUND traria um mau entendimento
 			 * de que é o recurso de /restaurentes que não existe.
 			 */
-			return ResponseEntity.badRequest()
-					.body(e.getMessage());
-		}
+		
 	}
 	
 	@PutMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
+	public Restaurante atualizar(@PathVariable Long restauranteId,
 			@RequestBody Restaurante restaurante) {
-		try {
-			Optional<Restaurante> restauranteAtual = restauranteRepository.findById(restauranteId);
-			
-			if (restauranteAtual.isPresent()) {
-				BeanUtils.copyProperties(restaurante, restauranteAtual.get(), "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-				
-				Restaurante restauranteSalvo = cadastroRestauranteService.salvar(restauranteAtual.get());
-				return ResponseEntity.ok(restauranteSalvo);
-			}
-			
-			return ResponseEntity.notFound().build();
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest()
-					.body(e.getMessage());
-		}
+		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
+		
+		BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+		
+		return cadastroRestauranteService.salvar(restauranteAtual);
 	}
 	
 	/**
@@ -112,18 +92,13 @@ public class RestauranteController {
 	 * e posteriormente aplicado na atualização do recurso.
 	 */
 	@PatchMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
-			@RequestBody Map<String, Object> campos) {
-		Optional<Restaurante> restauranteAtual = restauranteRepository.findById(restauranteId);
+	public Restaurante atualizarParcial(@PathVariable Long restauranteId,
+			@RequestBody Map<String, Object> campos) {		
+		Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 		
-		if (restauranteAtual.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		merge(campos, restauranteAtual);
 		
-		merge(campos, restauranteAtual.get());
-		//restauranteAtual = merge2(campos, restauranteAtual);
-		
-		return atualizar(restauranteId, restauranteAtual.get());
+		return atualizar(restauranteId, restauranteAtual);
 	}
 
 	/**
