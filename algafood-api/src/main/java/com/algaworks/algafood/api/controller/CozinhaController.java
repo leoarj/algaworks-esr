@@ -109,13 +109,13 @@ public class CozinhaController {
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId) {
-		//cadastroCozinhaService.excluir(cozinhaId);
-		try {
-			cadastroCozinhaService.excluir(cozinhaId);
-		} catch (EntidadeNaoEncontradaException e) {
-			// Teste com exceções próprias do Spring
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-			//throw new ServerWebInputException(e.getMessage()); // Já retorna 409 - CONFLICT
-		}
+		cadastroCozinhaService.excluir(cozinhaId);
+//		try {
+//			cadastroCozinhaService.excluir(cozinhaId);
+//		} catch (EntidadeNaoEncontradaException e) {
+//			// Teste com exceções próprias do Spring
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//			//throw new ServerWebInputException(e.getMessage()); // Já retorna 409 - CONFLICT
+//		}
 	}
 }
