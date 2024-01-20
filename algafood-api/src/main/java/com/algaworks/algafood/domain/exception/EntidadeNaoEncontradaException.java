@@ -1,5 +1,8 @@
 package com.algaworks.algafood.domain.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * Exception de negócio lançada pelo domain service e tratada no controlador.
  * 
@@ -9,6 +12,8 @@ package com.algaworks.algafood.domain.exception;
  * intuitivo e com mais sentido em outras camadas.
  * 
  */
+// Definindo o código de status diretamente na exception (que vai ser retornado no controller, caso a exception ocorrer).
+@ResponseStatus(value = HttpStatus.NOT_FOUND) //, reason = "Entidade não encontrada")
 public class EntidadeNaoEncontradaException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

@@ -87,18 +87,26 @@ public class CozinhaController {
 		return ResponseEntity.notFound().build();
 	}
 	
+//	@DeleteMapping("/{cozinhaId}")
+//	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
+//		try {
+//			cadastroCozinhaService.excluir(cozinhaId);
+//			return ResponseEntity.noContent().build();
+//			
+//		} catch (EntidadeNaoEncontradaException e) {
+//			return ResponseEntity.notFound().build();
+//			
+//		} catch (EntidadeEmUsoException e) {
+//			return ResponseEntity.status(HttpStatus.CONFLICT)
+//					.body(e.getMessage());
+//		}
+//	}
+	
+	// Removidos try/catch para testar a definição do status code diretamente
+	// a partir das exceptions.
 	@DeleteMapping("/{cozinhaId}")
-	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
-		try {
-			cadastroCozinhaService.excluir(cozinhaId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT)
-					.body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long cozinhaId) {
+		cadastroCozinhaService.excluir(cozinhaId);
 	}
 }
