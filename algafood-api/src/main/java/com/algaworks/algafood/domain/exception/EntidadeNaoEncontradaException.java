@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 // Definindo o código de status diretamente na exception (que vai ser retornado no controller, caso a exception ocorrer).
 @ResponseStatus(value = HttpStatus.NOT_FOUND) //, reason = "Entidade não encontrada")
-public class EntidadeNaoEncontradaException extends RuntimeException {
+public abstract class EntidadeNaoEncontradaException extends NegocioException {
 
 	private static final long serialVersionUID = 1L;
 
