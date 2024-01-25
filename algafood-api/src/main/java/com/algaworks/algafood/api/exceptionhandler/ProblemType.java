@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ProblemType {
 
+	// Poderia ser também CORPO_INCOMPREENSIVEL, CORPO_MAL_FORMADO, JSON_MAL_FORMADO etc
+	MENSAGEM_INCOMPREENSIVEL("/mensagem-incompreensivel", "Mensagem incompreensível"),
 	ENTIDADE_NAO_ENCONTRADA("/entidade-nao-encontrada", "Entidade não encontrada"),
 	ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
 	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio");
