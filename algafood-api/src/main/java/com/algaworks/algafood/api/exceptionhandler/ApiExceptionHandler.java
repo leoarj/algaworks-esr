@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.exceptionhandler;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
@@ -52,10 +54,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
 		// Obtém a lista de campos (em hierarquia) com formato inválido e os concatena
-		String path = ex.getPath()
-				.stream()
-				.map(ref -> ref.getFieldName())
-				.collect(Collectors.joining("."));
+		String path = joinPath(ex.getPath());
 		
 		Object value = ex.getValue(); // Valor inválido
 		String targetTypeSimpleName = ex.getTargetType().getSimpleName(); // Tipo de dado esperado para a propriedade
@@ -67,26 +66,34 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 		
-		
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 	
+	/**
+	 * Para tratar propriedades inexistentes ou ignoradas (UnrecognizedPropertyException, IgnoredPropertyException).
+	 */
 	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
-		String path = ex.getPath()
-				.stream()
-				.map(ref -> ref.getFieldName())
-				.collect(Collectors.joining("."));
-		
+		String path = joinPath(ex.getPath());
 		
 		ProblemType problemType = ProblemType.MENSAGEM_INCOMPREENSIVEL;
-		String detail = String.format("A propriedade '%s' é inválida para a requisição.",
+		String detail = String.format("A propriedade '%s' não existe. "
+				+ "Corrija ou remova essa propriedade e tente novamente.",
 				path);
 		
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 		
 		return handleExceptionInternal(ex, problem, headers, status, request);
+	}
+	
+	/**
+	 * Para reutilização de código referente à extração dos nomes das propriedades.
+	 */
+	private String joinPath(List<Reference> references) {
+		return references.stream()
+				.map(ref -> ref.getFieldName())
+				.collect(Collectors.joining("."));
 	}
 
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
