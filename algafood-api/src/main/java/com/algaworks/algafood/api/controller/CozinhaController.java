@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.ServerWebInputException;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -39,29 +41,9 @@ public class CozinhaController {
 	}
 	
 	@GetMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-		//return cozinhaReposity.buscar(cozinhaId);
-		Optional<Cozinha> cozinha = cozinhaReposity.findById(cozinhaId);
-		
-		// ResponseEntity pode ser utilizado para se ter um melhor controle da resposta HTTP.
-		//return ResponseEntity.status(HttpStatus.OK).body(cozinha);
-		//return ResponseEntity.ok(cozinha);
-		
-		// Classe HttpHeaders pode ser utilizada para definição de cabeçalhos na resposta.
-		// HttpHeaders possui cabeçalhos padrão que podem ser utilizados. 
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add(HttpHeaders.LOCATION, "http://api.algafood.local:8080/cozinhas");
-//		
-//		return ResponseEntity
-//				.status(HttpStatus.FOUND)
-//				.headers(headers)
-//				.build();
-		
-		if (cozinha.isPresent()) {
-			return ResponseEntity.ok(cozinha.get());
-		}
-		
-		return ResponseEntity.notFound().build();
+	public Cozinha buscar(@PathVariable Long cozinhaId) {
+		// Código anterior mais complexo, está no histórico do repositório Git
+		return cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 	}
 	
 	@PostMapping
@@ -71,34 +53,43 @@ public class CozinhaController {
 	}
 	
 	@PutMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, 
+	public Cozinha atualizar(@PathVariable Long cozinhaId, 
 			@RequestBody Cozinha cozinha) {
-		Optional<Cozinha> cozinhaAtual = cozinhaReposity.findById(cozinhaId);
+		// Código anterior mais complexo, está no histórico do repositório Git
+		Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 		
-		if (cozinhaAtual.isPresent()) {
-			// Classe utilitária do Spring para operações com beans.
-			BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
-			
-			Cozinha cozinhaSalva = cadastroCozinhaService.salvar(cozinhaAtual.get());
-			
-			return ResponseEntity.ok(cozinhaSalva);
-		}
+		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
 		
-		return ResponseEntity.notFound().build();
+		return cadastroCozinhaService.salvar(cozinhaAtual);
 	}
 	
+//	@DeleteMapping("/{cozinhaId}")
+//	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
+//		try {
+//			cadastroCozinhaService.excluir(cozinhaId);
+//			return ResponseEntity.noContent().build();
+//			
+//		} catch (EntidadeNaoEncontradaException e) {
+//			return ResponseEntity.notFound().build();
+//			
+//		} catch (EntidadeEmUsoException e) {
+//			return ResponseEntity.status(HttpStatus.CONFLICT)
+//					.body(e.getMessage());
+//		}
+//	}
+	
+	// Removidos try/catch para testar a definição do status code diretamente
+	// a partir das exceptions.
 	@DeleteMapping("/{cozinhaId}")
-	public ResponseEntity<?> remover(@PathVariable Long cozinhaId) {
-		try {
-			cadastroCozinhaService.excluir(cozinhaId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT)
-					.body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long cozinhaId) {
+		cadastroCozinhaService.excluir(cozinhaId);
+//		try {
+//			cadastroCozinhaService.excluir(cozinhaId);
+//		} catch (EntidadeNaoEncontradaException e) {
+//			// Teste com exceções próprias do Spring
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//			//throw new ServerWebInputException(e.getMessage()); // Já retorna 409 - CONFLICT
+//		}
 	}
 }

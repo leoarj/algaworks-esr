@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cidade;
@@ -19,17 +20,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CadastroCidadeService {
 
+	private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
+	
 	private final CidadeRepository cidadeRepository;
 	private final EstadoRepository estadoRepository;
+	private final CadastroEstadoService cadastroEstadoService;
 	
 	public Cidade salvar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
-		Optional<Estado> estado = estadoRepository.findById(estadoId);
 		
-		estado.orElseThrow(() -> new EntidadeNaoEncontradaException(
-					String.format("Não existe cadastro de estado com código %d", estadoId)));
+		Estado estado = cadastroEstadoService.buscarOuFalhar(estadoId);
 		
-		cidade.setEstado(estado.get());
+		cidade.setEstado(estado);
 		
 		return cidadeRepository.save(cidade);
 	}
@@ -38,11 +40,15 @@ public class CadastroCidadeService {
 		try {
 			cidadeRepository.deleteById(cidadeId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(
-					String.format("Não existe um cadastro de cidade com código %d", cidadeId));
+			throw new CidadeNaoEncontradaException(cidadeId);
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
-					String.format("Cidade de código %d não pode ser removida, pois está em uso", cidadeId));
+					String.format(MSG_CIDADE_EM_USO, cidadeId));
 		}
+	}
+	
+	public Cidade buscarOuFalhar(Long cidadeId) {
+		return cidadeRepository.findById(cidadeId)
+				.orElseThrow(() -> new CidadeNaoEncontradaException(cidadeId));
 	}
 }
