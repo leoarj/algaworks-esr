@@ -27,6 +27,10 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 @ControllerAdvice // Para capturar globalmente as exceptions dos controllers
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+	private static final String MSG_ERRO_GENERICA_USUARIO_FINAL =
+			"Ocorreu um erro interno inesperado no sistema. Tente novamente e se o "
+			+ "problema persistir, entre em contato com o administrador do sistema.";
+
 	/**
 	 * Customiza exception handler específico de ResponseEntityExceptionHandler. 
 	 */
@@ -68,7 +72,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				+ "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
 				path, value, targetTypeSimpleName);
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+				.build();
 		
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -86,7 +92,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				+ "Corrija ou remova essa propriedade e tente novamente.",
 				path);
 		
-		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		Problem problem = createProblemBuilder(status, problemType, detail)
+				.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+				.build();
 		
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
@@ -145,8 +153,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-		String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o "
-				+ "problema persistir, entre em contato com o administrador do sistema.";
+		String detail = MSG_ERRO_GENERICA_USUARIO_FINAL;
 		
 		// Para fins de desenvolvimento
 		ex.printStackTrace();
