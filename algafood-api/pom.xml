@@ -61,6 +61,11 @@
     		<groupId>org.apache.commons</groupId>
     		<artifactId>commons-lang3</artifactId>
     	</dependency>
+    	<!-- A partir da versao 2.3.0 é necessaria para usar Bean Validations -->
+    	<dependency> 
+    		<groupId>org.springframework.boot</groupId> 
+    		<artifactId>spring-boot-starter-validation</artifactId> 
+		</dependency>
 	</dependencies>
 
 	<build>
