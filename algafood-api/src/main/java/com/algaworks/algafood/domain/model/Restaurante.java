@@ -20,6 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -58,6 +59,8 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
+	@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata)
+	@NotNull
 	//@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
 	//@JsonIgnore
 	@ManyToOne //(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
