@@ -50,6 +50,7 @@ public class Restaurante {
 	@Column(nullable = false)
 	private String nome;
 	
+	@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
 	//@DecimalMin("0")
 	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
