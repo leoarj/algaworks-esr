@@ -30,6 +30,7 @@ import javax.validation.constraints.PositiveOrZero;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.algaworks.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -50,17 +51,17 @@ public class Restaurante {
 	
 	//@NotNull
 	//@NotEmpty
-	@NotBlank
+	@NotBlank(groups = Groups.CadastroRestaurante.class)
 	@Column(nullable = false)
 	private String nome;
 	
 	//@DecimalMin("0")
-	@PositiveOrZero
+	@PositiveOrZero(groups = Groups.CadastroRestaurante.class)
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
 	@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata)
-	@NotNull
+	@NotNull(groups = Groups.CadastroRestaurante.class)
 	//@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
 	//@JsonIgnore
 	@ManyToOne //(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
