@@ -42,6 +42,7 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false)
 	private String nome;
 	
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
@@ -74,7 +75,8 @@ public class Restaurante {
 	 * inverseJoinColumns para definir nome da chave estrangeira referente a segunda entidade.
 	 */
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER) // Apenas para teste de carregamento "ansioso", não recomendado nesse caso
+	//@ManyToMany(fetch = FetchType.EAGER) // Apenas para teste de carregamento "ansioso", não recomendado nesse caso
+	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
 			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
