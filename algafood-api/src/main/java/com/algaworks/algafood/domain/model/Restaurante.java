@@ -44,7 +44,7 @@ public class Restaurante {
 	
 	private String nome;
 	
-	@Column(name = "taxa_frete", nullable = true) // Não necessário, apenas para referência.
+	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
 	@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
