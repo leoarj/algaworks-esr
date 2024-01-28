@@ -48,9 +48,9 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
-	@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
+	//@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
 	//@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
+	@ManyToOne //(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
 	
