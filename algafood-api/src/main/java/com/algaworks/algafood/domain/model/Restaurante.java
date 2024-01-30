@@ -28,6 +28,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algaworks.algafood.Groups;
 import com.algaworks.algafood.core.validation.Multiplo;
+import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,6 +36,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+// Anotação customizada a nível de classe para validar mais de uma propriedade conforme condições impostas.
+@ValorZeroIncluirDescricao(valorField = "taxaFrete",
+		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
