@@ -27,6 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algaworks.algafood.Groups;
+import com.algaworks.algafood.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,7 +53,8 @@ public class Restaurante {
 	
 	@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
 	//@DecimalMin("0")
-	@PositiveOrZero(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
+	//@PositiveOrZero//(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
+	@TaxaFrete // Constraint personalizada
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
