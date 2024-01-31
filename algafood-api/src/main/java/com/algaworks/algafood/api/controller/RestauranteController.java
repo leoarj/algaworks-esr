@@ -135,10 +135,7 @@ public class RestauranteController {
 		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
 		validator.validate(restaurante, bindingResult);
 		
-		System.out.println("validate");
-		
 		if (bindingResult.hasErrors()) {
-			System.out.println("hasErrors");
 			throw new ValidacaoException(bindingResult); // Exceção para ser tratada no Exception Handler
 		}
 	}
