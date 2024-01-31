@@ -20,7 +20,7 @@ public class Problem {
 	private String title;
 	private String detail;
 	private String userMessage;
-	private List<Field> fields;
+	private List<Object> objects;
 	
 	/**
 	 * Classe estática interna para definir tipo aninhado Field,
@@ -28,7 +28,7 @@ public class Problem {
 	 */
 	@Getter
 	@Builder
-	public static class Field {
+	public static class Object {
 		private String name;
 		private String userMessage;
 	}
