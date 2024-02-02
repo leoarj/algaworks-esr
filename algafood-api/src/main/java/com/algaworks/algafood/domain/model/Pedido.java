@@ -19,8 +19,6 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.algaworks.algafood.di.modelo.Cliente;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
