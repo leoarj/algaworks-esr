@@ -74,6 +74,12 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- Plugin failsafe para que testes de integração não sejam executados
+			a cada build, mas sim quando chamar ./mvnw verify -->
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 
