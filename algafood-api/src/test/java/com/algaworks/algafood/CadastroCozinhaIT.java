@@ -1,7 +1,8 @@
 package com.algaworks.algafood;
 
 import static io.restassured.RestAssured.given;
-
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -46,6 +47,25 @@ class CadastroCozinhaIT {
 			.get()
 		.then()
 			.statusCode(HttpStatus.OK.value());
+	}
+	
+	/**
+	 * Realiza teste validando corpo da resposta,
+	 * utilizando a biblioteca hamcrest para abstrair lógica de correspondências.
+	 */
+	@Test
+	public void deveConter4Cozinhas_QuandoConsultarCozinhas() {
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		
+		given()
+			.basePath("/cozinhas")
+			.port(port)
+			.accept(ContentType.JSON)
+		.when()
+			.get()
+		.then()
+			.body("", hasSize(4)) // Se no corpo da resposta existem 4 objetos (JSON)
+			.body("nome", hasItems("Indiana", "Tailandesa")); // Se para a chave "nome" existem os valores informados
 	}
 
 }
