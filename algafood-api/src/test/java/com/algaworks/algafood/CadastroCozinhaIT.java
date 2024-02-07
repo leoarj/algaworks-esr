@@ -74,5 +74,23 @@ class CadastroCozinhaIT {
 			.body("", hasSize(4)) // Se no corpo da resposta existem 4 objetos (JSON)
 			.body("nome", hasItems("Indiana", "Tailandesa")); // Se para a chave "nome" existem os valores informados
 	}
+	
+	/*
+	 * Espera o retorno 201 - CREATED na criação de uma nova cozinha.
+	 *
+	 * Obs.: Vai quebrar o teste de verificação do corpo da resposta,
+	 * já este teste vai alterar a quantidade de cozinhas cadastradas.
+	 */
+	@Test
+	public void testRetornarStatus201_QuandoCadastrarCozinha() {
+		given()
+			.body("{ \"nome\": \"Chinesa\" }")
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.CREATED.value());
+	}
 
 }
