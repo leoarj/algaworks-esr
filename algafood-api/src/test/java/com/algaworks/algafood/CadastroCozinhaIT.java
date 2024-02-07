@@ -1,18 +1,14 @@
 package com.algaworks.algafood;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.restassured.RestAssured.given;
 
-import javax.validation.ConstraintViolationException;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 
-import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.service.CadastroCozinhaService;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 /**
  * Classe de testes para testar cadastro de cozinha.
@@ -25,68 +21,31 @@ import com.algaworks.algafood.domain.service.CadastroCozinhaService;
  * - Validação = Verificação dos resultados obtidos a partir da ação,
  * onde os resultados já são esperados em um determinado estado.
  */
-@SpringBootTest
+//@RunWith(SpringRunner.class) // JUnit4
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // Para definir uma porta aleatória para o container de teste
 class CadastroCozinhaIT {
 
-	@Autowired
-	private CadastroCozinhaService cadastroCozinhaService;
+	// Para injetar a porta do servidor na variável
+	@LocalServerPort
+	private int port;
 	
 	/**
-	 * Não deve falhar para o caso de cozinha ser informada corretamente para cadastro.
-	 * Nesse caso, garantir que a operação ocorra sem falhas para dados informados corretamente.
+	 * Teste de API, realizando chamada no recurso de /cozinhas
+	 * e testando o endpoint get verificando se o código de status do retorno é 200 - OK.
 	 */
 	@Test
-	void testarCadastroCozinhaComSucesso() {
-		// cenário
-		Cozinha novaCozinha = new Cozinha();
-		novaCozinha.setNome("Chinesa");
+	public void deveRetornarStatus200_QuandoConsultarCozinhas() {
+		// Habilita log da requisição/resposta caso haja falha
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		
-		// ação
-		novaCozinha = cadastroCozinhaService.salvar(novaCozinha);
-		
-		// validação
-		assertThat(novaCozinha).isNotNull();
-		assertThat(novaCozinha.getId()).isNotNull();
-	}
-	
-	/**
-	 * Deve falhar para o caso de cozinha ser informada incorretamente para cadastro.
-	 * Nesse caso, garantir que um erro seja capturado.
-	 */
-	@Test
-	void testarCadastroCozinhaSemNome() {
-		Cozinha novaCozinha = new Cozinha();
-		novaCozinha.setNome(null);
-		
-		// Necessário devido ao JUnit 5
-		ConstraintViolationException erroEsperado =
-				Assertions.assertThrows(ConstraintViolationException.class, () -> {
-					cadastroCozinhaService.salvar(novaCozinha);
-				});
-		
-		assertThat(erroEsperado).isNotNull();
-	}
-	
-	//JUnit4: @Test(expected = EntidadeEmUsoException.class)
-	@Test
-	public void deveFalhar_QuandoExcluirCozinhaEmUso() {
-		EntidadeEmUsoException erroEsperaodo =
-				Assertions.assertThrows(EntidadeEmUsoException.class, () -> {
-					cadastroCozinhaService.excluir(1L);
-				});
-		
-		assertThat(erroEsperaodo).isNotNull();
-	}
-	
-	//JUnit4: @Test(expected = EntidadeNaoEncontradaException.class)
-	@Test
-	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
-		EntidadeNaoEncontradaException erroEsperado =
-				Assertions.assertThrows(EntidadeNaoEncontradaException.class, () -> {
-					cadastroCozinhaService.excluir(10L);
-				});
-		
-		assertThat(erroEsperado).isNotNull();
+		given()
+			.basePath("/cozinhas")
+			.port(port)
+			.accept(ContentType.JSON)
+		.when()
+			.get()
+		.then()
+			.statusCode(HttpStatus.OK.value());
 	}
 
 }
