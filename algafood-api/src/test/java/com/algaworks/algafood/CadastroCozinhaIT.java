@@ -3,6 +3,8 @@ package com.algaworks.algafood;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -31,17 +33,26 @@ class CadastroCozinhaIT {
 	private int port;
 	
 	/**
+	 * Método de callback para preparar a execuçãode cada teste.
+	 * - Configura log para caso de falha das requisições/respostas.
+	 * - Configura porta.
+	 * - Configura rota.
+	 */
+	@BeforeEach
+	public void setUp() {
+		// Habilita log da requisição/resposta caso haja falha
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		RestAssured.port = port;
+		RestAssured.basePath = "/cozinhas";
+	}
+	
+	/**
 	 * Teste de API, realizando chamada no recurso de /cozinhas
 	 * e testando o endpoint get verificando se o código de status do retorno é 200 - OK.
 	 */
 	@Test
 	public void deveRetornarStatus200_QuandoConsultarCozinhas() {
-		// Habilita log da requisição/resposta caso haja falha
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-		
 		given()
-			.basePath("/cozinhas")
-			.port(port)
 			.accept(ContentType.JSON)
 		.when()
 			.get()
@@ -55,11 +66,7 @@ class CadastroCozinhaIT {
 	 */
 	@Test
 	public void deveConter4Cozinhas_QuandoConsultarCozinhas() {
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-		
 		given()
-			.basePath("/cozinhas")
-			.port(port)
 			.accept(ContentType.JSON)
 		.when()
 			.get()
