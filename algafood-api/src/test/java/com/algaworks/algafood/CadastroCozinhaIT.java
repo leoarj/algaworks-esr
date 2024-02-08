@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -28,6 +29,7 @@ import io.restassured.http.ContentType;
  */
 //@RunWith(SpringRunner.class) // JUnit4
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // Para definir uma porta aleatória para o container de teste
+@TestPropertySource("/application-test.properties") // Para utilizar propriedades personalizadas de teste
 class CadastroCozinhaIT {
 
 	// Para injetar a porta do servidor na variável
