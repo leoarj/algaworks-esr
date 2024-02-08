@@ -4,6 +4,9 @@
  * para limpeza das tabelas do banco de dados a cada teste,
  * devido ser um banco de dados separado e para não depender
  * das migrações do Flyway.
+ * 
+ * Esta classe é uma alternativa, todavia ainda fica possível utilizar
+ * o recurso de afterMigrate do Flyway.
  */
 package com.algaworks.algafood.util;
 
