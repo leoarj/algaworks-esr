@@ -2,13 +2,8 @@ package com.algaworks.algafood;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +36,7 @@ import io.restassured.http.ContentType;
 @TestPropertySource("/application-test.properties") // Para utilizar propriedades personalizadas de teste
 class CadastroCozinhaIT {
 
-	private static final int COZINHA_INEXISTENTE_ID = 100;
+	private static final int COZINHA_ID_INEXISTENTE = 100;
 
 	// Para injetar a porta do servidor na variável
 	@LocalServerPort
@@ -53,9 +48,10 @@ class CadastroCozinhaIT {
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 	
-	private List<Cozinha> cozinhas = new ArrayList<>();
-	
+	private int quantidadeCozinhasCadastradas;
 	private Cozinha cozinhaAmericana;
+	private String jsonCorretoCozinhaChinesa;
+	
 	
 	/**
 	 * Método de callback para preparar a execuçãode cada teste.
@@ -73,6 +69,8 @@ class CadastroCozinhaIT {
 		// Migra/volta o estado do DB para cada teste
 		databaseCleaner.clearTables();
 		prepararDados();
+		
+		jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource("/json/correto/cozinha-chinesa.json");
 	}
 	
 	/**
@@ -94,26 +92,26 @@ class CadastroCozinhaIT {
 	 * utilizando a biblioteca hamcrest para abstrair lógica de correspondências.
 	 */
 	@Test
-	public void deveConterQuantidadeCozinhas_QuandoConsultarCozinhas() {
+	public void deveRetornarQuantidadeCorretaDeCozinhas_QuandoConsultarCozinhas() {
 		given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.body("", hasSize(cozinhas.size())); // Se no corpo da resposta existem 4 objetos (JSON)
+			.body("", hasSize(quantidadeCozinhasCadastradas)); // Se no corpo da resposta existem 4 objetos (JSON)
 			//.body("nome", hasItems("Indiana", "Tailandesa")); // Se para a chave "nome" existem os valores informados
 	}
 	
 	/*
 	 * Espera o retorno 201 - CREATED na criação de uma nova cozinha.
 	 *
-	 * Obs.: Vai quebrar o teste de verificação do corpo da resposta,
+	 * Obs.: Vai quebrar o teste de verificação (quando não tem a limpeza das tabelas) do corpo da resposta,
 	 * já este teste vai alterar a quantidade de cozinhas cadastradas.
 	 */
 	@Test
 	public void testRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
-			.body(ResourceUtils.getContentFromResource("/json/cadastro-cozinha.json"))
+			.body(jsonCorretoCozinhaChinesa)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
@@ -125,19 +123,19 @@ class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
 		given()
-			.pathParam("cozinhaId", 2) // Define e mapeia variável de caminho
+			.pathParam("cozinhaId", cozinhaAmericana.getId()) // Define e mapeia variável de caminho
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{cozinhaId}") // Adiciona variável de caminho na requisição
 		.then()
 			.statusCode(HttpStatus.OK.value())
-			.body("nome", equalTo("Americana"));
+			.body("nome", equalTo(cozinhaAmericana.getNome()));
 	}
 	
 	@Test
 	public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
 		given()
-			.pathParam("cozinhaId", COZINHA_INEXISTENTE_ID)
+			.pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{cozinhaId}")
@@ -146,19 +144,15 @@ class CadastroCozinhaIT {
 	}
 	
 	private void prepararDados() {
-		Cozinha cozinha1 = new Cozinha();
-		cozinha1.setNome("Tailandesa");
-		cozinhaRepository.save(cozinha1);
+		Cozinha cozinhaTailandesa = new Cozinha();
+		cozinhaTailandesa.setNome("Tailandesa");
+		cozinhaRepository.save(cozinhaTailandesa);
 
-		Cozinha cozinha2 = new Cozinha();
-		cozinha2.setNome("Americana");
-		cozinhaRepository.save(cozinha2);
+		cozinhaAmericana = new Cozinha();
+		cozinhaAmericana.setNome("Americana");
+		cozinhaRepository.save(cozinhaAmericana);
 		
-		cozinhas.clear();
-		cozinhas.add(cozinha1);
-		cozinhas.add(cozinha2);
-		
-		cozinhaAmericana = cozinha2;
+		quantidadeCozinhasCadastradas = (int) cozinhaRepository.count();
 	}
 
 }
