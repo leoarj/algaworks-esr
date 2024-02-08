@@ -5,6 +5,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.util.DatabaseCleaner;
+import com.algaworks.algafood.util.ResourceUtils;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -37,6 +41,8 @@ import io.restassured.http.ContentType;
 @TestPropertySource("/application-test.properties") // Para utilizar propriedades personalizadas de teste
 class CadastroCozinhaIT {
 
+	private static final int COZINHA_INEXISTENTE_ID = 100;
+
 	// Para injetar a porta do servidor na variável
 	@LocalServerPort
 	private int port;
@@ -46,6 +52,10 @@ class CadastroCozinhaIT {
 	
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
+	
+	private List<Cozinha> cozinhas = new ArrayList<>();
+	
+	private Cozinha cozinhaAmericana;
 	
 	/**
 	 * Método de callback para preparar a execuçãode cada teste.
@@ -84,13 +94,13 @@ class CadastroCozinhaIT {
 	 * utilizando a biblioteca hamcrest para abstrair lógica de correspondências.
 	 */
 	@Test
-	public void deveConter2Cozinhas_QuandoConsultarCozinhas() {
+	public void deveConterQuantidadeCozinhas_QuandoConsultarCozinhas() {
 		given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.body("", hasSize(2)); // Se no corpo da resposta existem 4 objetos (JSON)
+			.body("", hasSize(cozinhas.size())); // Se no corpo da resposta existem 4 objetos (JSON)
 			//.body("nome", hasItems("Indiana", "Tailandesa")); // Se para a chave "nome" existem os valores informados
 	}
 	
@@ -103,7 +113,7 @@ class CadastroCozinhaIT {
 	@Test
 	public void testRetornarStatus201_QuandoCadastrarCozinha() {
 		given()
-			.body("{ \"nome\": \"Chinesa\" }")
+			.body(ResourceUtils.getContentFromResource("/json/cadastro-cozinha.json"))
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
@@ -127,7 +137,7 @@ class CadastroCozinhaIT {
 	@Test
 	public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
 		given()
-			.pathParam("cozinhaId", 100)
+			.pathParam("cozinhaId", COZINHA_INEXISTENTE_ID)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{cozinhaId}")
@@ -142,7 +152,13 @@ class CadastroCozinhaIT {
 
 		Cozinha cozinha2 = new Cozinha();
 		cozinha2.setNome("Americana");
-		cozinhaRepository.save(cozinha2);		
+		cozinhaRepository.save(cozinha2);
+		
+		cozinhas.clear();
+		cozinhas.add(cozinha1);
+		cozinhas.add(cozinha2);
+		
+		cozinhaAmericana = cozinha2;
 	}
 
 }
