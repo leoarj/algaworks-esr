@@ -4,8 +4,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,9 @@ class CadastroCozinhaIT {
 	@LocalServerPort
 	private int port;
 	
+	@Autowired
+	private Flyway flyway;
+	
 	/**
 	 * Método de callback para preparar a execuçãode cada teste.
 	 * - Configura log para caso de falha das requisições/respostas.
@@ -44,6 +49,9 @@ class CadastroCozinhaIT {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 		RestAssured.port = port;
 		RestAssured.basePath = "/cozinhas";
+		
+		// Migra/volta o estado do DB para cada teste
+		flyway.migrate();
 	}
 	
 	/**
