@@ -1,0 +1,7 @@
+{
+    "nome": "Comida Brasileira",
+    "taxaFrete": -2.00,
+    "cozinha": {
+        "id": 3
+    }
+}
