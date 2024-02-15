@@ -30,6 +30,7 @@ import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.Multiplo;
 import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -62,6 +63,7 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
+	@JsonIgnoreProperties(value = "nome", allowGetters = true)
 	@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@NotNull
