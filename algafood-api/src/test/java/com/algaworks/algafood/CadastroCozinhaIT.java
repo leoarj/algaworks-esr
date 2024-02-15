@@ -1,18 +1,24 @@
 package com.algaworks.algafood;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
-import javax.validation.ConstraintViolationException;
-
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 
-import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
-import com.algaworks.algafood.domain.service.CadastroCozinhaService;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.util.DatabaseCleaner;
+import com.algaworks.algafood.util.ResourceUtils;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 /**
  * Classe de testes para testar cadastro de cozinha.
@@ -25,68 +31,128 @@ import com.algaworks.algafood.domain.service.CadastroCozinhaService;
  * - Validação = Verificação dos resultados obtidos a partir da ação,
  * onde os resultados já são esperados em um determinado estado.
  */
-@SpringBootTest
+//@RunWith(SpringRunner.class) // JUnit4
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // Para definir uma porta aleatória para o container de teste
+@TestPropertySource("/application-test.properties") // Para utilizar propriedades personalizadas de teste
 class CadastroCozinhaIT {
 
+	private static final int COZINHA_ID_INEXISTENTE = 100;
+
+	// Para injetar a porta do servidor na variável
+	@LocalServerPort
+	private int port;
+	
 	@Autowired
-	private CadastroCozinhaService cadastroCozinhaService;
+	private DatabaseCleaner databaseCleaner;
+	
+	@Autowired
+	private CozinhaRepository cozinhaRepository;
+	
+	private int quantidadeCozinhasCadastradas;
+	private Cozinha cozinhaAmericana;
+	private String jsonCorretoCozinhaChinesa;
+	
 	
 	/**
-	 * Não deve falhar para o caso de cozinha ser informada corretamente para cadastro.
-	 * Nesse caso, garantir que a operação ocorra sem falhas para dados informados corretamente.
+	 * Método de callback para preparar a execuçãode cada teste.
+	 * - Configura log para caso de falha das requisições/respostas.
+	 * - Configura porta.
+	 * - Configura rota.
 	 */
-	@Test
-	void testarCadastroCozinhaComSucesso() {
-		// cenário
-		Cozinha novaCozinha = new Cozinha();
-		novaCozinha.setNome("Chinesa");
+	@BeforeEach
+	public void setUp() {
+		// Habilita log da requisição/resposta caso haja falha
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+		RestAssured.port = port;
+		RestAssured.basePath = "/cozinhas";
 		
-		// ação
-		novaCozinha = cadastroCozinhaService.salvar(novaCozinha);
+		// Migra/volta o estado do DB para cada teste
+		databaseCleaner.clearTables();
+		prepararDados();
 		
-		// validação
-		assertThat(novaCozinha).isNotNull();
-		assertThat(novaCozinha.getId()).isNotNull();
+		jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource("/json/correto/cozinha-chinesa.json");
 	}
 	
 	/**
-	 * Deve falhar para o caso de cozinha ser informada incorretamente para cadastro.
-	 * Nesse caso, garantir que um erro seja capturado.
+	 * Teste de API, realizando chamada no recurso de /cozinhas
+	 * e testando o endpoint get verificando se o código de status do retorno é 200 - OK.
 	 */
 	@Test
-	void testarCadastroCozinhaSemNome() {
-		Cozinha novaCozinha = new Cozinha();
-		novaCozinha.setNome(null);
-		
-		// Necessário devido ao JUnit 5
-		ConstraintViolationException erroEsperado =
-				Assertions.assertThrows(ConstraintViolationException.class, () -> {
-					cadastroCozinhaService.salvar(novaCozinha);
-				});
-		
-		assertThat(erroEsperado).isNotNull();
+	public void deveRetornarStatus200_QuandoConsultarCozinhas() {
+		given()
+			.accept(ContentType.JSON)
+		.when()
+			.get()
+		.then()
+			.statusCode(HttpStatus.OK.value());
 	}
 	
-	//JUnit4: @Test(expected = EntidadeEmUsoException.class)
+	/**
+	 * Realiza teste validando corpo da resposta,
+	 * utilizando a biblioteca hamcrest para abstrair lógica de correspondências.
+	 */
 	@Test
-	public void deveFalhar_QuandoExcluirCozinhaEmUso() {
-		EntidadeEmUsoException erroEsperaodo =
-				Assertions.assertThrows(EntidadeEmUsoException.class, () -> {
-					cadastroCozinhaService.excluir(1L);
-				});
-		
-		assertThat(erroEsperaodo).isNotNull();
+	public void deveRetornarQuantidadeCorretaDeCozinhas_QuandoConsultarCozinhas() {
+		given()
+			.accept(ContentType.JSON)
+		.when()
+			.get()
+		.then()
+			.body("", hasSize(quantidadeCozinhasCadastradas)); // Se no corpo da resposta existem 4 objetos (JSON)
+			//.body("nome", hasItems("Indiana", "Tailandesa")); // Se para a chave "nome" existem os valores informados
 	}
 	
-	//JUnit4: @Test(expected = EntidadeNaoEncontradaException.class)
+	/*
+	 * Espera o retorno 201 - CREATED na criação de uma nova cozinha.
+	 *
+	 * Obs.: Vai quebrar o teste de verificação (quando não tem a limpeza das tabelas) do corpo da resposta,
+	 * já este teste vai alterar a quantidade de cozinhas cadastradas.
+	 */
 	@Test
-	public void deveFalhar_QuandoExcluirCozinhaInexistente() {
-		EntidadeNaoEncontradaException erroEsperado =
-				Assertions.assertThrows(EntidadeNaoEncontradaException.class, () -> {
-					cadastroCozinhaService.excluir(10L);
-				});
+	public void testRetornarStatus201_QuandoCadastrarCozinha() {
+		given()
+			.body(jsonCorretoCozinhaChinesa)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+			.statusCode(HttpStatus.CREATED.value());
+	}
+	
+	@Test
+	public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
+		given()
+			.pathParam("cozinhaId", cozinhaAmericana.getId()) // Define e mapeia variável de caminho
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{cozinhaId}") // Adiciona variável de caminho na requisição
+		.then()
+			.statusCode(HttpStatus.OK.value())
+			.body("nome", equalTo(cozinhaAmericana.getNome()));
+	}
+	
+	@Test
+	public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
+		given()
+			.pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{cozinhaId}")
+		.then()
+			.statusCode(HttpStatus.NOT_FOUND.value());
+	}
+	
+	private void prepararDados() {
+		Cozinha cozinhaTailandesa = new Cozinha();
+		cozinhaTailandesa.setNome("Tailandesa");
+		cozinhaRepository.save(cozinhaTailandesa);
+
+		cozinhaAmericana = new Cozinha();
+		cozinhaAmericana.setNome("Americana");
+		cozinhaRepository.save(cozinhaAmericana);
 		
-		assertThat(erroEsperado).isNotNull();
+		quantidadeCozinhasCadastradas = (int) cozinhaRepository.count();
 	}
 
 }

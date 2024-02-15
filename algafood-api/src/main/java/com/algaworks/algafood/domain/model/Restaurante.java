@@ -58,7 +58,7 @@ public class Restaurante {
 	@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
 	//@DecimalMin("0")
 	@PositiveOrZero//(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
-	@Multiplo(numero = 5) // Constraint personalizada
+	//@Multiplo(numero = 5) // Constraint personalizada
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
