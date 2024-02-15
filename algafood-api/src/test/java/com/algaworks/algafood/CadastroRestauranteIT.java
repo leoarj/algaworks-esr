@@ -33,7 +33,13 @@ import io.restassured.http.ContentType;
 @TestPropertySource("/application-test.properties")
 public class CadastroRestauranteIT {
 	
+	private static final String RESTAURANTE_FRETE_GRATIS_DESCRICAO = "frete grátis";
+
 	private static final int RESTAURANTE_ID_INEXISTENTE = 10;
+	
+	private static final String VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE = "Violação de regra de negócio";
+
+    private static final String DADOS_INVALIDOS_PROBLEM_TITLE = "Dados inválidos";
 	
 	@LocalServerPort
 	private int port;
@@ -49,11 +55,16 @@ public class CadastroRestauranteIT {
 	
 	private int quantidadeRestaurantesCadastrados;
 	private Restaurante restauranteMarrocos;
-	private String jsonCorretoRestauranteBrasileiro;
-	private String jsonCorretoRestauranteBrasileiroFreteGratis;
-	private String jsonIncorretoRestauranteBrasileiro;
-	private String jsonIncorretoRestauranteBrasileiroTaxaFreteNegativa;
-	private String jsonIncorretoRestauranteBrasileiroTaxaFreteGratisSemDescricaoObrigatoria;
+	private String jsonRestauranteCorreto;
+	private String jsonRestauranteFreteGratisCorreto;
+	private String jsonRestauranteCozinhaInexistente;
+	private String jsonRestauranteTaxaFreteNegativa;
+	private String jsonRestauranteTaxaFreteGratisSemDescricaoObrigatoria;
+	
+	// Obtidos a partir do exemplo
+	private String jsonRestauranteSemFrete;
+	private String jsonRestauranteSemCozinha;
+	
 	
 	@BeforeEach
 	public void setup() {
@@ -64,12 +75,27 @@ public class CadastroRestauranteIT {
 		databaseCleaner.clearTables();
 		prepararDados();
 		
-		jsonCorretoRestauranteBrasileiro = ResourceUtils.getContentFromResource("/json/correto/restaurante-brasileiro.json");
-		jsonCorretoRestauranteBrasileiroFreteGratis = ResourceUtils.getContentFromResource("/json/correto/restaurante-brasileiro-taxafrete-gratis-descricao-obrigatoria.json");
+		jsonRestauranteCorreto = ResourceUtils.getContentFromResource(
+				"/json/correto/restaurante-brasileiro.json");
 		
-		jsonIncorretoRestauranteBrasileiro = ResourceUtils.getContentFromResource("/json/inccorreto/restaurante-brasileiro.json");
-		jsonIncorretoRestauranteBrasileiroTaxaFreteNegativa = ResourceUtils.getContentFromResource("/json/inccorreto/restaurante-brasileiro-taxafrete-negativa.json");
-		jsonIncorretoRestauranteBrasileiroTaxaFreteGratisSemDescricaoObrigatoria = ResourceUtils.getContentFromResource("/json/inccorreto/restaurante-brasileiro-taxafrete-gratis-sem-descricao-obrigatoria.json");
+		jsonRestauranteFreteGratisCorreto = ResourceUtils.getContentFromResource(
+				"/json/correto/restaurante-brasileiro-taxafrete-gratis-descricao-obrigatoria.json");
+		
+		jsonRestauranteCozinhaInexistente = ResourceUtils.getContentFromResource(
+				"/json/incorreto/restaurante-brasileiro-cozinha-inexistente.json");
+		
+		jsonRestauranteTaxaFreteNegativa = ResourceUtils.getContentFromResource(
+				"/json/incorreto/restaurante-brasileiro-taxafrete-negativa.json");
+		
+		jsonRestauranteTaxaFreteGratisSemDescricaoObrigatoria = ResourceUtils.getContentFromResource(
+				"/json/incorreto/restaurante-brasileiro-taxafrete-gratis-sem-descricao-obrigatoria.json");
+		
+		// Obtidos do exemplo do desafio
+		jsonRestauranteSemFrete = ResourceUtils.getContentFromResource(
+				"/json/incorreto/restaurante-brasileiro-sem-frete.json");
+		
+		jsonRestauranteSemCozinha = ResourceUtils.getContentFromResource(
+				"/json/incorreto/restaurante-brasileiro-sem-cozinha.json");
 	}
 	
 	// Status 200 quando consultar cozinhas
@@ -99,7 +125,7 @@ public class CadastroRestauranteIT {
 	@Test
 	public void deveRetornar201_QuandoCadastrarRestaurante() {
 		given()
-			.body(jsonCorretoRestauranteBrasileiro)
+			.body(jsonRestauranteCorreto)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
@@ -112,14 +138,15 @@ public class CadastroRestauranteIT {
 	@Test
 	public void deveRetornar201_QuandoCadastrarRestauranteComTaxaFreteGratisComDescricaoObrigatoria() {
 		given()
-			.body(jsonCorretoRestauranteBrasileiroFreteGratis)
+			.body(jsonRestauranteFreteGratisCorreto)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
 			.statusCode(HttpStatus.CREATED.value())
-			.body("nome", containsStringIgnoringCase("frete grátis"));
+			.body("nome", containsStringIgnoringCase(RESTAURANTE_FRETE_GRATIS_DESCRICAO))
+			.body("taxaFrete", equalTo(BigDecimal.ZERO.floatValue()));
 	}
 	
 	// Status 200 quando consultar restaurante existente
@@ -151,38 +178,71 @@ public class CadastroRestauranteIT {
 	@Test 
 	public void deveRetornarStatus400_QuandoCadastrarRestauranteComCozinhaInexistente() {
 		given()
-			.body(jsonIncorretoRestauranteBrasileiro)
+			.body(jsonRestauranteCozinhaInexistente)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.BAD_REQUEST.value());
+			.statusCode(HttpStatus.BAD_REQUEST.value())
+			.body("title", equalTo(VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE));
 	}
 	
+	// Status 400 quando cadastrar restaurante com taxa de frete negativa
 	@Test
 	public void deveRetornarStatus400_QuandoCadastrarRestauranteComTaxaFreteNegativa() {
 		given()
-			.body(jsonIncorretoRestauranteBrasileiroTaxaFreteNegativa)
+			.body(jsonRestauranteTaxaFreteNegativa)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.BAD_REQUEST.value());
+			.statusCode(HttpStatus.BAD_REQUEST.value())
+			.body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
 	}
 	
+	// Status 400 quando cadastrar restaurante com taxa de frete grátis sem descrição obrigatória
 	@Test
-	public void deveRetornarStatus400_QuandoCadastrarRestauranteComTaxaFreteZeroSemDescricaoGratis() {
+	public void deveRetornarStatus400_QuandoCadastrarRestauranteComFreteGratisSemDescricaoObrigatoria() {
 		given()
-			.body(jsonIncorretoRestauranteBrasileiroTaxaFreteGratisSemDescricaoObrigatoria)
+			.body(jsonRestauranteTaxaFreteGratisSemDescricaoObrigatoria)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.BAD_REQUEST.value());
+			.statusCode(HttpStatus.BAD_REQUEST.value())
+			.body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE))
+			.body("objects[0].userMessage", equalTo("descrição obrigatória inválida"));
 	}
+	
+	// Testes fornecidos de exemplo
+	@Test
+    public void deveRetornarStatus400_QuandoCadastrarRestauranteSemTaxaFrete() {
+        given()
+            .body(jsonRestauranteSemFrete)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+    }
+
+    @Test
+    public void deveRetornarStatus400_QuandoCadastrarRestauranteSemCozinha() {
+        given()
+            .body(jsonRestauranteSemCozinha)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+    }
 	
 	private void prepararDados() {
 		Cozinha cozinhaJaponesa = new Cozinha();
