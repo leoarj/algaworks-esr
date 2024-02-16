@@ -35,7 +35,6 @@ public class Cozinha {
 	@Column(nullable = false)
 	private String nome;
 	
-	@JsonIgnore // Para evitar problemas de referência circular na serialização
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante> restaurantes = new ArrayList<>();
 }

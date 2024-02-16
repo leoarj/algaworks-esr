@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Aqui onde são modificadas as anotações para ignorar ou não as propriedades
  * no modelo de representação.
  */
-public class RestauranteMixin {
+public abstract class RestauranteMixin {
 
 	@JsonIgnoreProperties(value = "nome", allowGetters = true)
 	private Cozinha cozinha;
@@ -31,9 +31,9 @@ public class RestauranteMixin {
 	private LocalDateTime dataAtualizacao;
 	
 	@JsonIgnore
-	private List<FormaPagamento> formasPagamento = new ArrayList<>();
+	private List<FormaPagamento> formasPagamento;
 	
 	@JsonIgnore
-	private List<Produto> produtos = new ArrayList<>();
+	private List<Produto> produtos;
 	
 }
