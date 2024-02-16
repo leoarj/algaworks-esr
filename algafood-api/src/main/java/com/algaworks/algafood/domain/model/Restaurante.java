@@ -27,12 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algaworks.algafood.core.validation.Groups;
-import com.algaworks.algafood.core.validation.Multiplo;
 import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-//import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -63,26 +58,21 @@ public class Restaurante {
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
-	@JsonIgnoreProperties(value = "nome", allowGetters = true)
 	@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
 	@NotNull
 	//@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
-	//@JsonIgnore
 	@ManyToOne //(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
 	
-	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 	
-	@JsonIgnore
 	@CreationTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
 	private LocalDateTime dataCadastro;
 	
-	@JsonIgnore
 	@UpdateTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
 	private LocalDateTime dataAtualizacao;
@@ -93,7 +83,6 @@ public class Restaurante {
 	 * joinColumns para definir nome da chave estrangeira referente a primeira entidade.
 	 * inverseJoinColumns para definir nome da chave estrangeira referente a segunda entidade.
 	 */
-	@JsonIgnore
 	//@ManyToMany(fetch = FetchType.EAGER) // Apenas para teste de carregamento "ansioso", não recomendado nesse caso
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
@@ -101,7 +90,6 @@ public class Restaurante {
 			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 }
