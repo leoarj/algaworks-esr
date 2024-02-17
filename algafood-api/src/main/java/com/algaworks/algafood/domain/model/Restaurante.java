@@ -2,6 +2,7 @@ package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,11 +72,11 @@ public class Restaurante {
 	
 	@CreationTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	
 	@UpdateTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 	
 	/**
 	 * @JoinTable para definir a tabela de associação.
