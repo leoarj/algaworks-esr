@@ -33,8 +33,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 // Anotação customizada a nível de classe para validar mais de uma propriedade conforme condições impostas.
-@ValorZeroIncluirDescricao(valorField = "taxaFrete",
-		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
+//@ValorZeroIncluirDescricao(valorField = "taxaFrete",
+		//descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -45,22 +45,20 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@NotNull
-	//@NotEmpty
-	@NotBlank
+	//@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
-	@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
+	//@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
 	//@DecimalMin("0")
-	@PositiveOrZero//(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
+	//@PositiveOrZero//(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
 	//@Multiplo(numero = 5) // Constraint personalizada
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
-	@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata
-	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-	@NotNull
+	//@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata
+	//@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+	//@NotNull
 	//@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
 	@ManyToOne //(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
