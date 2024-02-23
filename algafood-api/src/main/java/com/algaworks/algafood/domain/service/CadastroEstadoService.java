@@ -30,6 +30,11 @@ public class CadastroEstadoService {
 	public void remover(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
+			/**
+			 * Para não postergar operações pendentes e poder capturar
+			 * as exceptions correspondentes se for o caso.
+			 */
+			estadoRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EstadoNaoEncontradoException(estadoId);
 		} catch (DataIntegrityViolationException e) {
