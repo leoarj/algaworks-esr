@@ -14,7 +14,6 @@ public class CidadeInputDisassembler {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-
 	public Cidade toDomainObject(CidadeInput cidadeInput) {
 		return modelMapper.map(cidadeInput, Cidade.class);
 	}
