@@ -3,6 +3,7 @@ package com.algaworks.algafood.domain.service;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -20,13 +21,20 @@ public class CadastroEstadoService {
 	
 	private final EstadoRepository estadoRepository;
 	
+	@Transactional
 	public Estado salvar(Estado estado) {
 		return estadoRepository.save(estado);
 	}
 	
+	@Transactional
 	public void remover(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
+			/**
+			 * Para não postergar operações pendentes e poder capturar
+			 * as exceptions correspondentes se for o caso.
+			 */
+			estadoRepository.flush();
 		} catch (EmptyResultDataAccessException e) {
 			throw new EstadoNaoEncontradoException(estadoId);
 		} catch (DataIntegrityViolationException e) {

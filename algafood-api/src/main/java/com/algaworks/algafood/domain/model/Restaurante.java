@@ -1,7 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +27,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algaworks.algafood.core.validation.Groups;
-import com.algaworks.algafood.core.validation.Multiplo;
 import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-//import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 // Anotação customizada a nível de classe para validar mais de uma propriedade conforme condições impostas.
-@ValorZeroIncluirDescricao(valorField = "taxaFrete",
-		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
+//@ValorZeroIncluirDescricao(valorField = "taxaFrete",
+		//descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -49,41 +45,35 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@NotNull
-	//@NotEmpty
-	@NotBlank
+	//@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
-	@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
+	//@NotNull // Necessário porque @PositiveOrZero não valida se é nulo
 	//@DecimalMin("0")
-	@PositiveOrZero//(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
+	//@PositiveOrZero//(message = "{TaxaFrete.invalida}") // para ler do resource bundle do Bean Validation
 	//@Multiplo(numero = 5) // Constraint personalizada
 	@Column(name = "taxa_frete", nullable = false) // Não necessário, apenas para referência.
 	private BigDecimal taxaFrete;
 	
-	@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata
-	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-	@NotNull
+	//@Valid // Para validar em cascata (Por padrão não é realizada validação em cascata
+	//@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+	//@NotNull
 	//@JsonIgnoreProperties("hibernateLazyInitializer") // Para ignorar proxy gerado pelo Hibernate no caso de utilizar carregamento Lazy
-	//@JsonIgnore
 	@ManyToOne //(fetch = FetchType.LAZY) // Habilitar o carregamento tardio
 	@JoinColumn(name = "cozinha_id", nullable = false) // Não necessário, apenas para referência.
 	private Cozinha cozinha;
 	
-	@JsonIgnore
 	@Embedded
 	private Endereco endereco;
 	
-	@JsonIgnore
 	@CreationTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	
-	@JsonIgnore
 	@UpdateTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 	
 	/**
 	 * @JoinTable para definir a tabela de associação.
@@ -91,7 +81,6 @@ public class Restaurante {
 	 * joinColumns para definir nome da chave estrangeira referente a primeira entidade.
 	 * inverseJoinColumns para definir nome da chave estrangeira referente a segunda entidade.
 	 */
-	@JsonIgnore
 	//@ManyToMany(fetch = FetchType.EAGER) // Apenas para teste de carregamento "ansioso", não recomendado nesse caso
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento",
@@ -99,7 +88,6 @@ public class Restaurante {
 			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 }
