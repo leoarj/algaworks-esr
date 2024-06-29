@@ -20,16 +20,15 @@ public class CadastroUsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 	
-	public Usuario buscarOuFalhar(Long usuarioId) {
-		return usuarioRepository.findById(usuarioId)
-				.orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
-	}
-	
+	@Transactional
 	public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
 		Usuario usuario = buscarOuFalhar(usuarioId);
 		
 		usuario.alterarSenha(senhaAtual, novaSenha);
-		
-		salvar(usuario);
+	}
+	
+	public Usuario buscarOuFalhar(Long usuarioId) {
+		return usuarioRepository.findById(usuarioId)
+				.orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
 	}
 }
