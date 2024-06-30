@@ -55,6 +55,5 @@ public class Usuario {
 		}
 		
 		setSenha(novaSenha);
-	}
-	
+	}	
 }
