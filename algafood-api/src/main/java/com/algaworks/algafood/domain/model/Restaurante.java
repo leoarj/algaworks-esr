@@ -71,6 +71,8 @@ public class Restaurante {
 	
 	private Boolean ativo = Boolean.TRUE;
 	
+	private Boolean aberto = Boolean.FALSE;
+	
 	@CreationTimestamp // específica da implementação (Hibernate)
 	@Column(nullable = false, columnDefinition = "datetime") // para especificar o tipo no DB
 	private OffsetDateTime dataCadastro;
@@ -101,6 +103,14 @@ public class Restaurante {
 	
 	public void inativar() {
 		setAtivo(false);
+	}
+	
+	public void abrir() {
+		setAberto(true);
+	}
+	
+	public void fechar() {
+		setAberto(false);
 	}
 	
 	public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
