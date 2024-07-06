@@ -50,7 +50,7 @@ public class Pedido {
 	private OffsetDateTime dataEntrega;
 	
 	@Enumerated(EnumType.STRING)
-	private StatusPedido statusPedido;
+	private StatusPedido status = StatusPedido.CRIADO;
 	
 	@ManyToOne
 	@JoinColumn(nullable = false)

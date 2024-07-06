@@ -13,6 +13,8 @@ delete from restaurante_forma_pagamento;
 delete from usuario;
 delete from usuario_grupo;
 delete from restaurante_usuario_responsavel;
+delete from pedido;
+delete from item_pedido;
 
 set foreign_key_checks = 1;
 
@@ -85,3 +87,13 @@ INSERT INTO grupo_permissao (grupo_id, permissao_id) VALUES (1, 1), (1, 2), (2, 
 INSERT INTO usuario_grupo (usuario_id, grupo_id) VALUES (1, 1), (1, 2), (2, 2), (3, 1);
 
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1);
+
+INSERT INTO `algafood`.`pedido` (`id`, `subtotal`, `taxa_frete`, `valor_total`, `restaurante_id`, `usuario_cliente_id`, `forma_pagamento_id`, `endereco_cidade_id`, `endereco_cep`, `endereco_logradouro`, `endereco_numero`, `endereco_complemento`, `endereco_bairro`, `status`, `data_criacao`) VALUES (1, '188.90', '5.00', '193.90', '1', '1', '1', '1', '00000000', 'Rua teste', '100', 'Próximo à praça central', 'Centro', 'CRIADO', utc_timestamp());
+
+INSERT INTO `algafood`.`item_pedido` (`quantidade`, `preco_unitario`, `preco_total`, `pedido_id`, `produto_id`) VALUES ('1', '78.90', '78.90', '1', '1');
+
+INSERT INTO `algafood`.`item_pedido` (`quantidade`, `preco_unitario`, `preco_total`, `pedido_id`, `produto_id`) VALUES ('2', '110.00', '110.00', '1', '2');
+
+INSERT INTO `algafood`.`pedido` (`id`, `subtotal`, `taxa_frete`, `valor_total`, `restaurante_id`, `usuario_cliente_id`, `forma_pagamento_id`, `endereco_cidade_id`, `endereco_cep`, `endereco_logradouro`, `endereco_numero`, `endereco_complemento`, `endereco_bairro`, `status`, `data_criacao`) VALUES (2, '87.20', '7.00', '94.20', '4', '2', '2', '2', '11111111', 'Rua teste 2', '200', 'Próximo à torre', 'Centro', 'CRIADO', utc_timestamp());
+
+INSERT INTO `algafood`.`item_pedido` (`quantidade`, `preco_unitario`, `preco_total`, `pedido_id`, `produto_id`) VALUES ('1', '87.20', '348.80', '2', '3');
