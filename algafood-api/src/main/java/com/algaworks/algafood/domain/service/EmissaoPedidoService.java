@@ -42,11 +42,6 @@ public class EmissaoPedidoService {
 		return pedidoRepository.save(pedido);
 	}
 	
-	public Pedido buscarOuFalhar(Long pedidoId) {
-		return pedidoRepository.findById(pedidoId)
-				.orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
-	}
-	
 	private void validarPedido(Pedido pedido) {
 		Cidade cidade = cadastroCidadeService.buscarOuFalhar(pedido.getEnderecoEntrega().getCidade().getId());
 		Usuario cliente = cadastroUsuarioService.buscarOuFalhar(pedido.getCliente().getId());
@@ -72,5 +67,10 @@ public class EmissaoPedidoService {
 			item.setProduto(produto);
 			item.setPrecoUnitario(produto.getPreco());
 		});
+	}
+	
+	public Pedido buscarOuFalhar(String codigoPedido) {
+		return pedidoRepository.findByCodigo(codigoPedido)
+				.orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
 	}
 }

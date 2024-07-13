@@ -13,26 +13,26 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/pedidos/{pedidoId}")
+@RequestMapping("/pedidos/{codigoPedido}")
 public class FluxoPedidoController {
 
 	private final FluxoPedidoService fluxoPedidoService;
 	
 	@PutMapping("/confirmacao")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirmar(@PathVariable Long pedidoId) {
-		fluxoPedidoService.confirmar(pedidoId);
+	public void confirmar(@PathVariable String codigoPedido) {
+		fluxoPedidoService.confirmar(codigoPedido);
 	}
 	
 	@PutMapping("/cancelamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancelar(@PathVariable Long pedidoId) {
-		fluxoPedidoService.cancelar(pedidoId);
+	public void cancelar(@PathVariable String codigoPedido) {
+		fluxoPedidoService.cancelar(codigoPedido);
 	}
 	
 	@PutMapping("/entrega")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void entregar(@PathVariable Long pedidoId) {
-		fluxoPedidoService.entregar(pedidoId);
+	public void entregar(@PathVariable String codigoPedido) {
+		fluxoPedidoService.entregar(codigoPedido);
 	}
 }
