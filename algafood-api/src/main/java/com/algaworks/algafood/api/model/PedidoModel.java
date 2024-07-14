@@ -2,7 +2,6 @@ package com.algaworks.algafood.api.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -25,6 +24,6 @@ public class PedidoModel {
 	private UsuarioModel cliente;
 	private FormaPagamentoModel formaPagamento;
 	private EnderecoModel enderecoEntrega;
-	private List<ItemPedidoModel> itens = new ArrayList<>();
+	private List<ItemPedidoModel> itens;
 	
 }

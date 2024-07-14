@@ -46,7 +46,8 @@ public class RestauranteProdutoController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProdutoModel adicionar(@RequestBody @Valid ProdutoInput produtoInput, @PathVariable Long restauranteId) {
+	public ProdutoModel adicionar(@PathVariable Long restauranteId,
+			@RequestBody @Valid ProdutoInput produtoInput) {
 		Produto produto = produtoInputDisassembler.toDomainObject(produtoInput);
 		
 		return produtoModelAssembler.toModel(cadastroProdutoService.salvarNovo(produto, restauranteId));

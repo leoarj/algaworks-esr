@@ -11,7 +11,6 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.model.Usuario;
-import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 public class CadastroRestauranteService {
 
 	private final RestauranteRepository restauranteRepository;
-	private final CozinhaRepository cozinhaRepository;
 	private final CadastroCozinhaService cadastroCozinhaService;
 	private final CadastroCidadeService cadastroCidadeService;
 	private final CadastroFormaPagamentoService cadastroFormaPagamentoService;
@@ -35,7 +33,7 @@ public class CadastroRestauranteService {
 		Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 		Cidade cidade = cadastroCidadeService.buscarOuFalhar(cidadeId);
 		
-		restaurante.setCozinha(cozinha); // Atualiza restaurante com cozinha vinda do respositório (managed).
+		restaurante.setCozinha(cozinha); // Atualiza restaurante com cozinha vinda do repositório (managed).
 		restaurante.getEndereco().setCidade(cidade);
 		
 		return restauranteRepository.save(restaurante);

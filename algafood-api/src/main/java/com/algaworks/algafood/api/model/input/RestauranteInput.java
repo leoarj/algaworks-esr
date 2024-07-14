@@ -7,14 +7,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
-import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
+//import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
 
 import lombok.Getter;
 import lombok.Setter;
 
 //Anotação customizada a nível de classe para validar mais de uma propriedade conforme condições impostas.
-@ValorZeroIncluirDescricao(valorField = "taxaFrete",
-		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
+//@ValorZeroIncluirDescricao(valorField = "taxaFrete",
+//		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Setter
 @Getter
 public class RestauranteInput {

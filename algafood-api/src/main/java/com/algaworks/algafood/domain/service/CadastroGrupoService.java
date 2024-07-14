@@ -29,7 +29,7 @@ public class CadastroGrupoService {
 	}
 	
 	@Transactional
-	public void remover(Long grupoId) {
+	public void excluir(Long grupoId) {
 		try {
 			grupoRepository.deleteById(grupoId);
 			

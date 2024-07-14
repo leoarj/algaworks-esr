@@ -59,8 +59,6 @@ public class EstadoController {
 			@RequestBody @Valid EstadoInput estadoInput) {
 		Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(estadoId);
 		
-//		BeanUtils.copyProperties(estado, estadoAtual, "id");
-		
 		estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
 		
 		return estadoModelAssembler.toModel(cadastroEstadoService.salvar(estadoAtual));
@@ -69,7 +67,7 @@ public class EstadoController {
 	@DeleteMapping("/{estadoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long estadoId) {
-		cadastroEstadoService.remover(estadoId);
+		cadastroEstadoService.excluir(estadoId);
 	}
 	
 }

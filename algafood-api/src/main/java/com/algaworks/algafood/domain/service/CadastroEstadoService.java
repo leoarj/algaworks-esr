@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
@@ -27,7 +26,7 @@ public class CadastroEstadoService {
 	}
 	
 	@Transactional
-	public void remover(Long estadoId) {
+	public void excluir(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
 			/**

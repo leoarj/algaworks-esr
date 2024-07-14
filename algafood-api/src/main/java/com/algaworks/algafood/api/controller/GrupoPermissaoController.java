@@ -36,13 +36,13 @@ public class GrupoPermissaoController {
 	
 	@PutMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+	public void associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		cadastroGrupoService.associarPermissao(grupoId, permissaoId);
 	}
 	
 	@DeleteMapping("/{permissaoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void desassociarPermissao(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+	public void desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
 		cadastroGrupoService.desassociarPermissao(grupoId, permissaoId);
 	}
 	

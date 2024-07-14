@@ -9,6 +9,5 @@ public class GrupoModel {
 
 	private Long id;
 	private String nome;
-//	private List<Permissao> permissoes = new ArrayList<>();
 	
 }

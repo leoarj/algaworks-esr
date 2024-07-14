@@ -10,24 +10,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonRootName("cozinha") // Para personalizar o nome da raíz do body na serialização.
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cozinha {
 	
-	//@NotNull(groups = Groups.CozinhaId.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	//@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	

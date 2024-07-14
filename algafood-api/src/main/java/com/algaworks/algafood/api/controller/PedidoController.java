@@ -55,14 +55,15 @@ public class PedidoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
 		try {
-			Pedido pedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
+			Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 			
-			pedido.setCliente(new Usuario());
-			pedido.getCliente().setId(1L);
+			// TODO aqui vai informar usuário autenticado (módulo de seguraça)
+			novoPedido.setCliente(new Usuario());
+			novoPedido.getCliente().setId(1L);
 			
-			pedido = emissaoPedidoService.emitir(pedido);
+			novoPedido = emissaoPedidoService.emitir(novoPedido);
 			
-			return pedidoModelAssembler.toModel(pedido);
+			return pedidoModelAssembler.toModel(novoPedido);
 		} catch (EntidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}

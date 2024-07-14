@@ -57,10 +57,10 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/{usuarioId}")
-	public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioSemSenhaInput) {
+	public UsuarioModel atualizar(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioInput usuarioInput) {
 		Usuario usuarioAtual = cadastroUsuarioService.buscarOuFalhar(usuarioId);
 		
-		usuarioInputDisassembler.copyToDomainObject(usuarioSemSenhaInput, usuarioAtual);
+		usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuarioAtual);
 		
 		return usuarioModelAssembler.toModel(cadastroUsuarioService.salvar(usuarioAtual));
 	}
@@ -68,8 +68,6 @@ public class UsuarioController {
 	@PutMapping("/{usuarioId}/senha")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid UsuarioAlteracaoSenhaInput usuarioAlteracaoSenhaInput) {
-		Usuario usuarioAtual = cadastroUsuarioService.buscarOuFalhar(usuarioId);
-		
 		cadastroUsuarioService.alterarSenha(usuarioId, usuarioAlteracaoSenhaInput.getSenhaAtual(), usuarioAlteracaoSenhaInput.getNovaSenha());
 	}
 	

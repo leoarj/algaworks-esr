@@ -66,8 +66,6 @@ public class CidadeController {
 		try {
 			Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(cidadeId);
 			
-//			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-			
 			cidadeInputDisassembler.copyToDomainObject(cidadeInput, cidadeAtual);
 			
 			return cidadeModelAssembler.toModel(cadastroCidadeService.salvar(cidadeAtual));
@@ -79,6 +77,6 @@ public class CidadeController {
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
-		cadastroCidadeService.remover(cidadeId);
+		cadastroCidadeService.excluir(cidadeId);
 	}
 }

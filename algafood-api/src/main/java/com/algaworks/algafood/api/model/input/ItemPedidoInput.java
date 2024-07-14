@@ -13,8 +13,8 @@ public class ItemPedidoInput {
 	@NotNull
 	private Long produtoId;
 	
-	@PositiveOrZero
 	@NotNull
+	@PositiveOrZero
 	private Integer quantidade;
 	
 	private String observacao;

@@ -13,21 +13,21 @@ import lombok.Setter;
 @Setter
 public class PedidoInput {
 
-	@NotNull
 	@Valid
+	@NotNull
 	private RestauranteIdInput restaurante;
 
-	@NotNull
 	@Valid
+	@NotNull
 	private FormaPagamentoIdInput formaPagamento;
 	
-	@NotNull
 	@Valid
+	@NotNull
 	private EnderecoInput enderecoEntrega;
 	
-	@Size(min = 1)
-	@NotNull
 	@Valid
+	@NotNull
+	@Size(min = 1)
 	private List<ItemPedidoInput> itens;
 	
 }
