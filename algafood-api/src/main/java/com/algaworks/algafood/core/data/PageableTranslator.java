@@ -22,6 +22,8 @@ public class PageableTranslator {
 		 * Coleta as orders em uma lista.
 		 * Instancia um novo pageable com as ordenações traduzidas.
 		 */
+		
+		// TODO refatorar para lançar exception de negócio posteriormente
 		var orders = pageable.getSort().stream()
 				.filter(order -> fieldsMapping.containsKey(order.getProperty()))
 				.map(order -> new Sort.Order(order.getDirection(),
