@@ -1,16 +1,19 @@
 package com.algaworks.algafood.infrastructure.service;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.Predicate;
 
 import org.springframework.stereotype.Repository;
 
 import com.algaworks.algafood.domain.filter.VendaDiariaFilter;
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.StatusPedido;
 import com.algaworks.algafood.domain.model.dto.VendaDiaria;
 import com.algaworks.algafood.domain.service.VendaQueryService;
 
@@ -28,6 +31,8 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 		var query = builder.createQuery(VendaDiaria.class);
 		var root = query.from(Pedido.class);
 		
+		var predicates = new ArrayList<Predicate>();
+		
 		var functionDateDataCriacao = builder.function(
 				"date", Date.class, root.get("dataCriacao"));
 		
@@ -36,7 +41,30 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 				builder.count(root.get("id")),
 				builder.sum(root.get("valorTotal")));
 		
+		if (Objects.nonNull(filtro.getRestauranteId())) {
+			predicates.add(builder.equal(root.get("restaurante"), filtro.getRestauranteId()));
+		}
+		
+		if (Objects.nonNull(filtro.getDataCriacaoInicio())) {
+			predicates.add(builder.greaterThanOrEqualTo(
+					root.get("dataCriacao"), filtro.getDataCriacaoInicio()));
+		}
+		
+		if (Objects.nonNull(filtro.getDataCriacaoFim())) {
+			predicates.add(builder.lessThanOrEqualTo(
+					root.get("dataCriacao"), filtro.getDataCriacaoFim()));
+		}
+		
+		// Implementação com "or"
+//		predicates.add(builder.or(
+//				builder.equal(root.get("status"), StatusPedido.CONFIRMADO),
+//				builder.equal(root.get("status"), StatusPedido.ENTREGUE)));
+		predicates.add(root.get("status").in(
+				StatusPedido.CONFIRMADO,
+				StatusPedido.ENTREGUE));
+		
 		query.select(selection);
+		query.where(predicates.toArray(size -> new Predicate[size]));
 		query.groupBy(functionDateDataCriacao);
 		
 		return manager.createQuery(query).getResultList();
