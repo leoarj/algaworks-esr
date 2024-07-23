@@ -39,11 +39,17 @@ public class CadastroProdutoService {
 				.orElseThrow(() -> new ProdutoNaoEncontradoException(produtoId, restauranteId));
 	}
 	
-	public List<Produto> listarOuFalharPorCodigoRestaurante(Long restauranteId) {
+	public List<Produto> listarOuFalharTodosPorCodigoRestaurante(Long restauranteId) {
 		Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 		
-		return restaurante.getProdutos();
+		//return restaurante.getProdutos();
 		// ou
-		//return produtoRepository.findByRestaurante(restaurante);
+		return produtoRepository.findTodosByRestaurante(restaurante);
+	}
+	
+	public List<Produto> listarOuFalharAtivosPorCodigoRestaurante(Long restauranteId) {
+		Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
+		
+		return produtoRepository.findAtivosByRestaurante(restaurante);
 	}
 }
