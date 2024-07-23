@@ -14,6 +14,15 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+/**
+ * Esta classe implementa o serviço de relatório de vendas diárias,
+ * utilizando a bibliteca do JasperReports.
+ * A projeção de dados utilizadas no relatório é provida pelo serviço
+ * de consulta de vendas diárias.
+ * 
+ * Devido ser uma implementação específica e com uso de bibliotecas externas
+ * é uma classe que fica no pacote de infraestrutura.
+ */
 @Service
 public class PdfVendaReportService implements VendaReportService {
 
