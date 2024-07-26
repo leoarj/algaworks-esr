@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.Restaurante;
 
-public interface ProdutoRepository extends JpaRepository<Produto, Long> {
+public interface ProdutoRepository extends JpaRepository<Produto, Long>, ProdutoRepositoryQueries {
 
 //	Optional<Produto> findByIdAndRestauranteId(Long id, Long produtoId);
 	
