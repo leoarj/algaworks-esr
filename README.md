@@ -1,2 +1,1 @@
-# ESR - Especialista Spring REST (algafood-api)
-## In progress
+# ESR - Especialista Spring REST (algafood-api) (In progress...)
