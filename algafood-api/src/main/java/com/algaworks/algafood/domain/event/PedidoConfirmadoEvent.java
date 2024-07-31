@@ -1,4 +1,4 @@
-package com.algaworks.algafood.domain;
+package com.algaworks.algafood.domain.event;
 
 import com.algaworks.algafood.domain.model.Pedido;
 
