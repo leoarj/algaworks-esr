@@ -9,4 +9,15 @@ function consultaRestaurantes() {
 	});
 }
 
-$("#botao").click(consultaRestaurantes);
+function fecharRestaurante() {
+	$.ajax({
+		url: "http://api.algafood.local:8080/restaurantes/1/fechamento",
+		type: "put",
+		
+		success: function(response) {
+			alert("Restaurante foi fechado!");
+		}
+	});
+}
+
+$("#botao").click(fecharRestaurante);
