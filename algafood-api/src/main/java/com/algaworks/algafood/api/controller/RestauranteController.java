@@ -4,9 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 //import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@CrossOrigin
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -48,20 +48,15 @@ public class RestauranteController {
 	
 	@JsonView(RestauranteView.Resumo.class) // Associa método à projeção
 	@GetMapping
-	public ResponseEntity<List<RestauranteModel>> listar() {
-		List<RestauranteModel> restaurantesModel = restauranteModelAssembler
-				.toCollectionModel(restauranteRepository.findAll());
-		
-		return ResponseEntity.ok()
-				.header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*") // (didático) habilitar temporariamente para qualquer origem
-				.body(restaurantesModel);
+	public List<RestauranteModel> listar() {
+		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 	
-//	@JsonView(RestauranteView.ApenasNome.class) // Associa método à projeção (quando passado parâmetro na requisição)
-//	@GetMapping(params = "projecao=apenas-nome")
-//	public List<RestauranteModel> listarApenasNome() {
-//		return listar();
-//	}
+	@JsonView(RestauranteView.ApenasNome.class) // Associa método à projeção (quando passado parâmetro na requisição)
+	@GetMapping(params = "projecao=apenas-nome")
+	public List<RestauranteModel> listarApenasNome() {
+		return listar();
+	}
 	
 	// Outras alternativas de implementação com JsonView:
 //	@GetMapping
