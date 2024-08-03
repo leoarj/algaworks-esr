@@ -20,4 +20,4 @@ function fecharRestaurante() {
 	});
 }
 
-$("#botao").click(fecharRestaurante);
+$("#botao").click(consultaRestaurantes);
