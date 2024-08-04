@@ -46,7 +46,11 @@ public class FormaPagamentoController {
 				.toCollectionModel(formaPagamentoRepository.findAll());
 		
 		return ResponseEntity.ok()
-				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) // cache individual, não deve ser armazenado para cache público
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) // cache público, qualquer proxy pode armazenar a resposta para cache
+//				.cacheControl(CacheControl.noCache()) // não desativa, apenas obriga sempre validar o cache antes
+//				.cacheControl(CacheControl.noStore()) // desativa, pois informar para não armazenar o cache
 				.body(formasPagamentoModel);
 	}
 	
