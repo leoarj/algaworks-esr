@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
@@ -45,32 +46,38 @@ public class FormaPagamentoController {
 
 	@GetMapping
 	public ResponseEntity<List<FormaPagamentoModel>> listar(ServletWebRequest request) {
-		if (verificarSeEtagNaoFoiModificada(request,
-				formaPagamentoRepository.getDataUltimaAtualizacao())) {
-			return null;
+		Optional<String> optEtag = calcularEtag(request,
+				formaPagamentoRepository.getDataUltimaAtualizacao());
+		
+		if (optEtag.isPresent()) {
+			List<FormaPagamentoModel> formasPagamentoModel = formaPagamentoModelAssembler
+					.toCollectionModel(formaPagamentoRepository.findAll());
+			
+			return ResponseEntity.ok()
+					.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+					.eTag(optEtag.get())
+					.body(formasPagamentoModel);
 		}
 		
-		List<FormaPagamentoModel> formasPagamentoModel = formaPagamentoModelAssembler
-				.toCollectionModel(formaPagamentoRepository.findAll());
-		
-		return ResponseEntity.ok()
-				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
-				.body(formasPagamentoModel);
+		return null;
 	}
 	
 	@GetMapping("/{formaPagamentoId}")
 	public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
-		if (verificarSeEtagNaoFoiModificada(request,
-				formaPagamentoRepository.getDataAtualizacaoById(formaPagamentoId))) {
-			return null;
+		Optional<String> optEtag = calcularEtag(request,
+				formaPagamentoRepository.getDataAtualizacaoById(formaPagamentoId));
+		
+		if (optEtag.isPresent()) {
+			FormaPagamentoModel formaPagamentoModel = formaPagamentoModelAssembler
+					.toModel(cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId));
+			
+			return ResponseEntity.ok()
+					.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+					.eTag(optEtag.get())
+					.body(formaPagamentoModel);
 		}
 		
-		FormaPagamentoModel formaPagamentoModel = formaPagamentoModelAssembler
-				.toModel(cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId));
-		
-		return ResponseEntity.ok()
-				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
-				.body(formaPagamentoModel);
+		return null;
 	}
 	
 	@PostMapping
@@ -101,7 +108,7 @@ public class FormaPagamentoController {
 	 * Verifica se a etag da requisição corresponde com a etag atual,
 	 * com base na última data de atualização.
 	 */
-	private boolean verificarSeEtagNaoFoiModificada(ServletWebRequest request,
+	private Optional<String> calcularEtag(ServletWebRequest request,
 			OffsetDateTime dataUltimaAtualizacao) {
 		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
 		
@@ -111,6 +118,8 @@ public class FormaPagamentoController {
 			eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
 		}
 		
-		return request.checkNotModified(eTag);
+		eTag = request.checkNotModified(eTag) ? null : eTag;
+		
+		return Optional.ofNullable(eTag);
 	}
 }
