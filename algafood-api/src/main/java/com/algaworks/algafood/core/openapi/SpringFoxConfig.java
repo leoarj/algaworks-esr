@@ -2,7 +2,9 @@ package com.algaworks.algafood.core.openapi;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -15,6 +17,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 //@EnableSwagger2
+@Import(BeanValidatorPluginsConfiguration.class) // para habilitar a interpretação automática de alguns validações do Jakarta Bean Validation
 public class SpringFoxConfig {
 
 	@Bean
