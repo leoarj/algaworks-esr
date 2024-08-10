@@ -25,8 +25,10 @@ import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.service.CadastroCidadeService;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
+@Api(tags = "Cidades") // associa o controlador como um recurso da tag especificada no configuration
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/cidades")
