@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.algaworks.algafood.api.assembler.FotoProdutoModelAssembler;
 import com.algaworks.algafood.api.model.FotoProdutoModel;
 import com.algaworks.algafood.api.model.input.FotoProdutoInput;
+import com.algaworks.algafood.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.Produto;
@@ -34,8 +35,9 @@ import com.algaworks.algafood.domain.service.FotoStorageService;
 import com.algaworks.algafood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
-@RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+@RequestMapping(path = "/restaurantes/{restauranteId}/produtos/{produtoId}/foto",
+	produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 	
 	@Autowired
 	private CadastroProdutoService cadastroProdutoService;
@@ -49,14 +51,14 @@ public class RestauranteProdutoFotoController {
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
 		FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
 		
 		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servir(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
@@ -87,6 +89,46 @@ public class RestauranteProdutoFotoController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	// ref: https://app.algaworks.com/forum/topicos/83619/o-combobox-response-content-type-nao-aparece-na-swagger-ui-v3
+//	//
+//	@GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.APPLICATION_JSON_VALUE})
+//	public ResponseEntity<?> buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
+//												@RequestHeader(name="accept") String acceptHeader)
+//			throws HttpMediaTypeNotAcceptableException  {
+//		
+//		if (acceptHeader.equals(MediaType.APPLICATION_JSON_VALUE)) {
+//			return recuperarFoto(restauranteId, produtoId);
+//		}
+//		
+//		try {
+//			FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
+//			MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
+//			
+//			List<MediaType> mediaTypeAceitas = MediaType.parseMediaTypes(acceptHeader);
+//			verificarCompatibilidadeMediaType(mediaTypeFoto,mediaTypeAceitas);
+//			var fotoRecuperada =  fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+//			if(fotoRecuperada.temUrl()) {
+//				
+//				return ResponseEntity
+//						.status(HttpStatus.FOUND)
+//						.header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
+//						.build();
+//			} else {
+//				return ResponseEntity.ok()
+//						.contentType(mediaTypeFoto)
+//						.body(new InputStreamResource(fotoRecuperada.getInputStream()));
+//			}	
+//		} catch (EntidadeNaoEncontradaException e) {
+//			return ResponseEntity.notFound().build();
+//		}	
+//	}
+//	
+//	public ResponseEntity<?> recuperarFoto(@PathVariable Long restauranteId,@PathVariable Long produtoId)  {
+//		FotoProdutoModel fotoProdutoModel = fotoProdutoModelAssembler.toModel(catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId));
+//		return ResponseEntity.ok(fotoProdutoModel);
+//	}
+//	//
 	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
