@@ -34,6 +34,8 @@ import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.service.EmissaoPedidoService;
 import com.algaworks.algafood.infrastructure.repository.spec.PedidoSpecs;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -50,6 +52,10 @@ public class PedidoController {
 	private final PedidoInputDisassembler pedidoInputDisassembler;
 
 	// Spring já trata o DTO de filtro conforme os parâmetros da requisisão
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+				name = "campos", paramType = "query", type = "string")
+	})
 	@GetMapping
 	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
 			@PageableDefault(size = 10) Pageable pageable) {
@@ -66,6 +72,10 @@ public class PedidoController {
 		return pedidosResumoModelPage;
 	}
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+				name = "campos", paramType = "query", type = "string")
+	})
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		return pedidoModelAssembler.toModel(emissaoPedidoService.buscarOuFalhar(codigoPedido));
