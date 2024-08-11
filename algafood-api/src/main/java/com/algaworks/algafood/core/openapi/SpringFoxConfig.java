@@ -7,13 +7,16 @@ import java.util.function.Consumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
-import com.algaworks.algafood.core.openapi.model.PageableModelOpenApi;
+import com.algaworks.algafood.api.model.CozinhaModel;
+import com.algaworks.algafood.api.openapi.model.CozinhasModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -23,6 +26,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Response;
@@ -55,6 +59,9 @@ public class SpringFoxConfig {
 		        .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
 		        .additionalModels(typeResolver.resolve(Problem.class)) // registra classe de ProblemDetail para a documentação
 		        .directModelSubstitute(Pageable.class, PageableModelOpenApi.class) // substituição para documentação de Pageable
+		        .alternateTypeRules(AlternateTypeRules.newRule(
+						typeResolver.resolve(Page.class, CozinhaModel.class),
+						CozinhasModelOpenApi.class))
 		        .apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"),
 						new Tag("Grupos", "Gerencia os grupos de usuários")); // para personalizar as tags referente a recursos, na UI da documentação
