@@ -64,7 +64,8 @@ public class SpringFoxConfig {
 						CozinhasModelOpenApi.class))
 		        .apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"),
-						new Tag("Grupos", "Gerencia os grupos de usuários")); // para personalizar as tags referente a recursos, na UI da documentação
+						new Tag("Grupos", "Gerencia os grupos de usuários"),
+						new Tag("Cozinhas", "Gerencia as cozinhas")); // para personalizar as tags referente a recursos, na UI da documentação
 	}
 	
 	@Bean
