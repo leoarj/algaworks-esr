@@ -55,7 +55,8 @@ public class SpringFoxConfig {
 		        .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
 		        .additionalModels(typeResolver.resolve(Problem.class)) // registra classe de ProblemDetail para a documentação
 				.apiInfo(apiInfo())
-				.tags(new Tag("Cidades", "Gerencia as cidades")); // para personalizar as tags referente a recursos, na UI da documentação
+				.tags(new Tag("Cidades", "Gerencia as cidades"),
+						new Tag("Grupos", "Gerencia os grupos de usuários")); // para personalizar as tags referente a recursos, na UI da documentação
 	}
 	
 	@Bean
