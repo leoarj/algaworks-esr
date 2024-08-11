@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,17 +39,17 @@ public class GrupoController implements GrupoControllerOpenApi {
 	private final GrupoModelAssembler grupoModelAssembler;
 	private final GrupoInputDisassembler grupoInputDisassembler;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GrupoModel> listar() {
 		return grupoModelAssembler.toCollectionModel(grupoRepository.findAll());
 	}
 	
-	@GetMapping("/{grupoId}")
+	@GetMapping(path = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GrupoModel buscar(@PathVariable Long grupoId) {
 		return grupoModelAssembler.toModel(cadastroGrupoService.buscarOuFalhar(grupoId));
 	}
 	
-	@PostMapping
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
 		Grupo grupo = grupoInputDisassembler.toDomainObject(grupoInput);
@@ -56,7 +57,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toModel(cadastroGrupoService.salvar(grupo));
 	}
 	
-	@PutMapping("/{grupoId}")
+	@PutMapping(path = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GrupoModel atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
 		Grupo grupoAtual = cadastroGrupoService.buscarOuFalhar(grupoId);
 		
