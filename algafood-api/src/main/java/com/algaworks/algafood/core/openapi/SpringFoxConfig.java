@@ -99,7 +99,8 @@ public class SpringFoxConfig {
 						new Tag("Pedidos", "Gerencia os pedidos"),
 						new Tag("Restaurantes", "Gerencia os restaurantes"),
 						new Tag("Estados", "Gerencia os estados"),
-						new Tag("Produtos", "Gerencia os produtos de restaurantes")); // para personalizar as tags referente a recursos, na UI da documentação
+						new Tag("Produtos", "Gerencia os produtos de restaurantes"),
+						new Tag("Usuários", "Gerencia os usuários")); // para personalizar as tags referente a recursos, na UI da documentação
 	}
 	
 	@Bean
