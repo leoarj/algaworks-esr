@@ -17,6 +17,7 @@ import lombok.Setter;
 @Setter
 public class FotoProdutoInput {
 	
+//	@ApiModelProperty(hidden = true) -> no caso de precisar testar o upload pela UI do Swagger
 	@ApiModelProperty(value = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)",
 			required = true)
 	@NotNull
