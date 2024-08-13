@@ -1,5 +1,10 @@
 package com.algaworks.algafood.core.openapi;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +13,7 @@ import java.util.function.Consumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
@@ -75,7 +81,9 @@ public class SpringFoxConfig {
 //		                        .build())
 //		        )
 		        .additionalModels(typeResolver.resolve(Problem.class)) // registra classe de ProblemDetail para a documentação
-		        .ignoredParameterTypes(ServletWebRequest.class)
+		        .ignoredParameterTypes(ServletWebRequest.class,
+		        		URL.class, URI.class, URLStreamHandler.class, Resource.class,
+		        		File.class, InputStream.class)
 		        .directModelSubstitute(Pageable.class, PageableModelOpenApi.class) // substituição para documentação de Pageable
 		        .alternateTypeRules(AlternateTypeRules.newRule(
 						typeResolver.resolve(Page.class, CozinhaModel.class),
