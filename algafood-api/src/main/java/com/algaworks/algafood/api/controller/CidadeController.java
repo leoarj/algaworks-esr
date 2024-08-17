@@ -60,20 +60,35 @@ public class CidadeController implements CidadeControllerOpenApi {
 		// ou
 //		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades/1", IanaLinkRelations.SELF));
 		
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-				.slash(cidadeModel.getId())
+//		cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+//				.slash(cidadeModel.getId())
+//				.withSelfRel());
+		
+		cidadeModel.add(WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(CidadeController.class)
+				.buscar(cidadeModel.getId()))
 				.withSelfRel());
 		
 //		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades", IanaLinkRelations.COLLECTION));
 		//cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades", "cidades"));
 		
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+//		cidadeModel.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+//				.withRel("cidades"));
+		
+		cidadeModel.add(WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(CidadeController.class)
+				.listar())
 				.withRel("cidades"));
 		
 //		cidadeModel.getEstado().add(Link.of("http://api.algafood.local:8080/estados/1"));
 		
-		cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
-				.slash(cidadeModel.getEstado().getId())
+//		cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(EstadoController.class)
+//				.slash(cidadeModel.getEstado().getId())
+//				.withSelfRel());
+		
+		cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(EstadoController.class)
+				.buscar(cidadeModel.getEstado().getId()))
 				.withSelfRel());
 		
 		return cidadeModel;
