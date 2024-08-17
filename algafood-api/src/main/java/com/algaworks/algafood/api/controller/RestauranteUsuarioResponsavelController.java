@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +29,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 	private final UsuarioModelAssembler usuarioModelAssembler;
 	
 	@GetMapping
-	public List<UsuarioModel> listar(@PathVariable Long restauranteId) {
+	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
 		
 		return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis());
