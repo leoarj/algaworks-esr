@@ -1,14 +1,14 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,22 +50,21 @@ public class PedidoController implements PedidoControllerOpenApi {
 	private final PedidoModelAssembler pedidoModelAssembler;
 	private final PedidoResumoModelAssembler pedidoResumoModelAssembler;
 	private final PedidoInputDisassembler pedidoInputDisassembler;
+	
+	private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
 	// Spring já trata o DTO de filtro conforme os parâmetros da requisisão
 	@GetMapping
-	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
+	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
 			@PageableDefault(size = 10) Pageable pageable) {
 		pageable = traduzirPageable(pageable);
 		
 		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+				
+		PagedModel<PedidoResumoModel> pedidosResumoPagedModel = pagedResourcesAssembler
+				.toModel(pedidosPage, pedidoResumoModelAssembler);
 		
-		List<PedidoResumoModel> pedidosResumoModel =
-				pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
-		
-		Page<PedidoResumoModel> pedidosResumoModelPage =
-				new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements());
-		
-		return pedidosResumoModelPage;
+		return pedidosResumoPagedModel;
 	}
 	
 	@GetMapping("/{codigoPedido}")
