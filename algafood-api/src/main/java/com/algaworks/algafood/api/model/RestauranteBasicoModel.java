@@ -10,30 +10,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "restaurantes")
-@Setter
 @Getter
-public class RestauranteModel extends RepresentationModel<RestauranteModel> {
-	
-	/*
-	 * Anotações @JsonView associam propriedades a uma ou mais projeções.
-	 * Obs.: @JsonView também aceita arrays.
-	 */
+@Setter
+public class RestauranteBasicoModel extends RepresentationModel<RestauranteBasicoModel> {
+
 	@ApiModelProperty(example = "1")
-//	@JsonView({ RestauranteView.Resumo.class, RestauranteView.ApenasNome.class })
 	private Long id;
 	
 	@ApiModelProperty(example = "Thai Gourmet")
-//	@JsonView({ RestauranteView.Resumo.class, RestauranteView.ApenasNome.class })
 	private String nome;
 	
 	@ApiModelProperty(example = "12.00")
-//	@JsonView(RestauranteView.Resumo.class)
 	private BigDecimal taxaFrete;
 	
-//	@JsonView(RestauranteView.Resumo.class)
 	private CozinhaModel cozinha;
-	
-	private Boolean ativo;
-	private Boolean aberto;
-	private EnderecoModel endereco;
 }

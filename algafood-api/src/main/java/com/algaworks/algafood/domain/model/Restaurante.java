@@ -24,8 +24,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Restaurante {
@@ -81,6 +83,14 @@ public class Restaurante {
 	joinColumns = @JoinColumn(name = "restaurante_id"),
 	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private Set<Usuario> responsaveis = new HashSet<>();
+	
+	/**
+	 * Construtor, para selecionar apenas id e nome na query específica no repository.
+	 */
+	public Restaurante(Long id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
 	
 	public void ativar() {
 		setAtivo(true);

@@ -16,7 +16,9 @@ import com.algaworks.algafood.api.controller.FluxoPedidoController;
 import com.algaworks.algafood.api.controller.FormaPagamentoController;
 import com.algaworks.algafood.api.controller.PedidoController;
 import com.algaworks.algafood.api.controller.RestauranteController;
+import com.algaworks.algafood.api.controller.RestauranteFormaPagamentoController;
 import com.algaworks.algafood.api.controller.RestauranteProdutoController;
+import com.algaworks.algafood.api.controller.RestauranteUsuarioResponsavelController;
 import com.algaworks.algafood.api.controller.UsuarioController;
 import com.algaworks.algafood.api.controller.UsuarioGrupoController;
 
@@ -73,6 +75,39 @@ public class AlgaLinks {
 	
 	public Link linkToRestaurante(Long restauranteId) {
 		return linkToRestaurante(restauranteId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestaurantes(String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteController.class)
+				.listar())
+				.withRel(rel);
+	}
+	
+	public Link linkToRestaurantes() {
+		return linkToRestaurantes(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteFormaPagamentoController.class)
+				.listar(restauranteId))
+				.withRel(rel);
+	}
+	
+	public Link linkToRestauranteFormasPagamento(Long restauranteId) {
+		return linkToRestauranteFormasPagamento(restauranteId, IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class)
+				.listar(restauranteId))
+				.withRel(rel);
+	}
+	
+	public Link linkToRestauranteResponsaveis(Long restauranteId) {
+		return linkToRestauranteResponsaveis(restauranteId, IanaLinkRelations.SELF_VALUE);
 	}
 	
 	public Link linkToUsuario(Long usuarioId, String rel) {
@@ -192,6 +227,17 @@ public class AlgaLinks {
 	
 	public Link linkToCozinhas() {
 		return linkToCozinhas(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToCozinha(Long cozinhaId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(CozinhaController.class)
+				.buscar(cozinhaId))
+				.withRel(rel);
+	}
+	
+	public Link linkToCozinha(Long cozinhaId) {
+		return linkToCozinha(cozinhaId, IanaLinkRelations.SELF_VALUE);
 	}
 	
 }

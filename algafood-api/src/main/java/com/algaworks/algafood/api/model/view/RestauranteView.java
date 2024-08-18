@@ -10,12 +10,12 @@ public interface RestauranteView {
 	/**
 	 * Representa projeção padrão de resumo de recurso.
 	 */
-	public interface Resumo {}
+//	public interface Resumo {}
 	
 	/**
 	 * Representa projeção de resumo com apenas o id/nome do restautante
 	 * (nome da interface deve ser semântico ao que ser quer representar).
 	 */
-	public interface ApenasNome {}
+//	public interface ApenasNome {}
 	
 }

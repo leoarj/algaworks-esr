@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 //import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.assembler.RestauranteApenasNomeModelAssembler;
+import com.algaworks.algafood.api.assembler.RestauranteBasicoModelAssembler;
 import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.disassembler.RestauranteInputDisassembler;
+import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
+import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.model.view.RestauranteView;
 import com.algaworks.algafood.api.openapi.controller.RestauranteControllerOpenApi;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
@@ -31,7 +36,6 @@ import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,18 +48,22 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	private final CadastroRestauranteService cadastroRestauranteService;
 	
 	private final RestauranteModelAssembler restauranteModelAssembler;
+	private final RestauranteBasicoModelAssembler restauranteBasicoModelAssembler;
+	private final RestauranteApenasNomeModelAssembler restauranteApenasNomeModelAssembler;
 	private final RestauranteInputDisassembler restauranteInputDisassembler;
 	
-	@JsonView(RestauranteView.Resumo.class) // Associa método à projeção
+	//@JsonView(RestauranteView.Resumo.class) // Associa método à projeção
 	@GetMapping
-	public List<RestauranteModel> listar() {
-		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+	public CollectionModel<RestauranteBasicoModel> listar() {
+		return restauranteBasicoModelAssembler
+				.toCollectionModel(restauranteRepository.findAll());
 	}
 	
-	@JsonView(RestauranteView.ApenasNome.class) // Associa método à projeção (quando passado parâmetro na requisição)
+	//@JsonView(RestauranteView.ApenasNome.class) // Associa método à projeção (quando passado parâmetro na requisição)
 	@GetMapping(params = "projecao=apenas-nome")
-	public List<RestauranteModel> listarApenasNomes() {
-		return listar();
+	public CollectionModel<RestauranteApenasNomeModel> listarApenasNomes() {
+		return restauranteApenasNomeModelAssembler
+				.toCollectionModel(restauranteRepository.findAllApenasNome());
 	}
 	
 	// Outras alternativas de implementação com JsonView:
@@ -144,14 +152,18 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	
 	@PutMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void ativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
 		cadastroRestauranteService.ativar(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping("/{restauranteId}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void inativar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
 		cadastroRestauranteService.inativar(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/ativacoes")
@@ -176,13 +188,17 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	
 	@PutMapping("/{restauranteId}/abertura")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void abrir(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
 		cadastroRestauranteService.abrir(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("{restauranteId}/fechamento")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void fechar(@PathVariable Long restauranteId) {
+	public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
 		cadastroRestauranteService.fechar(restauranteId);
+		
+		return ResponseEntity.noContent().build();
 	}
 }
