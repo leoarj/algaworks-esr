@@ -4,11 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.CidadeController;
-import com.algaworks.algafood.api.controller.EstadoController;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.domain.model.Cidade;
 
@@ -21,6 +20,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private AlgaLinks algaLinks;
+	
 	public CidadeModelAssembler() {
 		// construtor da superclasse, deve informar a class do controlador e do modelo de representação
 		super(CidadeController.class, CidadeModel.class);
@@ -34,16 +36,19 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 		
 		modelMapper.map(cidade, cidadeModel);
 		
-		cidadeModel.add(WebMvcLinkBuilder.linkTo(
-				WebMvcLinkBuilder.methodOn(CidadeController.class)
-				.listar())
-				.withRel("cidades"));
+		cidadeModel.add(algaLinks.linkToCidades("cidades"));
+//		cidadeModel.add(WebMvcLinkBuilder.linkTo(
+//				WebMvcLinkBuilder.methodOn(CidadeController.class)
+//				.listar())
+//				.withRel("cidades"));
 		
-		
-		cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(
-				WebMvcLinkBuilder.methodOn(EstadoController.class)
-				.buscar(cidadeModel.getEstado().getId()))
-				.withSelfRel());
+		cidadeModel.getEstado().add(algaLinks
+				.linkToEstado(cidadeModel
+						.getEstado().getId()));
+//		cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(
+//				WebMvcLinkBuilder.methodOn(EstadoController.class)
+//				.buscar(cidadeModel.getEstado().getId()))
+//				.withSelfRel());
 		
 		return cidadeModel;
 	}
@@ -52,8 +57,10 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 	@Override
 	public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
 		return super.toCollectionModel(entities)
-				.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-				.withSelfRel());
+				.add(algaLinks.linkToCidades());
+//		return super.toCollectionModel(entities)
+//				.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
+//				.withSelfRel());
 	}
 	
 //	public List<CidadeModel> toCollectionModel(List<Cidade> cidades) {
