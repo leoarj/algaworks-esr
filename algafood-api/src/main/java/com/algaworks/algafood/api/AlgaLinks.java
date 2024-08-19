@@ -3,9 +3,9 @@ package com.algaworks.algafood.api;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariable.VariableType;
 import org.springframework.hateoas.TemplateVariables;
 import org.springframework.hateoas.UriTemplate;
-import org.springframework.hateoas.TemplateVariable.VariableType;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ public class AlgaLinks {
 			new TemplateVariable("size", VariableType.REQUEST_PARAM),
 			new TemplateVariable("sort", VariableType.REQUEST_PARAM));
 
-	public Link linkToPedidos() {
+	public Link linkToPedidos(String rel) {
 		TemplateVariables filterVariables = new TemplateVariables(
 				new TemplateVariable("clienteId", VariableType.REQUEST_PARAM),
 				new TemplateVariable("restauranteId", VariableType.REQUEST_PARAM),
@@ -42,7 +42,7 @@ public class AlgaLinks {
 				.toString();
 		
 		return Link.of(UriTemplate.of(pedidosUrl,
-				PAGE_VARIABLES.concat(filterVariables)), "pedidos");
+				PAGE_VARIABLES.concat(filterVariables)), rel);
 	}
 	
 	public Link linkToConfirmacaoPedido(String codigoPedido, String rel) {
@@ -78,10 +78,16 @@ public class AlgaLinks {
 	}
 	
 	public Link linkToRestaurantes(String rel) {
-		return WebMvcLinkBuilder.linkTo(
-				WebMvcLinkBuilder.methodOn(RestauranteController.class)
-				.listar())
-				.withRel(rel);
+		TemplateVariables projectionVariables = new TemplateVariables(
+				new TemplateVariable("projecao", VariableType.REQUEST_PARAM));
+				
+		String restaurantesUrl = WebMvcLinkBuilder.linkTo(
+					WebMvcLinkBuilder.methodOn(RestauranteController.class)
+					.listar())
+				.toUri()
+				.toString();
+		
+		return Link.of(UriTemplate.of(restaurantesUrl, projectionVariables), rel);
 	}
 	
 	public Link linkToRestaurantes() {
