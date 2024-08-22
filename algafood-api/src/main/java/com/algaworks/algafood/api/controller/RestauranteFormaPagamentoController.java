@@ -40,7 +40,9 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 				formaPagamentoModelAssembler.toCollectionModel(
 						restaurante.getFormasPagamento())
 				.removeLinks()
-				.add(algaLinks.linkToRestauranteFormasPagamento(restauranteId, "formas-pagamento"));
+				//.add(algaLinks.linkToRestauranteFormasPagamento(restauranteId, "formas-pagamento"))
+				.add(algaLinks.linkToRestauranteFormasPagamento(restauranteId))
+				.add(algaLinks.linkTolinkToRestauranteFormaPagamentoAssociacao(restauranteId, "associar"));
 		
 		formasPagamentoModel.getContent().forEach(formaPagamentoModel -> {
 			formaPagamentoModel.add(algaLinks
@@ -61,8 +63,10 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
 	
 	@PutMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
+	public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
 		cadastroRestauranteService.associarFormaPagamento(restauranteId, formaPagamentoId);
+		
+		return ResponseEntity.noContent().build();
 	}
 
 }
