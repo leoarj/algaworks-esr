@@ -141,6 +141,14 @@ public class AlgaLinks {
 				.withRel(rel);
 	}
 	
+	public Link linkTolinkToRestauranteFormaPagamentoAssociacao(
+			Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteFormaPagamentoController.class)
+				.desassociar(restauranteId, null)) // passando null para gerar como template variable
+				.withRel(rel);
+	}
+	
 	public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
 		return WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(RestauranteUsuarioResponsavelController.class)

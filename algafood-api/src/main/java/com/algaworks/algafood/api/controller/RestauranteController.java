@@ -62,6 +62,8 @@ public class RestauranteController implements RestauranteControllerOpenApi {
 	//@JsonView(RestauranteView.ApenasNome.class) // Associa método à projeção (quando passado parâmetro na requisição)
 	@GetMapping(params = "projecao=apenas-nome")
 	public CollectionModel<RestauranteApenasNomeModel> listarApenasNomes() {
+		//restauranteRepository.findBy();
+		
 		return restauranteApenasNomeModelAssembler
 				.toCollectionModel(restauranteRepository.findAllApenasNome());
 	}
