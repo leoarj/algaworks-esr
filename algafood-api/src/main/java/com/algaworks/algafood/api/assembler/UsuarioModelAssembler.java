@@ -12,7 +12,8 @@ import com.algaworks.algafood.api.model.UsuarioModel;
 import com.algaworks.algafood.domain.model.Usuario;
 
 @Component
-public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<Usuario, UsuarioModel> {
+public class UsuarioModelAssembler
+	extends RepresentationModelAssemblerSupport<Usuario, UsuarioModel> {
 	
 	@Autowired
 	private ModelMapper modelMapper;
