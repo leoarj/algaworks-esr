@@ -262,6 +262,17 @@ public class AlgaLinks {
 		return linkToProduto(restauranteId, produtoId, IanaLinkRelations.SELF_VALUE);
 	}
 	
+	public Link linkToProdutos(Long restauranteId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(RestauranteProdutoController.class)
+				.listar(restauranteId, null))
+				.withRel(rel);
+	}
+	
+	public Link linkToProdutos(Long restauranteId) {
+		return linkToProdutos(restauranteId, IanaLinkRelations.SELF_VALUE);
+	}
+	
 	public Link linkToEstado(Long estadoId, String rel) {
 		return WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(EstadoController.class)
