@@ -33,7 +33,8 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
 		Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
 		
-		return grupoModelAssembler.toCollectionModel(usuario.getGrupos());
+		return grupoModelAssembler.toCollectionModel(usuario.getGrupos())
+				.removeLinks();
 	}
 	
 	@PutMapping("/{grupoId}")

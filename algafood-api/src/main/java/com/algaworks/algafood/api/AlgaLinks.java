@@ -14,6 +14,8 @@ import com.algaworks.algafood.api.controller.CozinhaController;
 import com.algaworks.algafood.api.controller.EstadoController;
 import com.algaworks.algafood.api.controller.FluxoPedidoController;
 import com.algaworks.algafood.api.controller.FormaPagamentoController;
+import com.algaworks.algafood.api.controller.GrupoController;
+import com.algaworks.algafood.api.controller.GrupoPermissaoController;
 import com.algaworks.algafood.api.controller.PedidoController;
 import com.algaworks.algafood.api.controller.RestauranteController;
 import com.algaworks.algafood.api.controller.RestauranteFormaPagamentoController;
@@ -208,6 +210,24 @@ public class AlgaLinks {
 		return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF_VALUE);
 	}
 	
+	public Link linkToGrupos(String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(GrupoController.class)
+				.listar())
+				.withRel(rel);
+	}
+	
+	public Link linkToGrupos() {
+		return linkToGrupos(IanaLinkRelations.SELF_VALUE);
+	}
+	
+	public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+		return WebMvcLinkBuilder.linkTo(
+				WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class)
+				.listar(grupoId))
+				.withRel(rel);
+	}
+	
 	public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
 		return WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(FormaPagamentoController.class)
@@ -326,5 +346,7 @@ public class AlgaLinks {
 	public Link linkToCozinha(Long cozinhaId) {
 		return linkToCozinha(cozinhaId, IanaLinkRelations.SELF_VALUE);
 	}
+	
+	
 	
 }
