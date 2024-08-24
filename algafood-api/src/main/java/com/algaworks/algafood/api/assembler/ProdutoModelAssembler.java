@@ -34,6 +34,10 @@ public class ProdutoModelAssembler
 		produtoModel.add(algaLinks.linkToProdutos(
 				produto.getRestaurante().getId(), "produtos"));
 		
+		produtoModel.add(
+				algaLinks.linkToProdutoFoto(
+						produto.getRestaurante().getId(), produto.getId(), "foto"));
+		
 		return produtoModel;
 	}
 	
