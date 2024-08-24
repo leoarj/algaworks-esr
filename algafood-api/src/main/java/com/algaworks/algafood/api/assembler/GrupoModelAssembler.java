@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.GrupoController;
-import com.algaworks.algafood.api.controller.UsuarioGrupoController;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.domain.model.Grupo;
 
