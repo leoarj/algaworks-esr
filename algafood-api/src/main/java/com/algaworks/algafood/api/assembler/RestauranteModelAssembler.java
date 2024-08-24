@@ -1,5 +1,7 @@
 package com.algaworks.algafood.api.assembler;
 
+import java.util.Objects;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -37,9 +39,12 @@ public class RestauranteModelAssembler
 				algaLinks.linkToCozinha(
 						restauranteModel.getCozinha().getId()));
 		
-		restauranteModel.getEndereco().getCidade().add(
-				algaLinks.linkToCidade(
-						restauranteModel.getEndereco().getCidade().getId()));
+		if (Objects.nonNull(restauranteModel.getEndereco()) &&
+				Objects.nonNull(restauranteModel.getEndereco().getCidade())) {
+			restauranteModel.getEndereco().getCidade().add(
+					algaLinks.linkToCidade(
+							restauranteModel.getEndereco().getCidade().getId()));
+		}
 		
 		if (restaurante.podeSerAtivado()) {
 			restauranteModel.add(
@@ -64,6 +69,10 @@ public class RestauranteModelAssembler
 					algaLinks.linkToRestauranteFechamento(
 							restauranteModel.getId(), "fechar"));
 		}
+		
+		restauranteModel.add(
+				algaLinks.linkToProdutos(
+						restauranteModel.getId(), "produtos"));
 		
 		restauranteModel.add(
 				algaLinks.linkToRestauranteFormasPagamento(
