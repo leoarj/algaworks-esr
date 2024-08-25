@@ -25,6 +25,9 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
 	@Query("from Restaurante r join fetch r.cozinha")
 	List<Restaurante> findAll();
 	
+	@Query("select new com.algaworks.algafood.domain.model.Restaurante(r.id, r.nome) from Restaurante r")
+	List<Restaurante> findAllApenasNome();
+	
 	List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
 
 //	@Query("from Restaurante where nome like %:nome% and cozinha.id = :id")

@@ -24,8 +24,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Restaurante {
@@ -82,6 +84,14 @@ public class Restaurante {
 	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
 	private Set<Usuario> responsaveis = new HashSet<>();
 	
+	/**
+	 * Construtor, para selecionar apenas id e nome na query específica no repository.
+	 */
+	public Restaurante(Long id, String nome) {
+		this.id = id;
+		this.nome = nome;
+	}
+	
 	public void ativar() {
 		setAtivo(true);
 	}
@@ -120,5 +130,37 @@ public class Restaurante {
 	
 	public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
 		return !aceitaFormaPagamento(formaPagamento);
+	}
+	
+	public boolean isAtivo() {
+		return this.ativo;
+	}
+	
+	public boolean isInativo() {
+		return !isAtivo();
+	}
+	
+	public boolean isAberto() {
+		return this.aberto;
+	}
+	
+	public boolean isFechado() {
+		return !isAberto();
+	}
+	
+	public boolean podeSerAtivado() {
+		return isInativo();
+	}
+	
+	public boolean podeSerInativado() {
+		return isAtivo();
+	}
+	
+	public boolean podeSerAberto() {
+		return isAtivo() && isFechado();
+	}
+	
+	public boolean podeSerFechado() {
+		return isAtivo() && isAberto();
 	}
 }

@@ -1,14 +1,14 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +26,7 @@ import com.algaworks.algafood.api.model.PedidoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.input.PedidoInput;
 import com.algaworks.algafood.api.openapi.controller.PedidoControllerOpenApi;
+import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -50,22 +51,25 @@ public class PedidoController implements PedidoControllerOpenApi {
 	private final PedidoModelAssembler pedidoModelAssembler;
 	private final PedidoResumoModelAssembler pedidoResumoModelAssembler;
 	private final PedidoInputDisassembler pedidoInputDisassembler;
+	
+	private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
 	// Spring já trata o DTO de filtro conforme os parâmetros da requisisão
 	@GetMapping
-	public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
+	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
 			@PageableDefault(size = 10) Pageable pageable) {
-		pageable = traduzirPageable(pageable);
+		Pageable pageableTraduzido = traduzirPageable(pageable);
 		
-		Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+		Page<Pedido> pedidosPage = pedidoRepository.findAll(
+				PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
 		
-		List<PedidoResumoModel> pedidosResumoModel =
-				pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
+		// Repassa pageable original para construção dos links de HyperMedia
+		pedidosPage = new PageWrapper<>(pedidosPage, pageable);
+				
+		PagedModel<PedidoResumoModel> pedidosResumoPagedModel = pagedResourcesAssembler
+				.toModel(pedidosPage, pedidoResumoModelAssembler);
 		
-		Page<PedidoResumoModel> pedidosResumoModelPage =
-				new PageImpl<>(pedidosResumoModel, pageable, pedidosPage.getTotalElements());
-		
-		return pedidosResumoModelPage;
+		return pedidosResumoPagedModel;
 	}
 	
 	@GetMapping("/{codigoPedido}")

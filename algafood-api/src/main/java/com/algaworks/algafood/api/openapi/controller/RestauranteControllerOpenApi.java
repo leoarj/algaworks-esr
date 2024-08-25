@@ -2,12 +2,18 @@ package com.algaworks.algafood.api.openapi.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
+
 import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
+import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.model.view.RestauranteView;
+import com.algaworks.algafood.api.openapi.model.FormasPagamentoModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.algaworks.algafood.api.openapi.model.RestaurantesApenasNomeModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.RestaurantesBasicoModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,20 +24,23 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
-	@ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
+	//@ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
+	@ApiOperation(value = "Lista restaurantes")
     @ApiImplicitParams({
         @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
                 name = "projecao", paramType = "query", dataType = "java.lang.String")
     })
-    @JsonView(RestauranteView.Resumo.class)
-    List<RestauranteModel> listar();
+    //@JsonView(RestauranteView.Resumo.class)
+	CollectionModel<RestauranteBasicoModel> listar();
     
+	@ApiIgnore
     @ApiOperation(value = "Lista restaurantes", hidden = true)
-    List<RestauranteModel> listarApenasNomes();
+    CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
     
     @ApiOperation("Busca um restaurante por ID")
     @ApiResponses({
@@ -72,7 +81,7 @@ public interface RestauranteControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = Problem.class)))
 	})
-    void ativar(
+    ResponseEntity<Void> ativar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
             Long restauranteId);
     
@@ -82,7 +91,7 @@ public interface RestauranteControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = Problem.class)))
 	})
-    void inativar(
+    ResponseEntity<Void> inativar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
             Long restauranteId);
     
@@ -108,7 +117,7 @@ public interface RestauranteControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = Problem.class)))
 	})
-    void abrir(
+    ResponseEntity<Void> abrir(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
             Long restauranteId);
     
@@ -118,7 +127,7 @@ public interface RestauranteControllerOpenApi {
 		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = Problem.class)))
 	})
-    void fechar(
+    ResponseEntity<Void> fechar(
             @ApiParam(value = "ID de um restaurante", example = "1", required = true)
             Long restauranteId);
 	

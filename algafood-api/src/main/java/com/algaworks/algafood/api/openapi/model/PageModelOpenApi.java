@@ -1,17 +1,18 @@
 package com.algaworks.algafood.api.openapi.model;
 
-import java.util.List;
-
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Classe para modelar a representação de Page na documentação da API.
+ */
+@ApiModel("PageModel")
 @Getter
 @Setter
-public class PagedModelOpenApi<T> {
+public class PageModelOpenApi {
 
-	private List<T> content;
-	
 	@ApiModelProperty(example = "10", value = "Quantidade de registros por página")
 	private Long size;
 	
