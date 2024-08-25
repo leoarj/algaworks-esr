@@ -10,10 +10,6 @@ import com.algaworks.algafood.api.model.RestauranteApenasNomeModel;
 import com.algaworks.algafood.api.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
-import com.algaworks.algafood.api.openapi.model.FormasPagamentoModelOpenApi;
-import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
-import com.algaworks.algafood.api.openapi.model.RestaurantesApenasNomeModelOpenApi;
-import com.algaworks.algafood.api.openapi.model.RestaurantesBasicoModelOpenApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,13 +25,11 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
-	//@ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
 	@ApiOperation(value = "Lista restaurantes")
     @ApiImplicitParams({
         @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
                 name = "projecao", paramType = "query", dataType = "java.lang.String")
     })
-    //@JsonView(RestauranteView.Resumo.class)
 	CollectionModel<RestauranteBasicoModel> listar();
     
 	@ApiIgnore

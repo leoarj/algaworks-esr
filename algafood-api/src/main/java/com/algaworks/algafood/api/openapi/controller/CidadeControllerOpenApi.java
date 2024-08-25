@@ -1,7 +1,5 @@
 package com.algaworks.algafood.api.openapi.controller;
 
-import java.util.List;
-
 import org.springframework.hateoas.CollectionModel;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;

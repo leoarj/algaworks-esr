@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -146,15 +145,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		foto.setContentType(arquivo.getContentType());
 		foto.setTamanho(arquivo.getSize());
 		foto.setNomeArquivo(arquivo.getOriginalFilename());
-		
-//		FotoProduto foto = FotoProduto.builder()
-//				.produto(produto)
-//				.descricao(fotoProdutoInput.getDescricao())
-//				.contentType(arquivo.getContentType())
-//				.tamanho(arquivo.getSize())
-//				.nomeArquivo(arquivo.getOriginalFilename())
-//			.build();
-		
+				
 		FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(foto, arquivo.getInputStream());
 		
 		return fotoProdutoModelAssembler.toModel(fotoSalva);
@@ -175,5 +166,4 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 			throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
 		}
 	}
-
 }

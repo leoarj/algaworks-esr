@@ -409,5 +409,4 @@ public class AlgaLinks {
 		
 		return Link.of(UriTemplate.of(estatisticasUrl, filterVariables), rel);
 	}
-	
 }
