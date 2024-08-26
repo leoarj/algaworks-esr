@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 import com.algaworks.algafood.api.v1.model.EnderecoModel;
 import com.algaworks.algafood.api.v1.model.input.ItemPedidoInput;
+import com.algaworks.algafood.api.v2.model.input.CidadeInputV2;
+import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Endereco;
 import com.algaworks.algafood.domain.model.ItemPedido;
 
@@ -18,6 +20,9 @@ public class ModelMapperConfig {
 	@Bean
 	public ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
+		
+		modelMapper.createTypeMap(CidadeInputV2.class, Cidade.class)
+		.addMappings(mapper -> mapper.skip(Cidade::setId));
 		
 		// Exemplo quando necessitar de algum mapeamento específico
 //		modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
