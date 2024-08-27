@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/usuarios/{usuarioId}/grupos",
+@RequestMapping(path = "/v1/usuarios/{usuarioId}/grupos",
 	produces = MediaType.APPLICATION_JSON_VALUE)
 public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 	

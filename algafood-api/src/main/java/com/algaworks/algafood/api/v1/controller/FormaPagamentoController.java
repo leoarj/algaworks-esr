@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/formas-pagamento")
+@RequestMapping("/v1/formas-pagamento")
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 	
 	private final FormaPagamentoRepository formaPagamentoRepository;

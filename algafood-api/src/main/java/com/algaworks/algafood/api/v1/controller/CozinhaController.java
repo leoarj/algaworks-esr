@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/cozinhas")
+@RequestMapping("/v1/cozinhas")
 public class CozinhaController implements CozinhaControllerOpenApi {
 
 	private final CozinhaRepository cozinhaReposity;

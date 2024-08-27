@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/restaurantes/{restauranteId}/responsaveis",
+@RequestMapping(path = "/v1/restaurantes/{restauranteId}/responsaveis",
 	produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteUsuarioResponsavelController implements
 	RestauranteUsuarioResponsavelControllerOpenApi {

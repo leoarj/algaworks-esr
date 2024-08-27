@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/grupos")
+@RequestMapping("/v1/grupos")
 public class GrupoController implements GrupoControllerOpenApi {
 
 	private final GrupoRepository grupoRepository;
