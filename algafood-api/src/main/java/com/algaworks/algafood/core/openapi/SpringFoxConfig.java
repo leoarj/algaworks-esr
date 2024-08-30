@@ -73,7 +73,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Import(BeanValidatorPluginsConfiguration.class) // para habilitar a interpretação automática de alguns validações do Jakarta Bean Validation
 public class SpringFoxConfig {
 
-	@Bean
+	//@Bean
 	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 		
