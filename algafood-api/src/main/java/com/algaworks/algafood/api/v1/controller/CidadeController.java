@@ -40,6 +40,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	private final CidadeModelAssembler cidadeModelAssembler;
 	private final CidadeInputDisassembler cidadeInputDisassembler;
 	
+	@Deprecated // para testar informação de deprenciação na documentação
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public CollectionModel<CidadeModel> listar() {
 		return cidadeModelAssembler.toCollectionModel(cidadeRepository.findAll());
