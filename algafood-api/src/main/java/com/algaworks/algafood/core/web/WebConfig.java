@@ -28,10 +28,10 @@ public class WebConfig implements WebMvcConfigurer {
 //			.maxAge(30); // define o tempo de vida (em segundos) do cache preflight para os clients
 	}
 	
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(apiDeprecationHandler);
-	}
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		registry.addInterceptor(apiDeprecationHandler);
+//	}
 	
 	/**
 	 * Bean para Shallow ETag (ETag simples), utilizando implementação do Spring.

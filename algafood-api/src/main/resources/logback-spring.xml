@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- Configuracao base para manter o appender padrao do Spring (Logs na console) -->
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<springProfile name="production">
+		<!-- Para ler o valor do token das propriedades da aplicacao -->
+		<springProperty name="logglyToken" source="logging.loggly.token" />
+	
+		<!-- Appender padrao do Loggly, com URL do endpoint e formato de log -->
+		<appender name="loggly" class="ch.qos.logback.ext.loggly.LogglyAppender">
+			<endpointUrl>https://logs-01.loggly.com/inputs/${logglyToken}/tag/logback</endpointUrl>
+			<pattern>%d{"ISO8601", UTC} %p %t %c %M - %m%n</pattern>
+		</appender>
+		
+		<!-- Configuracao de appender assincrono, para nao bloquear a aplicacao.
+		Este referencia o appender padrao -->
+		<appender name="logglyAsync" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="loggly" />
+		</appender>
+		
+		<root level="info">
+			<appender-ref ref="logglyAsync" />
+		</root>
+	</springProfile>
+
+</configuration>
