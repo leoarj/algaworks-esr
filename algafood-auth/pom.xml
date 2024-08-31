@@ -22,7 +22,7 @@
 	</properties>
 	<dependencies>
 		<!-- 
-			Para evitar: Caused by: java.lang.ClassNotFoundException: javax.xml.bind.JAXBException
+			Java 11+: Para evitar "Caused by: java.lang.ClassNotFoundException: javax.xml.bind.JAXBException"
 			https://gist.github.com/thiagofa/ef9a40d495016cb2581add41b5cbde1b
 		 -->
 		<dependency>
