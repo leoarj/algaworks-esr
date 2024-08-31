@@ -27,7 +27,8 @@ public class RestauranteApenasNomeModelAssembler
 	
 	@Override
 	public RestauranteApenasNomeModel toModel(Restaurante restaurante) {
-		RestauranteApenasNomeModel restauranteApenasNomeModel = createModelWithId(restaurante.getId(), restaurante);
+		RestauranteApenasNomeModel restauranteApenasNomeModel =
+				createModelWithId(restaurante.getId(), restaurante);
 		
 		modelMapper.map(restaurante, restauranteApenasNomeModel);
 		
@@ -37,7 +38,8 @@ public class RestauranteApenasNomeModelAssembler
 	}
 	
 	@Override
-	public CollectionModel<RestauranteApenasNomeModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
+	public CollectionModel<RestauranteApenasNomeModel> toCollectionModel(
+			Iterable<? extends Restaurante> entities) {
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToRestaurantes());
 	}

@@ -27,7 +27,8 @@ public class FormaPagamentoModelAssembler
 	
 	@Override
 	public FormaPagamentoModel toModel(FormaPagamento formaPagamento) {
-		FormaPagamentoModel formaPagamentoModel = createModelWithId(formaPagamento.getId(), formaPagamento);
+		FormaPagamentoModel formaPagamentoModel =
+				createModelWithId(formaPagamento.getId(), formaPagamento);
 		
 		modelMapper.map(formaPagamento, formaPagamentoModel);
 		
@@ -38,14 +39,9 @@ public class FormaPagamentoModelAssembler
 	}
 	
 	@Override
-	public CollectionModel<FormaPagamentoModel> toCollectionModel(Iterable<? extends FormaPagamento> entities) {
+	public CollectionModel<FormaPagamentoModel> toCollectionModel(
+			Iterable<? extends FormaPagamento> entities) {
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToFormasPagamento());
 	}
-//	public List<FormaPagamentoModel> toCollectionModel(Collection<FormaPagamento> formasPagamento) {
-//		return formasPagamento.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
-
 }

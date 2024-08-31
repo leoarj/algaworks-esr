@@ -43,10 +43,4 @@ public class GrupoModelAssembler
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToGrupos());
 	}
-	
-//	public List<GrupoModel> toCollectionModel(Collection<Grupo> grupos) {
-//		return grupos.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
 }

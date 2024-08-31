@@ -12,10 +12,12 @@ import com.algaworks.algafood.api.v1.model.CidadeModel;
 import com.algaworks.algafood.domain.model.Cidade;
 
 /**
- * Estendendo {@link RepresentationModelAssemblerSupport} para adicionar automação de links no modelo de representação.
+ * Estendendo {@link RepresentationModelAssemblerSupport} para adicionar automação<br>
+ * de links no modelo de representação.
  */
 @Component
-public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Cidade, CidadeModel> {
+public class CidadeModelAssembler
+	extends RepresentationModelAssemblerSupport<Cidade, CidadeModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -37,18 +39,10 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 		modelMapper.map(cidade, cidadeModel);
 		
 		cidadeModel.add(algaLinks.linkToCidades("cidades"));
-//		cidadeModel.add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(CidadeController.class)
-//				.listar())
-//				.withRel("cidades"));
 		
 		cidadeModel.getEstado().add(algaLinks
 				.linkToEstado(cidadeModel
 						.getEstado().getId()));
-//		cidadeModel.getEstado().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(EstadoController.class)
-//				.buscar(cidadeModel.getEstado().getId()))
-//				.withSelfRel());
 		
 		return cidadeModel;
 	}
@@ -58,15 +52,5 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 	public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToCidades());
-//		return super.toCollectionModel(entities)
-//				.add(WebMvcLinkBuilder.linkTo(CidadeController.class)
-//				.withSelfRel());
-	}
-	
-//	public List<CidadeModel> toCollectionModel(List<Cidade> cidades) {
-//		return cidades.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
-	
+	}	
 }

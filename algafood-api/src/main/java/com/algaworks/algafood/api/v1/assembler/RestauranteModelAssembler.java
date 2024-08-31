@@ -90,11 +90,4 @@ public class RestauranteModelAssembler
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToRestaurantes());
 	}
-	
-//	public List<RestauranteModel> toCollectionModel(List<Restaurante> restaurantes) {
-//		return restaurantes.stream()
-//				.map(restaurante -> toModel(restaurante))
-//				.collect(Collectors.toList());
-//	}
-
 }

@@ -33,12 +33,5 @@ public class PermissaoModelAssembler
 		// Chamando método default
 		return RepresentationModelAssembler.super.toCollectionModel(entities)
 				.add(algaLinks.linkToPermissoes());
-	}
-	
-//	public List<PermissaoModel> toCollectionModel(Collection<Permissao> permissoes) {
-//		return permissoes.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
-	
+	}	
 }

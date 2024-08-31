@@ -12,7 +12,8 @@ import com.algaworks.algafood.api.v1.model.CozinhaModel;
 import com.algaworks.algafood.domain.model.Cozinha;
 
 @Component
-public class CozinhaModelAssembler extends RepresentationModelAssemblerSupport<Cozinha, CozinhaModel> {
+public class CozinhaModelAssembler
+	extends RepresentationModelAssemblerSupport<Cozinha, CozinhaModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -31,8 +32,6 @@ public class CozinhaModelAssembler extends RepresentationModelAssemblerSupport<C
 		modelMapper.map(cozinha, cozinhaModel);
 		
 		cozinhaModel.add(algaLinks.linkToCozinhas("cozinhas"));
-//		cozinhaModel.add(WebMvcLinkBuilder.linkTo(CozinhaController.class)
-//				.withRel("cozinhas"));
 		
 		return cozinhaModel;
 	}
@@ -42,10 +41,4 @@ public class CozinhaModelAssembler extends RepresentationModelAssemblerSupport<C
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToCozinhas());
 	}
-	
-//	public List<CozinhaModel> toCollectionModel(List<Cozinha> cozinhas) {
-//		return cozinhas.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
 }

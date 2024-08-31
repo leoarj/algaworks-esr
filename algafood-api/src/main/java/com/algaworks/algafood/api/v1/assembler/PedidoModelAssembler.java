@@ -11,7 +11,8 @@ import com.algaworks.algafood.api.v1.model.PedidoModel;
 import com.algaworks.algafood.domain.model.Pedido;
 
 @Component
-public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
+public class PedidoModelAssembler
+	extends RepresentationModelAssemblerSupport<Pedido, PedidoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -31,9 +32,6 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 		
 		pedidoModel.add(algaLinks.linkToPedidos("pedidos"));
 		
-//		pedidoModel.add(WebMvcLinkBuilder.linkTo(PedidoController.class)
-//				.withRel("pedidos"));
-		
 		if (pedido.podeSerConfirmado()) {
 			pedidoModel.add(algaLinks.linkToConfirmacaoPedido(pedidoModel.getCodigo(), "confirmar"));
 		}
@@ -49,51 +47,25 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 		pedidoModel.getRestaurante().add(algaLinks
 				.linkToRestaurante(pedidoModel
 						.getRestaurante().getId()));
-//		pedidoModel.getRestaurante().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(RestauranteController.class)
-//				.buscar(pedidoModel.getRestaurante().getId()))
-//				.withSelfRel());
 		
 		pedidoModel.getCliente().add(algaLinks
 				.linkToUsuario(pedidoModel
 						.getCliente().getId()));
-//		pedidoModel.getCliente().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(UsuarioController.class)
-//				.buscar(pedidoModel.getCliente().getId()))
-//				.withSelfRel());
 		
 		pedidoModel.getFormaPagamento().add(algaLinks
 				.linkToFormaPagamento(pedidoModel
 						.getFormaPagamento().getId()));
-//		pedidoModel.getFormaPagamento().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(FormaPagamentoController.class)
-//				.buscar(pedidoModel.getFormaPagamento().getId(), null)) // <- Passando null porque é indiferente para construir a url
-//				.withSelfRel());
 		
 		pedidoModel.getEnderecoEntrega().getCidade().add(algaLinks
 				.linkToCidade(pedidoModel
 						.getEnderecoEntrega()
 							.getCidade().getId()));
-//		pedidoModel.getEnderecoEntrega().getCidade().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(CidadeController.class)
-//				.buscar(pedidoModel.getEnderecoEntrega().getCidade().getId()))
-//				.withSelfRel());
 		
 		pedidoModel.getItens().forEach(item -> {
 			item.add(algaLinks.linkToProduto(pedidoModel
 					.getRestaurante().getId(), item.getProdutoId(), "produto"));
-//			item.add(WebMvcLinkBuilder.linkTo(
-//					WebMvcLinkBuilder.methodOn(RestauranteProdutoController.class)
-//					.buscar(pedidoModel.getRestaurante().getId(), item.getProdutoId()))
-//					.withRel("produto"));
 		});
 		
 		return pedidoModel;
 	}
-	
-//	public List<PedidoModel> toCollectionModel(List<Pedido> pedidos) {
-//		return pedidos.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
 }

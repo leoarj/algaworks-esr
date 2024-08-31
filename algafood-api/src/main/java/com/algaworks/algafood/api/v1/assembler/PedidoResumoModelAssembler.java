@@ -11,7 +11,8 @@ import com.algaworks.algafood.api.v1.model.PedidoResumoModel;
 import com.algaworks.algafood.domain.model.Pedido;
 
 @Component
-public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoResumoModel> {
+public class PedidoResumoModelAssembler
+	extends RepresentationModelAssemblerSupport<Pedido, PedidoResumoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -30,31 +31,15 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
 		modelMapper.map(pedido, pedidoResumoModel);
 		
 		pedidoResumoModel.add(algaLinks.linkToPedidos("pedidos"));
-//		pedidoResumoModel.add(WebMvcLinkBuilder.linkTo(PedidoController.class)
-//				.withRel("pedidos"));
 		
 		pedidoResumoModel.getRestaurante().add(algaLinks
 				.linkToRestaurante(pedidoResumoModel
 						.getRestaurante().getId()));
-//		pedidoResumoModel.getRestaurante().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(RestauranteController.class)
-//				.buscar(pedidoResumoModel.getRestaurante().getId()))
-//				.withSelfRel());
 		
 		pedidoResumoModel.getCliente().add(algaLinks.linkToUsuario(
 				pedidoResumoModel
 				.getCliente().getId()));
-//		pedidoResumoModel.getCliente().add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(UsuarioController.class)
-//				.buscar(pedidoResumoModel.getCliente().getId()))
-//				.withSelfRel());
 	
 		return pedidoResumoModel;
 	}
-	
-//	public List<PedidoResumoModel> toCollectionModel(List<Pedido> pedidos) {
-//		return pedidos.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
 }

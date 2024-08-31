@@ -32,16 +32,8 @@ public class UsuarioModelAssembler
 		modelMapper.map(usuario, usuarioModel);
 		
 		usuarioModel.add(algaLinks.linkToUsuarios("usuarios"));
-//		usuarioModel.add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(UsuarioController.class)
-//				.listar())
-//				.withRel("usuarios"));
 		
 		usuarioModel.add(algaLinks.linkToGruposUsuario(usuarioModel.getId(), "grupos-usuario"));
-//		usuarioModel.add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class)
-//				.listar(usuarioModel.getId()))
-//				.withRel("grupos-usuario"));
 		
 		return usuarioModel;
 	}
@@ -50,15 +42,5 @@ public class UsuarioModelAssembler
 	public CollectionModel<UsuarioModel> toCollectionModel(Iterable<? extends Usuario> entities) {
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToUsuarios());
-//		return super.toCollectionModel(entities)
-//				.add(WebMvcLinkBuilder.linkTo(UsuarioController.class)
-//				.withSelfRel());
-	}
-	
-//	public List<UsuarioModel> toCollectionModel(Collection<Usuario> usuarios) {
-//		return usuarios.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
-	
+	}	
 }

@@ -39,12 +39,5 @@ public class ProdutoModelAssembler
 						produto.getRestaurante().getId(), produto.getId(), "foto"));
 		
 		return produtoModel;
-	}
-	
-//	public List<ProdutoModel> toCollectionModel(List<Produto> produtos) {
-//		return produtos.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
-	
+	}	
 }

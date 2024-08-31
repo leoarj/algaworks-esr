@@ -12,7 +12,8 @@ import com.algaworks.algafood.api.v1.model.EstadoModel;
 import com.algaworks.algafood.domain.model.Estado;
 
 @Component
-public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Estado, EstadoModel> {
+public class EstadoModelAssembler
+	extends RepresentationModelAssemblerSupport<Estado, EstadoModel> {
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -31,10 +32,6 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
 		modelMapper.map(estado, estadoModel);
 		
 		estadoModel.add(algaLinks.linkToEstados("estados"));
-//		estadoModel.add(WebMvcLinkBuilder.linkTo(
-//				WebMvcLinkBuilder.methodOn(EstadoController.class)
-//				.listar())
-//				.withRel("estados"));
 		
 		return estadoModel;
 	}
@@ -43,15 +40,5 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
 	public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
 		return super.toCollectionModel(entities)
 				.add(algaLinks.linkToEstados());
-		//		return super.toCollectionModel(entities)
-//				.add(WebMvcLinkBuilder.linkTo(EstadoController.class)
-//				.withSelfRel());
 	}
-	
-//	public List<EstadoModel> toCollectionModel(List<Estado> estados) {
-//		return estados.stream()
-//				.map(this::toModel)
-//				.toList();
-//	}
-	
 }
