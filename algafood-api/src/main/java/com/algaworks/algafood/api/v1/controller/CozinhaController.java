@@ -52,9 +52,9 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 		
 		log.info("Consultando cozinhas com páginas de {} registro...", pageable.getPageSize());
 		
-		if (true) {
-			throw new RuntimeException("Exception de teste");
-		}
+//		if (true) {
+//			throw new RuntimeException("Exception de teste");
+//		}
 		
 //		List<CozinhaModel> cozinhasModel = cozinhaModelAssembler
 //				.toCollectionModel(cozinhasPage.getContent());
