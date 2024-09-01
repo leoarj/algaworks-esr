@@ -26,6 +26,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated() // restringe qualquer outro endpoint a ter somente acesso com autenticação
 				
 			.and()
+			.cors().and() // Configura CORS (para que chamada com OPTIONS não seja impedida por navegadores)
 			.oauth2ResourceServer().opaqueToken();
 	}
 }
