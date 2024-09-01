@@ -21,6 +21,7 @@
 		<aws-java-sdk-s3.version>1.12.765</aws-java-sdk-s3.version>
 		<springfox.version>3.0.0</springfox.version>
 		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
+		<oauth2-oidc-sdk.version>6.21.2</oauth2-oidc-sdk.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -174,6 +175,21 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		
+		<!-- Dependência para habilitar a aplicação como um Resource Server -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>
+				spring-boot-starter-oauth2-resource-server
+			</artifactId>
+		</dependency>
+		
+		<!-- Dependência necessária para "spring-boot-starter-oauth2-resource-server" -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>${oauth2-oidc-sdk.version}</version>
 		</dependency>
 		
 	</dependencies>
