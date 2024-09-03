@@ -54,6 +54,12 @@
 			<version>${spring-security-oauth2.version}</version>
 		</dependency>
 		
+		<!-- Dependência para conectar com Redis (Token Store) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
