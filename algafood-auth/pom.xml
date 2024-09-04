@@ -19,6 +19,7 @@
 		<spring-security-oauth2.version>2.5.2.RELEASE</spring-security-oauth2.version>
 		<!-- <javax-jaxb.version>4.0.1</javax-jaxb.version> -->
 		<jaxb-core.version>4.0.1</jaxb-core.version>
+		<spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
 	</properties>
 	<dependencies>
 		<!-- 
@@ -58,6 +59,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>${spring-security-jwt.version}</version>
 		</dependency>
 		
 	</dependencies>
