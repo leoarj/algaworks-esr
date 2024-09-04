@@ -3,6 +3,7 @@ package com.algaworks.algafood.auth;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
@@ -32,8 +34,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private UserDetailsService userDetailsService;
 	
 	// Para ter acesso as configurações de conexão do Redis (no application.properties).
-	@Autowired
-	private RedisConnectionFactory redisConnectionFactory;
+//	@Autowired
+//	private RedisConnectionFactory redisConnectionFactory;
 	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -94,15 +96,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			.authenticationManager(authenticationManager)
 			.userDetailsService(userDetailsService)
 			.reuseRefreshTokens(false)
-			.tokenStore(redisTokenStore()) // configura armazenamento de tokens para o Redis
+//			.tokenStore(redisTokenStore()) // configura armazenamento de tokens para o Redis
+			.accessTokenConverter(jwtAccessTokenConverter()) // configura conversor de Token JWT
 			.tokenGranter(tokenGranter(endpoints));
 	}
 	
 	/**
 	 * Retorna um Token Store com implementação para Redis.
 	 */
-	private TokenStore redisTokenStore() {
-		return new RedisTokenStore(redisConnectionFactory);
+//	private TokenStore redisTokenStore() {
+//		return new RedisTokenStore(redisConnectionFactory);
+//	}
+	
+	/**
+	 * Registra um bean para um conversor de token JWT, usando chave simétrica.
+	 */
+	@Bean
+	public JwtAccessTokenConverter jwtAccessTokenConverter() {
+		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+		jwtAccessTokenConverter.setSigningKey("algaworks");
+		
+		return jwtAccessTokenConverter;
 	}
 	
 	/**
