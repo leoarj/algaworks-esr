@@ -39,6 +39,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 //	@Autowired
 //	private RedisConnectionFactory redisConnectionFactory;
 	
+	@Autowired
+	private JwtKeyStoreProperties jwtKeyStoreProperties;
+	
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients
@@ -120,11 +123,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 //		jwtAccessTokenConverter.setSigningKey("iHrwgwjuSgBNwIhT5vl7Syfxtr1GsKAR");
 		
 		// Obtém recurso do keystore a partir dos resources
-		var jksResource = new ClassPathResource("keystores/algafood.jks");
+		var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
 		// Senha utilizada para criptografia do arquivo/chaves
-		var keyStorePass = "123456";
+		var keyStorePass = jwtKeyStoreProperties.getPassword();
 		// Nome do conjunto das chaves no keystore
-		var keyPairAlias = "algafood";
+		var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
 		
 		// Cria a fábrica para pares de chaves, a partir de um keytore JKS.
 		// Para obter os pares contidos nele.
