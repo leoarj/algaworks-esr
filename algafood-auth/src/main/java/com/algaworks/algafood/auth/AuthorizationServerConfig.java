@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
@@ -114,7 +116,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter() {
 		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-		jwtAccessTokenConverter.setSigningKey("iHrwgwjuSgBNwIhT5vl7Syfxtr1GsKAR");
+		// Configuração simétrica com tokens opacos.
+//		jwtAccessTokenConverter.setSigningKey("iHrwgwjuSgBNwIhT5vl7Syfxtr1GsKAR");
+		
+		// Obtém recurso do keystore a partir dos resources
+		var jksResource = new ClassPathResource("keystores/algafood.jks");
+		// Senha utilizada para criptografia do arquivo/chaves
+		var keyStorePass = "123456";
+		// Nome do conjunto das chaves no keystore
+		var keyPairAlias = "algafood";
+		
+		// Cria a fábrica para pares de chaves, a partir de um keytore JKS.
+		// Para obter os pares contidos nele.
+		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
+		// Obtém o par de acordo com o alias correspondente.
+		var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
+		
+		// Configura o conversor de token JWT para usar um par de chaves RSA assimétrico.
+		jwtAccessTokenConverter.setKeyPair(keyPair);
 		
 		return jwtAccessTokenConverter;
 	}
