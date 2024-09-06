@@ -1,4 +1,4 @@
-package com.algaworks.algafood.auth;
+package com.algaworks.algafood.auth.core;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,17 +21,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication() // configurando autenticação em memória (testes)
-			.withUser("leandro")
-				.password(passwordEncoder().encode("123"))
-				.roles("ADMNIN")
-			.and()
-			.withUser("joao")
-				.password(passwordEncoder().encode("123"))
-				.roles("ADMIN");
-	}
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.inMemoryAuthentication() // configurando autenticação em memória (testes)
+//			.withUser("leandro")
+//				.password(passwordEncoder().encode("123"))
+//				.roles("ADMNIN")
+//			.and()
+//			.withUser("joao")
+//				.password(passwordEncoder().encode("123"))
+//				.roles("ADMIN");
+//	}
 	
 	/**
 	 * Para gerar o bean referente a codificação da senha.
@@ -50,9 +50,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManager();
 	}
 	
-	@Bean
-	@Override
-	protected UserDetailsService userDetailsService() {
-		return super.userDetailsService();
-	}
+	// Desabilitado para usar o UserDetailsService via JPA.
+//	@Bean
+//	@Override
+//	protected UserDetailsService userDetailsService() {
+//		return super.userDetailsService();
+//	}
 }

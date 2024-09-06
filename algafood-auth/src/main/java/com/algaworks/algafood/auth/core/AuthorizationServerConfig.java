@@ -1,4 +1,4 @@
-package com.algaworks.algafood.auth;
+package com.algaworks.algafood.auth.core;
 
 import java.util.Arrays;
 
@@ -34,6 +34,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	// Agora injetando de JpaUserDetailsService
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
