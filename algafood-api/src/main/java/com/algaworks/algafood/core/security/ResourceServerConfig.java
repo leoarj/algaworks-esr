@@ -40,10 +40,10 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 	 * especificando a chave secreta e o algoritmo.<br>
 	 * Obs.: Deve ser a mesma chave do Authorization Server.
 	 */
-	@Bean
-	public JwtDecoder jwtDecoder() {
-		var secretKey = new SecretKeySpec("iHrwgwjuSgBNwIhT5vl7Syfxtr1GsKAR".getBytes(), "HmacSHA256");
-		
-		return NimbusJwtDecoder.withSecretKey(secretKey).build();
-	}
+//	@Bean
+//	public JwtDecoder jwtDecoder() {
+//		var secretKey = new SecretKeySpec("iHrwgwjuSgBNwIhT5vl7Syfxtr1GsKAR".getBytes(), "HmacSHA256");
+//		
+//		return NimbusJwtDecoder.withSecretKey(secretKey).build();
+//	}
 }
