@@ -87,6 +87,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		//security.checkTokenAccess("isAuthenticated()");
 		security.checkTokenAccess("permitAll()")
+		.tokenKeyAccess("permitAll()") // habilita acesso para endpoint de obtenção da chave pública
 		.allowFormAuthenticationForClients(); // para permitir autenticação por url-encoded
 	}
 	
