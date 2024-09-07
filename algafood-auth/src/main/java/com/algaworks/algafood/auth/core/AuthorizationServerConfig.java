@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -101,12 +102,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 */
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+		// Passa cadeia de modificadores (melhoradores) de token
+		var enhancerChaim = new TokenEnhancerChain();
+		enhancerChaim.setTokenEnhancers(
+				Arrays.asList(new JwtCustomClaimsTokenEnhancer(), jwtAccessTokenConverter()));
+		
 		endpoints
 			.authenticationManager(authenticationManager)
 			.userDetailsService(userDetailsService)
 			.reuseRefreshTokens(false)
 //			.tokenStore(redisTokenStore()) // configura armazenamento de tokens para o Redis
 			.accessTokenConverter(jwtAccessTokenConverter()) // configura conversor de Token JWT
+			.tokenEnhancer(enhancerChaim) // cadeia de modificadores de token
 			.approvalStore(approvalStore(endpoints.getTokenStore()))
 			.tokenGranter(tokenGranter(endpoints));
 	}
