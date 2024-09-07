@@ -3,6 +3,8 @@ package com.algaworks.algafood.domain.model;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,12 +51,20 @@ public class Usuario {
 	inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private Set<Grupo> grupos = new HashSet<>();
 	
-	public void alterarSenha(String senhaAtual, String novaSenha) {
-		if (!getSenha().equals(senhaAtual)) {
-			throw new UsuarioSenhaAtualDiferenteException("Senha atual informada não coincide com a senha do usuário.");
+	public void alterarSenhaOuFalhar(String senhaAtual, String novaSenha,
+			BiPredicate<CharSequence, String> comparadorSenhaAtual,
+			Function<CharSequence, String> encodadorNovaSenha) {
+		
+		if (!comparadorSenhaAtual.test(senhaAtual, getSenha())) {
+			throw new UsuarioSenhaAtualDiferenteException(
+					"Senha atual informada não coincide com a senha do usuário.");
 		}
 		
-		setSenha(novaSenha);
+		setSenha(encodadorNovaSenha.apply(novaSenha));
+	}
+	
+	public boolean isNovo() {
+		return getId() == null;
 	}
 	
 	public boolean removerGrupo(Grupo grupo) {
