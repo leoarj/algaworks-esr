@@ -50,9 +50,9 @@ public class CadastroUsuarioService {
 	@Transactional
 	public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
 		Usuario usuario = buscarOuFalhar(usuarioId);
-		
-		usuario.alterarSenhaOuFalhar(senhaAtual, novaSenha,
-				passwordEncoder::matches, passwordEncoder::encode);
+				
+		usuario.alterarSenhaOuFalhar(senhaAtual, () -> passwordEncoder.encode(novaSenha),
+				passwordEncoder::matches);
 	}
 	
 	@Transactional

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,17 +51,16 @@ public class Usuario {
 	joinColumns = @JoinColumn(name = "usuario_id"),
 	inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private Set<Grupo> grupos = new HashSet<>();
-	
-	public void alterarSenhaOuFalhar(String senhaAtual, String novaSenha,
-			BiPredicate<CharSequence, String> comparadorSenhaAtual,
-			Function<CharSequence, String> encodadorNovaSenha) {
+		
+	public void alterarSenhaOuFalhar(String senhaAtual, Supplier<String> novaSenhaEncodada,
+			BiPredicate<CharSequence, String> comparadorSenhaAtual) {
 		
 		if (!comparadorSenhaAtual.test(senhaAtual, getSenha())) {
 			throw new UsuarioSenhaAtualDiferenteException(
 					"Senha atual informada não coincide com a senha do usuário.");
 		}
 		
-		setSenha(encodadorNovaSenha.apply(novaSenha));
+		setSenha(novaSenhaEncodada.get());
 	}
 	
 	public boolean isNovo() {
