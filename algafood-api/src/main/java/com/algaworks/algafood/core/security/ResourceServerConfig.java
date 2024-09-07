@@ -1,5 +1,6 @@
 package com.algaworks.algafood.core.security;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -14,12 +15,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 /**
  * Componente para configurar a segurança na API<br>
@@ -60,9 +63,16 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 				authorities = Collections.emptyList();
 			}
 			
-			return authorities.stream()
+			// Recupera escopos da autenticação
+			var scopesAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+			Collection<GrantedAuthority> grantedAuthorities = scopesAuthoritiesConverter.convert(jwt);
+			
+			// Realiza o merge dos escopos com as permissões do usuário
+			grantedAuthorities.addAll(authorities.stream()
 					.map(SimpleGrantedAuthority::new)
-					.collect(Collectors.toList());
+					.collect(Collectors.toList()));
+			
+			return grantedAuthorities;
 		});
 		
 		return jwtAuthenticationConverter;
