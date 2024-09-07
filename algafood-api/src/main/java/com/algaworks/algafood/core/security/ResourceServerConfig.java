@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -27,18 +28,19 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
  * */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) // para habilitar segurança definida nos métodos
 public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests()
-				//.anyRequest().authenticated() // restringe qualquer outro endpoint a ter somente acesso com autenticação
-				.antMatchers(HttpMethod.POST, "/v1/cozinhas/**").hasAnyAuthority("EDITAR_COZINHAS")
-				.antMatchers(HttpMethod.PUT, "/v1/cozinhas/**").hasAnyAuthority("EDITAR_COZINHAS")
-				.antMatchers(HttpMethod.GET, "/v1/cozinhas/**").hasAnyAuthority("CONSULTAR_COZINHAS")
-				.anyRequest().denyAll()
-			.and()
+//			.authorizeRequests()
+//				//.anyRequest().authenticated() // restringe qualquer outro endpoint a ter somente acesso com autenticação
+//				.antMatchers(HttpMethod.POST, "/v1/cozinhas/**").hasAnyAuthority("EDITAR_COZINHAS")
+//				.antMatchers(HttpMethod.PUT, "/v1/cozinhas/**").hasAnyAuthority("EDITAR_COZINHAS")
+//				.antMatchers(HttpMethod.GET, "/v1/cozinhas/**").hasAnyAuthority("CONSULTAR_COZINHAS")
+//				.anyRequest().denyAll()
+			.csrf().disable()
 			.cors().and() // Configura CORS (para que chamada com OPTIONS não seja impedida por navegadores)
 			//.oauth2ResourceServer().opaqueToken();
 			.oauth2ResourceServer().jwt() // configura para usar tokens transparentes JWT
