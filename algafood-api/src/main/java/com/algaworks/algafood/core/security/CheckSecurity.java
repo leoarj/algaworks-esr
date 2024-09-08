@@ -63,6 +63,21 @@ public @interface CheckSecurity {
 		@Retention(RetentionPolicy.RUNTIME)
 		@Target(ElementType.METHOD)
 		public @interface PodePesquisar {}
+		
+		@PreAuthorize("hasAuthority('GERENCIAR_PEDIDOS') and isAuthenticated()")
+		@Retention(RetentionPolicy.RUNTIME)
+		@Target(ElementType.METHOD)
+		public @interface PodeCriar {}
+		
+		public @interface Fluxo {
+			
+			@PreAuthorize("hasAuthority('SCOPE_WRITE') and "
+					+ "(hasAuthority('GERENCIAR_PEDIDOS') or "
+					+ "@algaSecurity.gerenciaRestauranteDoPedido(#codigoPedido))")
+			@Retention(RetentionPolicy.RUNTIME)
+			@Target(ElementType.METHOD)
+			public @interface PodeGerenciar {}
+		}
 	}
 	
 }
