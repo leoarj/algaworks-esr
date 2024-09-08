@@ -28,6 +28,7 @@ import com.algaworks.algafood.api.v1.disassembler.FormaPagamentoInputDisassemble
 import com.algaworks.algafood.api.v1.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.v1.model.input.FormaPagamentoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
@@ -46,6 +47,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 	private final FormaPagamentoModelAssembler formaPagamentoModelAssembler;
 	private final FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
 		Optional<String> optEtag = calcularEtag(request,
@@ -64,6 +66,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		return null;
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeConsultar
 	@GetMapping(path = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long formaPagamentoId, ServletWebRequest request) {
 		Optional<String> optEtag = calcularEtag(request,
@@ -82,6 +85,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		return null;
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -90,6 +94,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		return formaPagamentoModelAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamento));
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@PutMapping(path = "/{formaPagamentoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public FormaPagamentoModel atualizar(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
 		FormaPagamento formaPagamentoAtual = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
@@ -99,6 +104,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
 		return formaPagamentoModelAssembler.toModel(cadastroFormaPagamentoService.salvar(formaPagamentoAtual));
 	}
 	
+	@CheckSecurity.FormasPagamento.PodeEditar
 	@DeleteMapping("/{formaPagamentoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long formaPagamentoId) {
