@@ -58,6 +58,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 	
 	private final AlgaSecurity algaSecurity;
 
+	@CheckSecurity.Pedidos.PodePesquisar
 	// Spring já trata o DTO de filtro conforme os parâmetros da requisisão
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
