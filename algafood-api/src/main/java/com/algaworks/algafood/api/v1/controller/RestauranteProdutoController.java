@@ -65,7 +65,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return produtoModelAssembler.toModel(cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId));
 	}
 	
-	@CheckSecurity.Restaurantes.PodeGerenciarFunctionamento
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoModel adicionar(@PathVariable Long restauranteId,
@@ -75,7 +75,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 		return produtoModelAssembler.toModel(cadastroProdutoService.salvarNovo(produto, restauranteId));
 	}
 	
-	@CheckSecurity.Restaurantes.PodeGerenciarFunctionamento
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping("/{produtoId}")
 	public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
 			@RequestBody @Valid ProdutoInput produtoInput) {
