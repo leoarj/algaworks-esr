@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
  */
 public @interface CheckSecurity {
 
+	// TODO Criar anotações padrão para valores padrão?
+	
 	public @interface Cozinhas {
 		
 		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')")
