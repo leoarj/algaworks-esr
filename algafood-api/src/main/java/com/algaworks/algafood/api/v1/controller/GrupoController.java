@@ -20,6 +20,7 @@ import com.algaworks.algafood.api.v1.disassembler.GrupoInputDisassembler;
 import com.algaworks.algafood.api.v1.model.GrupoModel;
 import com.algaworks.algafood.api.v1.model.input.GrupoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.GrupoControllerOpenApi;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Grupo;
 import com.algaworks.algafood.domain.repository.GrupoRepository;
 import com.algaworks.algafood.domain.service.CadastroGrupoService;
@@ -38,16 +39,19 @@ public class GrupoController implements GrupoControllerOpenApi {
 	private final GrupoModelAssembler grupoModelAssembler;
 	private final GrupoInputDisassembler grupoInputDisassembler;
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public CollectionModel<GrupoModel> listar() {
 		return grupoModelAssembler.toCollectionModel(grupoRepository.findAll());
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
 	@GetMapping(path = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GrupoModel buscar(@PathVariable Long grupoId) {
 		return grupoModelAssembler.toModel(cadastroGrupoService.buscarOuFalhar(grupoId));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
@@ -56,6 +60,7 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toModel(cadastroGrupoService.salvar(grupo));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@PutMapping(path = "/{grupoId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GrupoModel atualizar(@PathVariable Long grupoId, @RequestBody @Valid GrupoInput grupoInput) {
 		Grupo grupoAtual = cadastroGrupoService.buscarOuFalhar(grupoId);
@@ -65,10 +70,10 @@ public class GrupoController implements GrupoControllerOpenApi {
 		return grupoModelAssembler.toModel(cadastroGrupoService.salvar(grupoAtual));
 	}
 	
+	@CheckSecurity.UsuariosGruposPermissoes.PodeEditar
 	@DeleteMapping("/{grupoId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long grupoId) {
 		cadastroGrupoService.excluir(grupoId);
 	}
-	
 }
