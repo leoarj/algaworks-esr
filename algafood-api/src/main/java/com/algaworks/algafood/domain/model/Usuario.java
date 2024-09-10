@@ -52,7 +52,7 @@ public class Usuario {
 	inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private Set<Grupo> grupos = new HashSet<>();
 		
-	public void alterarSenhaOuFalhar(String senhaAtual, Supplier<String> novaSenhaEncodada,
+	public void alterarSenha(String senhaAtual, Supplier<String> novaSenhaEncodada,
 			BiPredicate<CharSequence, String> comparadorSenhaAtual) {
 		
 		if (!comparadorSenhaAtual.test(senhaAtual, getSenha())) {

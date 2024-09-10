@@ -51,7 +51,7 @@ public class CadastroUsuarioService {
 	public void alterarSenha(Long usuarioId, String senhaAtual, String novaSenha) {
 		Usuario usuario = buscarOuFalhar(usuarioId);
 				
-		usuario.alterarSenhaOuFalhar(senhaAtual, () -> passwordEncoder.encode(novaSenha),
+		usuario.alterarSenha(senhaAtual, () -> passwordEncoder.encode(novaSenha),
 				passwordEncoder::matches);
 	}
 	
