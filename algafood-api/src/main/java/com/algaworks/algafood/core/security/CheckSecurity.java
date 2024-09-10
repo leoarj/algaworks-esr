@@ -73,9 +73,7 @@ public @interface CheckSecurity {
 		
 		public @interface Fluxo {
 			
-			@PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-					+ "(hasAuthority('GERENCIAR_PEDIDOS') or "
-					+ "@algaSecurity.gerenciaRestauranteDoPedido(#codigoPedido))")
+			@PreAuthorize("@algaSecurity.gerenciaRestauranteDoPedido(#codigoPedido)")
 			@Retention(RetentionPolicy.RUNTIME)
 			@Target(ElementType.METHOD)
 			public @interface PodeGerenciar {}
