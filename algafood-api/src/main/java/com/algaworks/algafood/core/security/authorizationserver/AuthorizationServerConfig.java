@@ -1,5 +1,7 @@
 package com.algaworks.algafood.core.security.authorizationserver;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 
 import javax.sql.DataSource;
@@ -26,6 +28,11 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 
 @Configuration
 @EnableAuthorizationServer
@@ -142,6 +149,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 //	}
 	
 	/**
+	 * Registra um bean que representa o conjunto de chaves criptográficas disponíveis
+	 * e suas propriedades, conforme a especificação JWKS.
+	 */
+	@Bean
+	public JWKSet jwkSet() {
+		RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic())
+				.keyUse(KeyUse.SIGNATURE)
+				.algorithm(JWSAlgorithm.RS256)
+				.keyID("algafood-key-id"); // Configurando apenas uma chave no nomento
+		
+		return new JWKSet(builder.build());
+	}
+	
+	/**
 	 * Registra um bean para um conversor de token JWT, usando chave simétrica.
 	 */
 	@Bean
@@ -150,6 +171,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		// Configuração simétrica com tokens opacos.
 //		jwtAccessTokenConverter.setSigningKey("iHrwgwjuSgBNwIhT5vl7Syfxtr1GsKAR");
 		
+		// Configura o conversor de token JWT para usar um par de chaves RSA assimétrico.
+		jwtAccessTokenConverter.setKeyPair(keyPair());
+		
+		return jwtAccessTokenConverter;
+	}
+	
+	/**
+	 * Para padronizar código de acesso ao par de chaves criptográficas.
+	 */
+	private KeyPair keyPair() {
 		// Obtém recurso do keystore a partir dos resources
 //		var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
 		var jksResource = jwtKeyStoreProperties.getJkLocation();
@@ -162,12 +193,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		// Para obter os pares contidos nele.
 		var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
 		// Obtém o par de acordo com o alias correspondente.
-		var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
-		
-		// Configura o conversor de token JWT para usar um par de chaves RSA assimétrico.
-		jwtAccessTokenConverter.setKeyPair(keyPair);
-		
-		return jwtAccessTokenConverter;
+		return keyStoreKeyFactory.getKeyPair(keyPairAlias);
 	}
 	
 	/**
