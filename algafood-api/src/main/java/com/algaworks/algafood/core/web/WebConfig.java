@@ -17,8 +17,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 	
-	@Autowired
-	private ApiRetirementHandler apiDeprecationHandler;
+//	@Autowired
+//	private ApiRetirementHandler apiDeprecationHandler;
 	
 //	@Override
 //	public void addCorsMappings(CorsRegistry registry) {
