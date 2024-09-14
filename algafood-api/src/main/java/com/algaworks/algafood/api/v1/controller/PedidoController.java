@@ -28,6 +28,8 @@ import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.filter.PedidoFilter;
@@ -53,7 +55,10 @@ public class PedidoController implements PedidoControllerOpenApi {
 	private final PedidoInputDisassembler pedidoInputDisassembler;
 	
 	private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+	
+	private final AlgaSecurity algaSecurity;
 
+	@CheckSecurity.Pedidos.PodePesquisar
 	// Spring já trata o DTO de filtro conforme os parâmetros da requisisão
 	@GetMapping
 	public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
@@ -72,20 +77,21 @@ public class PedidoController implements PedidoControllerOpenApi {
 		return pedidosResumoPagedModel;
 	}
 	
+	@CheckSecurity.Pedidos.PodeBuscar
 	@GetMapping("/{codigoPedido}")
 	public PedidoModel buscar(@PathVariable String codigoPedido) {
 		return pedidoModelAssembler.toModel(emissaoPedidoService.buscarOuFalhar(codigoPedido));
 	}
 	
+	@CheckSecurity.Pedidos.PodeCriar
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PedidoModel adicionar(@Valid @RequestBody PedidoInput pedidoInput) {
 		try {
 			Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 			
-			// TODO aqui vai informar usuário autenticado (módulo de seguraça)
 			novoPedido.setCliente(new Usuario());
-			novoPedido.getCliente().setId(1L);
+			novoPedido.getCliente().setId(algaSecurity.getUsuarioId()); // usuário autenticado
 			
 			novoPedido = emissaoPedidoService.emitir(novoPedido);
 			

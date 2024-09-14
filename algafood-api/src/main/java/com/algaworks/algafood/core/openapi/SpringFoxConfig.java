@@ -60,10 +60,14 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.HttpAuthenticationScheme;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -73,7 +77,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Import(BeanValidatorPluginsConfiguration.class) // para habilitar a interpretação automática de alguns validações do Jakarta Bean Validation
 public class SpringFoxConfig {
 
-	//@Bean
+	@Bean
 	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 		
@@ -149,7 +153,30 @@ public class SpringFoxConfig {
 						new Tag("Produtos", "Gerencia os produtos de restaurantes"),
 						new Tag("Usuários", "Gerencia os usuários"),
 						new Tag("Estatísticas", "Estatísticas da AlgaFood"),
-						new Tag("Permissões", "Gerencia as permissões")); // para personalizar as tags referente a recursos, na UI da documentação
+						new Tag("Permissões", "Gerencia as permissões")) // para personalizar as tags referente a recursos, na UI da documentação
+				
+				// Devido a limitações do SpringFox 3.0
+				.securityContexts(Arrays.asList(securityContext()))
+				.securitySchemes(List.of(authenticationScheme()))
+				.securityContexts(List.of(securityContext()));
+	}
+	
+	private SecurityContext securityContext() {
+		return SecurityContext.builder()
+				.securityReferences(securityReference()).build();
+	}
+	
+	// Necessário porque no SpringFox 3 não está recuperando os escopos da URL de autorização.
+	private List<SecurityReference> securityReference() {
+		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+		authorizationScopes[0] = authorizationScope;
+		return List.of(new SecurityReference("Authorization", authorizationScopes)); // Referencia o esquema de autenticação
+	}
+	
+	// Para dizer que a autenticação é por meio de um token JWT Bearer
+	private HttpAuthenticationScheme authenticationScheme() {
+		return HttpAuthenticationScheme.JWT_BEARER_BUILDER.name("Authorization").build();
 	}
 	
 	@Bean
@@ -195,7 +222,11 @@ public class SpringFoxConfig {
 		        
 		        .apiInfo(apiInfoV2())
 		        .tags(new Tag("Cidades", "Gerencia as cidades"),
-		        		new Tag("Cozinhas", "Gerencia as cozinhas"));
+		        		new Tag("Cozinhas", "Gerencia as cozinhas"))
+		        
+		        .securityContexts(Arrays.asList(securityContext()))
+				.securitySchemes(List.of(authenticationScheme()))
+				.securityContexts(List.of(securityContext()));
 	}
 	
 	@Bean

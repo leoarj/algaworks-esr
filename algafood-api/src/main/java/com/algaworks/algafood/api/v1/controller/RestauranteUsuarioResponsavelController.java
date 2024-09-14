@@ -16,6 +16,8 @@ import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.assembler.UsuarioModelAssembler;
 import com.algaworks.algafood.api.v1.model.UsuarioModel;
 import com.algaworks.algafood.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
+import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 
@@ -34,6 +36,9 @@ public class RestauranteUsuarioResponsavelController implements
 	
 	private final AlgaLinks algaLinks;
 	
+	private final AlgaSecurity algaSecurity;
+	
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@GetMapping
 	public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
 		Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(restauranteId);
@@ -43,17 +48,22 @@ public class RestauranteUsuarioResponsavelController implements
 		// Corrige link de coleção de usuários para-como subrecurso do recurso de restaurantes
 		usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis())
 				.removeLinks()
-				.add(algaLinks.linkToRestauranteResponsaveis(restauranteId))
-				.add(algaLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+				.add(algaLinks.linkToRestauranteResponsaveis(restauranteId));
 		
-		usuariosModel.getContent().forEach(usuarioModel -> {
-			usuarioModel.add(algaLinks.linkToRestauranteResponsavelDesassociacao(
-					restauranteId, usuarioModel.getId(), "desassociar"));
-		});
+		if (algaSecurity.podeGerenciarCadastroRestaurantes()) {
+			usuariosModel.add(algaLinks
+					.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+			
+			usuariosModel.getContent().forEach(usuarioModel -> {
+				usuarioModel.add(algaLinks.linkToRestauranteResponsavelDesassociacao(
+						restauranteId, usuarioModel.getId(), "desassociar"));
+			});
+		}
 		
 		return usuariosModel;
 	}
 	
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@PutMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
@@ -62,6 +72,7 @@ public class RestauranteUsuarioResponsavelController implements
 		return ResponseEntity.noContent().build();
 	}
 	
+	@CheckSecurity.Restaurantes.PodeGerenciarCadastro
 	@DeleteMapping("/{usuarioId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
@@ -69,5 +80,4 @@ public class RestauranteUsuarioResponsavelController implements
 		
 		return ResponseEntity.noContent().build();
 	}
-	
 }

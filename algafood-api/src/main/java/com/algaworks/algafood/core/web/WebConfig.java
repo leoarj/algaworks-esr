@@ -17,16 +17,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 	
-	@Autowired
-	private ApiRetirementHandler apiDeprecationHandler;
+//	@Autowired
+//	private ApiRetirementHandler apiDeprecationHandler;
 	
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**") // habilita para qualquer caminho
-			.allowedMethods("*"); // habilita para todos os verbos HTTP
-//			.allowedOrigins("*") // habilita para qualquer origem (padrão)
-//			.maxAge(30); // define o tempo de vida (em segundos) do cache preflight para os clients
-	}
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/**") // habilita para qualquer caminho
+//			.allowedMethods("*"); // habilita para todos os verbos HTTP
+////			.allowedOrigins("*") // habilita para qualquer origem (padrão)
+////			.maxAge(30); // define o tempo de vida (em segundos) do cache preflight para os clients
+//	}
 	
 //	@Override
 //	public void addInterceptors(InterceptorRegistry registry) {
