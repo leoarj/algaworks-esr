@@ -8,6 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class CryptConfig {
 	
+	/**
+	 * Para gerar o bean referente a codificação da senha.
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

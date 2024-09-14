@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,6 +44,12 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 //				.antMatchers(HttpMethod.PUT, "/v1/cozinhas/**").hasAnyAuthority("EDITAR_COZINHAS")
 //				.antMatchers(HttpMethod.GET, "/v1/cozinhas/**").hasAnyAuthority("CONSULTAR_COZINHAS")
 //				.anyRequest().denyAll()
+			.formLogin()
+			.and()
+			.authorizeRequests()
+				// diz que precisa estar autenticado nessa rota (vai direcionar para autenticação especificada (página de login no caso))
+				.antMatchers("/oauth/**").authenticated()
+			.and()
 			.csrf().disable()
 			.cors().and() // Configura CORS (para que chamada com OPTIONS não seja impedida por navegadores)
 			//.oauth2ResourceServer().opaqueToken();
@@ -76,6 +83,16 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 		});
 		
 		return jwtAuthenticationConverter;
+	}
+	
+	/**
+	 * Para repassar o bean referente ao Authentication Manager (Necessário no fluxo "password credentials").
+	 * Obs.: Movido de WebSecurityConfig pois WebSecurityConfig e ResourceServerConfig herdam WebSecurityConfigurerAdapter.
+	 */
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 	
 	/**
