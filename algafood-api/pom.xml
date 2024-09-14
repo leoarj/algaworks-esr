@@ -210,6 +210,12 @@
 			<version>${spring-security-jwt.version}</version>
 		</dependency>
 		
+		<!-- Dependência do starter do Thymeleaf -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

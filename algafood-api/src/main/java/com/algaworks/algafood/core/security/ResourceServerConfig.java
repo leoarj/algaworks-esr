@@ -44,7 +44,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 //				.antMatchers(HttpMethod.PUT, "/v1/cozinhas/**").hasAnyAuthority("EDITAR_COZINHAS")
 //				.antMatchers(HttpMethod.GET, "/v1/cozinhas/**").hasAnyAuthority("CONSULTAR_COZINHAS")
 //				.anyRequest().denyAll()
-			.formLogin()
+			.formLogin().loginPage("/login")
 			.and()
 			.authorizeRequests()
 				// diz que precisa estar autenticado nessa rota (vai direcionar para autenticação especificada (página de login no caso))
