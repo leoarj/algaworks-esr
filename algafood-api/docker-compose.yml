@@ -1,0 +1,30 @@
+# https://docs.docker.com/reference/compose-file/version-and-name/
+# version: "3.9" # propriedade apenas informativa, depreciada
+
+# Caso queira usar a variável de ambiente COMPOSE_PROJECT_NAME
+name: algafood-api
+
+networks:
+  algafood-network:
+    driver: bridge
+
+services:
+  algafood-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "root123456"
+    ports:
+      - "3306:3306"
+    networks:
+      - algafood-network
+
+  algafood-api:
+    image: algafood-api
+    environment:
+      DB_HOST: algafood-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-mysql
