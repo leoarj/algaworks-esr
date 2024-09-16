@@ -5,7 +5,10 @@ ARG APP_WORKDIR=/app
 
 WORKDIR ${APP_WORKDIR}
 
-COPY target/*.jar ${APP_WORKDIR}/api.jar
+# Recebido do plugin do Maven para Docker
+ARG JAR_FILE
+
+COPY target/${JAR_FILE} ${APP_WORKDIR}/api.jar
 
 EXPOSE 8080
 
