@@ -33,12 +33,22 @@ services:
     #command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: algafood-mysql
-    ports:
-      - "8080:8080"
+    #ports:
+     # - "8080:8080"
     networks:
       - algafood-network
     depends_on:
       #- algafood-mysql
       algafood-mysql:
         condition: service_healthy
-    
+
+  # Proxy para receber as requisições (deve ser colocado na mesma rede que os serviçõs)
+  algafood-proxy:
+    build: ./nginx
+    image: algafood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-api
