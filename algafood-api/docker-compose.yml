@@ -27,6 +27,11 @@ services:
       start_period: 30s
       timeout: 10s
 
+  algafood-redis:
+    image: redis:7.4.0-alpine
+    networks:
+      - algafood-network
+
   algafood-api:
     image: algafood-api
     # Substitui comandos do dockerfile, para poder usar o wait-for-it.sh
