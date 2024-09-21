@@ -19,7 +19,7 @@ import lombok.Setter;
 public class JwtKeyStoreProperties {
 
 	@NotNull
-	private Resource jkLocation;
+	private Resource jksLocation;
 	
 	@NotBlank
 	private String password;
