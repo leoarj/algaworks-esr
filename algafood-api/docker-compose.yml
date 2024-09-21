@@ -1,0 +1,62 @@
+# https://docs.docker.com/reference/compose-file/version-and-name/
+# version: "3.9" # propriedade apenas informativa, depreciada
+
+# Caso queira usar a variável de ambiente COMPOSE_PROJECT_NAME
+name: algafood-api
+
+networks:
+  algafood-network:
+    driver: bridge
+
+services:
+  algafood-mysql:
+    image: mysql:8.0
+    # em caso de Erro: Unable to load authentication plugin 'caching_sha2_password'.
+    #command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "root123456"
+    ports:
+      - "3306:3306"
+    networks:
+      - algafood-network
+    healthcheck:
+      test: ["CMD", "mysql", "-u", "root", "-proot123456", "--execute", "SHOW DATABASES;"]
+      #test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-proot1234"]
+      interval: 5s
+      retries: 3
+      start_period: 30s
+      timeout: 10s
+
+  algafood-redis:
+    image: redis:7.4.0-alpine
+    networks:
+      - algafood-network
+
+  algafood-api:
+    image: algafood-api
+    # Substitui comandos do dockerfile, para poder usar o wait-for-it.sh
+    #command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
+    environment:
+      DB_HOST: algafood-mysql
+      # Para habilitar o armazenamento de sessão (Authorization Server HTTP Session (Spring oAuth2)) no Redis
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: algafood-redis
+    #ports:
+     # - "8080:8080"
+    networks:
+      - algafood-network
+    depends_on:
+      #- algafood-mysql
+      algafood-mysql:
+        condition: service_healthy
+
+  # Proxy para receber as requisições (deve ser colocado na mesma rede que os serviçõs)
+  algafood-proxy:
+    build: ./nginx
+    image: algafood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - algafood-network
+    depends_on:
+      - algafood-api

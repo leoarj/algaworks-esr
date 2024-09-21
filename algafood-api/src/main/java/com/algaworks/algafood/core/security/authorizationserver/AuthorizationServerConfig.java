@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -122,6 +123,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		endpoints
 			.authenticationManager(authenticationManager)
 			.userDetailsService(userDetailsService)
+			// Para armazenar os authorizatin codes em base compartilhada:
+			.authorizationCodeServices(new JdbcAuthorizationCodeServices(this.dataSource))
 			.reuseRefreshTokens(false)
 //			.tokenStore(redisTokenStore()) // configura armazenamento de tokens para o Redis
 			.accessTokenConverter(jwtAccessTokenConverter()) // configura conversor de Token JWT

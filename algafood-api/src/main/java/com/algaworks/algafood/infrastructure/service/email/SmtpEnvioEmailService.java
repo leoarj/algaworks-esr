@@ -33,7 +33,8 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
 			
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 			helper.setFrom(emailProperties.getRemetente());
-			helper.setTo(mensagem.getDestinatarios().toArray(size -> new String[size]));
+			helper.setTo(mensagem.getDestinatarios().<String>toArray(size -> new String[size]));
+//			helper.setTo(mensagem.getDestinatarios().toArray(new String[0]));
 			helper.setSubject(mensagem.getAssunto());
 			helper.setText(corpo, true);
 			
