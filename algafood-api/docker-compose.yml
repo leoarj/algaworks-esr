@@ -38,6 +38,9 @@ services:
     #command: ["/wait-for-it.sh", "algafood-mysql:3306", "-t", "30", "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: algafood-mysql
+      # Para habilitar o armazenamento de sessão (Authorization Server HTTP Session (Spring oAuth2)) no Redis
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: algafood-redis
     #ports:
      # - "8080:8080"
     networks:
