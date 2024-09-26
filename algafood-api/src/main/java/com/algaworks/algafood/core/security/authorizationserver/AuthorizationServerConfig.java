@@ -186,7 +186,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private KeyPair keyPair() {
 		// Obtém recurso do keystore a partir dos resources
 //		var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
-		var jksResource = jwtKeyStoreProperties.getJkLocation();
+		var jksResource = jwtKeyStoreProperties.getJksLocation();
 		// Senha utilizada para criptografia do arquivo/chaves
 		var keyStorePass = jwtKeyStoreProperties.getPassword();
 		// Nome do conjunto das chaves no keystore

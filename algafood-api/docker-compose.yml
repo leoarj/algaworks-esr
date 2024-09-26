@@ -16,7 +16,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "root123456"
     ports:
-      - "3306:3306"
+      - "13306:3306"
     networks:
       - algafood-network
     healthcheck:
@@ -41,6 +41,7 @@ services:
       # Para habilitar o armazenamento de sessão (Authorization Server HTTP Session (Spring oAuth2)) no Redis
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: algafood-redis
+      SPRING_PROFILES_ACTIVE: development
     #ports:
      # - "8080:8080"
     networks:
