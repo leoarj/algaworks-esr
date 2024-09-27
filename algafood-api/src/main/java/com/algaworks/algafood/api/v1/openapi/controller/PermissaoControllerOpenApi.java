@@ -4,12 +4,12 @@ import org.springframework.hateoas.CollectionModel;
 
 import com.algaworks.algafood.api.v1.model.PermissaoModel;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-@Api(tags = "Permissoes")
+//@Api(tags = "Permissoes")
+@SecurityRequirement(name = "security_auth")
 public interface PermissaoControllerOpenApi {
 	
-	@ApiOperation("Lista as permissões")
+//	@ApiOperation("Lista as permissões")
 	CollectionModel<PermissaoModel> listar();
 }
