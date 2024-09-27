@@ -6,7 +6,6 @@ import org.springframework.hateoas.Links;
 
 import com.algaworks.algafood.api.v2.model.CidadeModelV2;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
@@ -14,14 +13,14 @@ import lombok.Data;
  * Corrige a geração dos objetos e arrays de objetos que estavam de forma indevida na documentação.<br>
  * Modela retorno de coleção de cidades na documentação de acordo com o formato real retornado pela API.
  */
-@ApiModel("CidadesModel")
+//@ApiModel("CidadesModel")
 @Data
 public class CidadesModelV2OpenApi {
 
 	private CidadeEmbeddedModelOpenApi _embedded;
 	private Links _links;
 	
-	@ApiModel("CidadesEmbeddedModel")
+//	@ApiModel("CidadesEmbeddedModel")
 	@Data
 	public class CidadeEmbeddedModelOpenApi {
 		private List<CidadeModelV2> cidades;

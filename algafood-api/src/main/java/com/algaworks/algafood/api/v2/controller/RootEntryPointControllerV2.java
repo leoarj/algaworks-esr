@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v2.AlgaLinksV2;
 
 import lombok.RequiredArgsConstructor;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Controlador base que representa o RootEntryPoint da API,<br>
  * a partir de onde vão ser listados todos os recursos da API.
  */
 @RequiredArgsConstructor
-@ApiIgnore
+//@ApiIgnore
 @RestController
 @RequestMapping(path = "/v2", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointControllerV2 {

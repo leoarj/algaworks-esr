@@ -6,10 +6,9 @@ import org.springframework.hateoas.Links;
 
 import com.algaworks.algafood.api.v1.model.PedidoResumoModel;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-@ApiModel("PedidosResumoModel")
+//@ApiModel("PedidosResumoModel")
 @Data
 public class PedidosResumoModelOpenApi {
 
@@ -17,7 +16,7 @@ public class PedidosResumoModelOpenApi {
 	private Links _links;
 	private PageModelOpenApi page;
 	
-	@ApiModel("PedidosResumoEmbeddedModel")
+//	@ApiModel("PedidosResumoEmbeddedModel")
 	@Data
 	public class PedidosResumoEmbeddedModelOpenApi {
 		private List<PedidoResumoModel> pedidos;

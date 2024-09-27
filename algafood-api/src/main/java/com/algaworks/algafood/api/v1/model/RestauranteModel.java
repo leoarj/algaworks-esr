@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,15 +17,15 @@ public class RestauranteModel extends RepresentationModel<RestauranteModel> {
 	 * Anotações @JsonView associam propriedades a uma ou mais projeções.
 	 * Obs.: @JsonView também aceita arrays.
 	 */
-	@ApiModelProperty(example = "1")
+//	@ApiModelProperty(example = "1")
 //	@JsonView({ RestauranteView.Resumo.class, RestauranteView.ApenasNome.class })
 	private Long id;
 	
-	@ApiModelProperty(example = "Thai Gourmet")
+//	@ApiModelProperty(example = "Thai Gourmet")
 //	@JsonView({ RestauranteView.Resumo.class, RestauranteView.ApenasNome.class })
 	private String nome;
 	
-	@ApiModelProperty(example = "12.00")
+//	@ApiModelProperty(example = "12.00")
 //	@JsonView(RestauranteView.Resumo.class)
 	private BigDecimal taxaFrete;
 	

@@ -10,14 +10,13 @@ import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 
 import lombok.RequiredArgsConstructor;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Controlador base que representa o RootEntryPoint da API,<br>
  * a partir de onde vão ser listados todos os recursos da API.
  */
 @RequiredArgsConstructor
-@ApiIgnore
+//@ApiIgnore
 @RestController
 @RequestMapping(path = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
