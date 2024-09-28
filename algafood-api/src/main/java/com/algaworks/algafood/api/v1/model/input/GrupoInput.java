@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class GrupoInput {
 
-	@Schema(example = "Gerente", required = true)
+	@Schema(example = "Gerente")
 	@NotBlank
 	private String nome;
 	
