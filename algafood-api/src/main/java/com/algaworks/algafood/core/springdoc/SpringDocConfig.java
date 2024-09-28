@@ -2,6 +2,7 @@ package com.algaworks.algafood.core.springdoc;
 
 import java.util.Arrays;
 
+import org.springdoc.core.customizers.OpenApiCustomiser;
 //import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.tags.Tag;
 
 @Configuration
@@ -50,6 +53,35 @@ public class SpringDocConfig {
 						).tags(Arrays.asList(
 								new Tag().name("Cidades").description("Gerencia as cidades")
 						));
+	}
+	
+	/**
+	 * Configura um customizador para a documentaçãp.
+	 * Recebe o bean registrado da documentação e personaliza propriedades.
+	 */
+	@Bean
+	public OpenApiCustomiser openApiCustomiser() {
+		return openApi -> {
+			openApi.getPaths()
+				.values()
+				.stream()
+				.flatMap(pathItem -> pathItem.readOperations().stream())
+				.forEach(operation -> {
+					// Recupera respostas já registradas
+					ApiResponses responses = operation.getResponses();
+					
+					// Cria respostas personalizadas
+					ApiResponse apiResponseNaoEncontrado = new ApiResponse().description("Recurso não encontrado");
+					ApiResponse apiResponseErroInterno = new ApiResponse().description("Erro interno no servidor");
+					ApiResponse apiResponseSemRepresentacao = new ApiResponse()
+							.description("Recurso não possui uma representação que poderia ser aceita pelo consumidor");
+					
+					// Para cada path/operações adiciona as respostas personalizadas
+					responses.addApiResponse("404", apiResponseNaoEncontrado);
+					responses.addApiResponse("406", apiResponseSemRepresentacao);
+					responses.addApiResponse("500", apiResponseErroInterno);
+				});
+		};
 	}
 	
 	/*
