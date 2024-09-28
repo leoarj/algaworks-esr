@@ -10,6 +10,10 @@ import com.algaworks.algafood.api.v1.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.v1.model.RestauranteModel;
 import com.algaworks.algafood.api.v1.model.input.RestauranteInput;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 //@Api(tags = "Restaurantes")
@@ -21,10 +25,18 @@ public interface RestauranteControllerOpenApi {
 //        @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
 //                name = "projecao", paramType = "query", dataType = "java.lang.String")
 //    })
+	@Operation(parameters = {
+			@Parameter(
+				in = ParameterIn.QUERY,
+		    		name = "projecao",
+		    		description = "Nome da projeção de pedidos",
+		    		example = "apenas-nome",
+		    		required = false
+				)
+	})
 	CollectionModel<RestauranteBasicoModel> listar();
     
-//	@ApiIgnore
-//    @ApiOperation(value = "Lista restaurantes", hidden = true)
+    @Operation(hidden = true)
     CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
     
 //    @ApiOperation("Busca um restaurante por ID")

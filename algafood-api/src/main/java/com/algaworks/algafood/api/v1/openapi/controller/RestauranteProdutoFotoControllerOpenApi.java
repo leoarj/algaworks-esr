@@ -2,12 +2,17 @@ package com.algaworks.algafood.api.v1.openapi.controller;
 
 import java.io.IOException;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
 import com.algaworks.algafood.api.v1.model.FotoProdutoModel;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 //@Api(tags = "Produtos")
@@ -58,6 +63,15 @@ public interface RestauranteProdutoFotoControllerOpenApi {
 //		@ApiResponse(responseCode = "404", description = "Foto de produto não encontrada",
 //			content = @Content(mediaType = "application/json", schema = @Schema(implementation = Problem.class)))
 //	})
+    @Operation(summary = "Busca a foto do produto de um restaurante",
+    		responses = {
+    				@ApiResponse(responseCode = "200",
+    						content = {
+    								@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = FotoProdutoModel.class)),
+    								@Content(mediaType = MediaType.IMAGE_JPEG_VALUE, schema = @Schema(type = "string", format = "binary")),
+    								@Content(mediaType = MediaType.IMAGE_PNG_VALUE, schema = @Schema(type = "string", format = "binary"))
+    						})
+    		})
     FotoProdutoModel buscar(
 //            @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
@@ -65,7 +79,7 @@ public interface RestauranteProdutoFotoControllerOpenApi {
 //            @ApiParam(value = "ID do produto", example = "1", required = true)
             Long produtoId);
 
-//    @ApiOperation(value = "Busca a foto do produto de um restaurante", hidden = true)
+    @Operation(hidden = true)
     ResponseEntity<?> servir(Long restauranteId, Long produtoId, String acceptHeader) 
             throws HttpMediaTypeNotAcceptableException;
     
