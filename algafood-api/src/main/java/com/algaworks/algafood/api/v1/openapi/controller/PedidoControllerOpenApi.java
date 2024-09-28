@@ -29,31 +29,37 @@ public interface PedidoControllerOpenApi {
     			    		in = ParameterIn.QUERY,
     			    		name = "clienteId",
     			    		description = "ID do cliente para filtro da pesquisa",
-    			    		schema = @Schema(type = "integer", example = "1")
+    			    		example = "1",
+    			    		schema = @Schema(type = "integer")
     			    		),
     			    @Parameter(
     			    		in = ParameterIn.QUERY,
     			    		name = "restauranteId",
     			    		description = "ID do restaurante para filtro da pesquisa",
-    			    		schema = @Schema(type = "integer", example = "1")
+    			    		example = "1",
+    			    		schema = @Schema(type = "integer")
     			    		),
     			    @Parameter(
     			    		in = ParameterIn.QUERY,
     			    		name = "dataCriacaoInicio",
     			    		description = "Data/hora de criação inicial para filtro da pesquisa",
-    			    		schema = @Schema(example = "2019-10-30T00:00:00Z")
+    			    		example = "2019-10-30T00:00:00Z",
+    			    		schema = @Schema(type = "string", format = "date-time")
     			    		),
     			    @Parameter(
     			    		in = ParameterIn.QUERY,
     			    		name = "dataCriacaoFim",
     			    		description = "Data/hora de criação final para filtro da pesquisa",
-    			    		schema = @Schema(example = "2019-11-01T10:00:00Z")
+    			    		example = "2019-11-01T10:00:00Z",
+    			    		schema = @Schema(type = "string", format = "date-time")
     			    		),
     			    @Parameter(
     			    		in = ParameterIn.QUERY,
     			    		name = "campos",
     			    		description = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
-    			    		schema = @Schema(type = "string", example = "codigo,valorTotal,cliente")
+    			    		example = "codigo,valorTotal,cliente",
+    			    		schema = @Schema(type = "string"),
+    			    		required = false
     			    		)
     		})
     @PageableParameter
@@ -63,6 +69,16 @@ public interface PedidoControllerOpenApi {
     		@Parameter(hidden = true)
     		Pageable pageable);
     @Operation(summary =  "Busca um pedido por código",
+    		parameters = {
+    				@Parameter(
+    			    		in = ParameterIn.QUERY,
+    			    		name = "campos",
+    			    		description = "Nomes das propriedades para filtrar na resposta, separados por vírgula",
+    			    		example = "codigo,valorTotal,cliente",
+    			    		schema = @Schema(type = "string"),
+    			    		required = false
+    			    		)
+    		},
     		responses = {
     				@ApiResponse(responseCode = "200"),
     				@ApiResponse(responseCode = "404", description = "Pedido não encontrado",
