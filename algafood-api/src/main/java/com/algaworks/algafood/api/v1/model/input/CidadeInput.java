@@ -4,6 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import lombok.Setter;
 @Getter
 public class CidadeInput {
 
-	//@ApiModelProperty(example = "Uberlândia", required = true)
+	@Schema(example = "Uberlândia")
 	@NotBlank
 	private String nome;
 	
