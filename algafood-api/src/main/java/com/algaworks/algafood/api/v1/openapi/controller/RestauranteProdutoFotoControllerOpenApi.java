@@ -10,8 +10,10 @@ import com.algaworks.algafood.api.v1.model.FotoProdutoModel;
 import com.algaworks.algafood.api.v1.model.input.FotoProdutoInput;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
@@ -25,20 +27,14 @@ public interface RestauranteProdutoFotoControllerOpenApi {
 //		@ApiResponse(responseCode = "404", description = "Produto de restaurante não encontrado",
 //			content = @Content(mediaType = "application/json", schema = @Schema(implementation = Problem.class)))
 //	})
+	@Operation(summary = "Atualiza a foto do produto de um restaurante")
     FotoProdutoModel atualizarFoto(
-//            @ApiParam(value = "ID do restaurante", example = "1", required = true)
+            @Parameter(description = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
-            
-//            @ApiParam(value = "ID do produto", example = "1", required = true)
+            @Parameter(description = "ID do produto", example = "1", required = true)
             Long produtoId,
-            
-            FotoProdutoInput fotoProdutoInput
-            
-//            @ApiParam(value = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)",
-//			required = true)
-//            ,MultipartFile arquivo -> no caso de precisar testar o upload pela UI do Swagger
-            
-    		) throws IOException;
+            @RequestBody(description = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)", required = true)
+            FotoProdutoInput fotoProdutoInput) throws IOException;
 
 //    @ApiOperation("Exclui a foto do produto de um restaurante")
 //    @ApiResponses({
