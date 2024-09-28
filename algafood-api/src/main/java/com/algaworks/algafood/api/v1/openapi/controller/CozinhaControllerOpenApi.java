@@ -5,7 +5,9 @@ import org.springframework.hateoas.PagedModel;
 
 import com.algaworks.algafood.api.v1.model.CozinhaModel;
 import com.algaworks.algafood.api.v1.model.input.CozinhaInput;
+import com.algaworks.algafood.core.springdoc.PageableParameter;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 //@Api(tags = "Cozinhas")
@@ -13,7 +15,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 public interface CozinhaControllerOpenApi {
 
 //    @ApiOperation("Lista as cozinhas com paginação")
-    PagedModel<CozinhaModel> listar(Pageable pageable);
+	@PageableParameter
+    PagedModel<CozinhaModel> listar(
+    		@Parameter(hidden = true)
+    		Pageable pageable);
     
 //    @ApiOperation("Busca uma cozinha por ID")
 //    @ApiResponses({
