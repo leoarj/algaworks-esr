@@ -62,25 +62,59 @@ public class SpringDocConfig {
 	@Bean
 	public OpenApiCustomiser openApiCustomiser() {
 		return openApi -> {
-			openApi.getPaths()
-				.values()
-				.stream()
-				.flatMap(pathItem -> pathItem.readOperations().stream())
-				.forEach(operation -> {
-					// Recupera respostas já registradas
-					ApiResponses responses = operation.getResponses();
-					
-					// Cria respostas personalizadas
-					ApiResponse apiResponseNaoEncontrado = new ApiResponse().description("Recurso não encontrado");
-					ApiResponse apiResponseErroInterno = new ApiResponse().description("Erro interno no servidor");
-					ApiResponse apiResponseSemRepresentacao = new ApiResponse()
-							.description("Recurso não possui uma representação que poderia ser aceita pelo consumidor");
-					
-					// Para cada path/operações adiciona as respostas personalizadas
-					responses.addApiResponse("404", apiResponseNaoEncontrado);
-					responses.addApiResponse("406", apiResponseSemRepresentacao);
-					responses.addApiResponse("500", apiResponseErroInterno);
-				});
+			openApi.getPaths().values()
+					.forEach(pathItem -> pathItem.readOperationsMap().forEach((httpMethod, operation) -> {
+						ApiResponses responses = operation.getResponses();
+
+						responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
+						
+						switch (httpMethod) {
+						case GET:
+							responses.addApiResponse("404", new ApiResponse().description("Recurso não encontrado"));
+							responses.addApiResponse("406", new ApiResponse().description(
+									"Recurso não possui representação que poderia ser aceita pelo consumidor"));
+							break;
+						case POST:
+							responses.addApiResponse("400", new ApiResponse().description("Requisição inválida"));
+
+							break;
+
+						case PUT:
+							responses.addApiResponse("404", new ApiResponse().description("Recurso não encontrado"));
+							responses.addApiResponse("400", new ApiResponse().description("Requisição inválida"));
+
+							break;
+
+						case DELETE:
+							responses.addApiResponse("404", new ApiResponse().description("Recurso não encontrado"));
+							break;
+						default:
+							responses.addApiResponse("500", new ApiResponse().description("Erro interno no servidor"));
+							break;
+						}
+
+					}));
+
+			// .stream()
+			// .flatMap(pathItem -> pathItem.readOperations().stream())
+			// .forEach(operation -> {
+			// // Recupera respostas já registradas
+			// ApiResponses responses = operation.getResponses();
+			//
+			// // Cria respostas personalizadas
+			// ApiResponse apiResponseNaoEncontrado = new ApiResponse().description("Recurso
+			// não encontrado");
+			// ApiResponse apiResponseErroInterno = new ApiResponse().description("Erro
+			// interno no servidor");
+			// ApiResponse apiResponseSemRepresentacao = new ApiResponse()
+			// .description("Recurso não possui uma representação que poderia ser aceita
+			// pelo consumidor");
+			//
+			// // Para cada path/operações adiciona as respostas personalizadas
+			// responses.addApiResponse("404", apiResponseNaoEncontrado);
+			// responses.addApiResponse("406", apiResponseSemRepresentacao);
+			// responses.addApiResponse("500", apiResponseErroInterno);
+			// });
 		};
 	}
 	
