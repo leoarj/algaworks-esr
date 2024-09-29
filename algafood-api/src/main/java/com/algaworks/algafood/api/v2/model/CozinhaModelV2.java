@@ -1,15 +1,12 @@
 package com.algaworks.algafood.api.v2.model;
 
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.core.Relation;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel("CozinhaModel")
-@Relation(collectionRelation = "cozinhas")
+//@Relation(collectionRelation = "cozinhas")
 @Setter
 @Getter
 public class CozinhaModelV2 extends RepresentationModel<CozinhaModelV2> {
@@ -18,10 +15,10 @@ public class CozinhaModelV2 extends RepresentationModel<CozinhaModelV2> {
 	 * Classe que está contida em outro modelo de representação,
 	 * também precisa ser anotada.
 	 */
-	@ApiModelProperty(example = "1")
+	@Schema(example = "1")
 	private Long idCozinha;
 	
-	@ApiModelProperty(example = "Brasileira")
+	@Schema(example = "Brasileira")
 	private String nomeCozinha;
 	
 }

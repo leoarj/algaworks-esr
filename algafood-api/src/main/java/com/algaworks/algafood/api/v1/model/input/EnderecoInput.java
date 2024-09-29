@@ -4,7 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,22 +12,22 @@ import lombok.Setter;
 @Setter
 public class EnderecoInput {
 
-	@ApiModelProperty(example = "38400-000", required = true)
+	@Schema(example = "38400-000")
 	@NotBlank
 	private String cep;
 	
-	@ApiModelProperty(example = "Rua Floriano Peixoto", required = true)
+	@Schema(example = "Rua Floriano Peixoto")
 	@NotBlank
 	private String logradouro;
 	
-	@ApiModelProperty(example = "\"1500\"", required = true)
+	@Schema(example = "\"1500\"")
 	@NotBlank
 	private String numero;
 	
-	@ApiModelProperty(example = "Apto 901")
+	@Schema(example = "Apto 901")
 	private String complemento;
 	
-	@ApiModelProperty(example = "Centro", required = true)
+	@Schema(example = "Centro")
 	@NotBlank
 	private String bairro;
 	

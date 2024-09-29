@@ -42,7 +42,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 	private final CidadeInputDisassembler cidadeInputDisassembler;
 	
 	@CheckSecurity.Cidades.PodeConsultar
-	@Deprecated // para testar informação de deprenciação na documentação
+	//@Deprecated // para testar informação de deprenciação na documentação
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public CollectionModel<CidadeModel> listar() {
 		return cidadeModelAssembler.toCollectionModel(cidadeRepository.findAll());
