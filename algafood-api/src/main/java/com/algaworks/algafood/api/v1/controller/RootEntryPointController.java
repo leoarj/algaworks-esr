@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.core.security.AlgaSecurity;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -16,7 +17,6 @@ import lombok.RequiredArgsConstructor;
  * a partir de onde vão ser listados todos os recursos da API.
  */
 @RequiredArgsConstructor
-//@ApiIgnore
 @RestController
 @RequestMapping(path = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
@@ -28,6 +28,7 @@ public class RootEntryPointController {
 	/**
 	 * Constrói modelo de representação do root entry point da API e adiciona links dos recursos.
 	 */
+	@Operation(hidden = true)
 	@GetMapping
 	public RootEntryPointModel root() {
 		var rootEntryPointModel = new RootEntryPointModel();
