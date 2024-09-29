@@ -6,13 +6,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springdoc.core.SpringDocUtils;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 //import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.algaworks.algafood.api.v1.openapi.model.LinksModelOpenApi;
 
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -55,6 +56,10 @@ public class SpringDocConfig {
 	
 	@Bean
 	public OpenAPI openAPI() {
+		// Realiza a substituição de Links, para representação mais simples no modelo
+		SpringDocUtils.getConfig()
+			.replaceWithClass(org.springframework.hateoas.Links.class, LinksModelOpenApi.class);
+		
 		return new OpenAPI()
 				.info(new Info()
 						.title("AlgaFood API")
