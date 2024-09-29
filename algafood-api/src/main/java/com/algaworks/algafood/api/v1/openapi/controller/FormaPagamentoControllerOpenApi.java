@@ -61,7 +61,7 @@ public interface FormaPagamentoControllerOpenApi {
             @RequestBody(description = "Representação de uma forma de pagamento com os novos dados", required = true)
             FormaPagamentoInput formaPagamentoInput);
     
-    @Operation(summary = "Exclui uma cidade por ID",
+    @Operation(summary = "Exclui uma forma de pagamento por ID",
     		responses = {
     				@ApiResponse(responseCode = "204", description = "Forma de pagamento excluída"),
     				@ApiResponse(responseCode = "400", description = "ID da forma de pagamento inválido",
