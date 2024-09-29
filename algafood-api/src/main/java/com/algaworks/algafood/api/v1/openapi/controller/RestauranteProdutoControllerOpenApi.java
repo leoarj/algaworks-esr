@@ -7,7 +7,6 @@ import com.algaworks.algafood.api.v1.model.input.ProdutoInput;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -20,15 +19,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface RestauranteProdutoControllerOpenApi {
 
 	@Operation(summary = "Lista os produtos de um restaurante",
-//			parameters = {
-//				@Parameter(
-//					in = ParameterIn.QUERY,
-//			    		name = "incluirInativos",
-//			    		description = "Indica se deve ou não incluir produtos inativos no resultado da listagem",
-//			    		example = "false",
-//			    		required = false
-//					)
-//			},
 			responses = {
 					@ApiResponse(responseCode = "200"),
 					@ApiResponse(responseCode = "400", description = "ID do restaurante inválido",
