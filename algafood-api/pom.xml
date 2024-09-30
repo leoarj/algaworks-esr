@@ -23,7 +23,7 @@
 		<oauth2-oidc-sdk.version>6.21.2</oauth2-oidc-sdk.version>
 		
 		<!-- Para habilitar Authorization Server -->
-		
+		<springauthserver.version>0.3.1</springauthserver.version>
 		
 		<dockerfile-maven-version>1.4.13</dockerfile-maven-version>
 		
@@ -183,8 +183,12 @@
 		</dependency>
 		
 		<!-- Dependências para habilitar a aplicação como um Authorization Server -->
-		<!-- Dependência do Spring Security OAuth2 -->
-		
+		<!-- Dependência do Spring Authorization Server -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-authorization-server</artifactId>
+			<version>${springauthserver.version}</version>
+		</dependency>
 		
 		<!-- Dependência do starter do Thymeleaf -->
 		<dependency>
