@@ -74,7 +74,7 @@ public class AuthorizationServerConfig {
 	}
 	
 	/**
-	 * Registra um bean responsavel por gerenciar as autoriações.
+	 * Registra um bean responsavel por gerenciar as autorizações.
 	 * Recebe injeção de um JdbcOperations para repassar a implementação
 	 * JdbcOAuth2AuthorizationService, para manipular os dados na tabela de autorizações,
 	 * além da injeção do repositório de clients da API registrados.
