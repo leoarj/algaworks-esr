@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,7 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.OAuth2TokenFormat;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
@@ -35,6 +38,7 @@ import org.springframework.security.oauth2.server.authorization.config.TokenSett
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
@@ -57,9 +61,11 @@ public class AuthorizationServerConfig {
 	@Order(Ordered.HIGHEST_PRECEDENCE) // para ter precedência antes de filters do Resource Server
 	public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
 		// Configura cadeia de filtros de segurança padrão
-		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+//		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+		applyDefaultSecurityWithCustomConsentPage(http);
+		
 		return http
-				.formLogin(Customizer.withDefaults())
+				.formLogin(customizer -> customizer.loginPage("/login"))
 				.build();
 	}
 	
@@ -153,5 +159,38 @@ public class AuthorizationServerConfig {
 				context.getClaims().claim("authorities", authorities);
 			}
 		};
+	}
+	
+	/**
+	 * Configura um bean para o serviço de autorização de consentimentos,
+	 * para armazenamento temporário dos consentimentos já concedidos.
+	 */
+	@Bean
+	public OAuth2AuthorizationConsentService consentService() {
+		return new InMemoryOAuth2AuthorizationConsentService();
+	}
+	
+	/**
+	 * Customiza configuração padrão de segurança {@code applyDefaultSecurity(HttpSecurity http)}
+	 * de {@link OAuth2AuthorizationServerConfiguration}
+	 * definindo uma página personalizada de consentimento.
+	 * @see {@link OAuth2AuthorizationServerConfiguration}
+	 */
+	private void applyDefaultSecurityWithCustomConsentPage(HttpSecurity http) throws Exception {
+		OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
+                new OAuth2AuthorizationServerConfigurer<>();
+
+        authorizationServerConfigurer.authorizationEndpoint(
+                customizer -> customizer.consentPage("/oauth2/consent"));
+
+        RequestMatcher endpointsMatcher = authorizationServerConfigurer
+                .getEndpointsMatcher();
+
+        http.requestMatcher(endpointsMatcher)
+            .authorizeRequests(authorizeRequests ->
+                    authorizeRequests.anyRequest().authenticated()
+            )
+            .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+            .apply(authorizationServerConfigurer);
 	}
 }
