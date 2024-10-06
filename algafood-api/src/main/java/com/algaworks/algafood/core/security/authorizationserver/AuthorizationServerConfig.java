@@ -174,6 +174,17 @@ public class AuthorizationServerConfig {
 	}
 	
 	/**
+	 * Expôe o bean referente a consulta de autorizações concedidas a clients,
+	 * que estão armazenadas no banco de dados.
+	 * A consulta fornecida por esse serviço será utilizada para exibir os clients
+	 * com autorizações concedidas em uma página personalizada.
+	 */
+	@Bean
+	public OAuth2AuthorizationQueryService oAuth2AuthorizationQueryService(JdbcOperations jdbcOperations) {
+		return new JdbcOAuth2AuthorizationQueryService(jdbcOperations);
+	}
+	
+	/**
 	 * Customiza configuração padrão de segurança {@code applyDefaultSecurity(HttpSecurity http)}
 	 * de {@link OAuth2AuthorizationServerConfiguration}
 	 * definindo uma página personalizada de consentimento.
