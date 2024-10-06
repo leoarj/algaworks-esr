@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,12 +34,13 @@ public class JpaUserDetailsService implements UserDetailsService {
 		Usuario usuario = usuarioRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com e-mail informado"));
 		
-		return new AuthUser(usuario, getAuthorities(usuario));
+		//return new AuthUser(usuario, getAuthorities(usuario));
+		return new User(usuario.getEmail(), usuario.getSenha(), getAuthorities(usuario));
 	}
 	
 	/**
 	 * Recupera e transforma as permissões associadas aos grupos associados ao usuário<br>
-	 * e transforma isso em uma coleção de permissões para serem passadas para um {@link AuthUser}.
+	 * e transforma isso em uma coleção de permissões para serem passadas para um AuthUser(User).
 	 */
 	private Collection<GrantedAuthority> getAuthorities(Usuario usuario) {
 		return usuario.getGrupos().stream()

@@ -35,7 +35,8 @@ public class AlgaSecurity {
 	public Long getUsuarioId() {
 		Jwt jwt = (Jwt) getAuthentication().getPrincipal();
 		
-		return jwt.getClaim("usuario_id");
+		// Long.parseLong devido a nova customozação do JWT
+		return Long.parseLong(jwt.getClaim("usuario_id"));
 	}
 	
 	public boolean isAutenticado() {
