@@ -40,7 +40,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 	
 	/**
 	 * Recupera e transforma as permissões associadas aos grupos associados ao usuário<br>
-	 * e transforma isso em uma coleção de permissões para serem passadas para um {@link AuthUser}.
+	 * e transforma isso em uma coleção de permissões para serem passadas para um AuthUser(User).
 	 */
 	private Collection<GrantedAuthority> getAuthorities(Usuario usuario) {
 		return usuario.getGrupos().stream()
