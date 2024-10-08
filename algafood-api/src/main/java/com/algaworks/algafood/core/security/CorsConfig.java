@@ -27,7 +27,7 @@ public class CorsConfig {
 	 * [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: 
 	 * Bean instantiation via factory method failed; 
 	 * nested exception is org.springframework.beans.BeanInstantiationException: 
-	 * Failed to instantiate [javax.servlet.Filter]: 
+	 * Failed to instantiate [jakarta.servlet.Filter]: 
 	 * Factory method 'springSecurityFilterChain' threw exception; 
 	 * nested exception is org.springframework.beans.factory.BeanNotOfRequiredTypeException: 
 	 * Bean named 'corsFilter' is expected to be of type 'org.springframework.web.filter.CorsFilter' 

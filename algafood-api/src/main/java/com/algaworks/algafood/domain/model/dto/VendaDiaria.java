@@ -5,11 +5,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Setter
 @Getter
 public class VendaDiaria {
@@ -22,5 +20,13 @@ public class VendaDiaria {
 	
 	@Schema(example = "308.90")
 	private BigDecimal totalFaturado;
-	
+
+	public VendaDiaria(java.sql.Date data, Long totalVendas, BigDecimal totalFaturado) {
+		// Spring Boot 3 e Jakarta EE9
+		// porque sendo compativeis, o Jakarta EE 9 tenta transformar
+		// o java.sql.Date com toInstant(), o qual não ele não suporta.
+		this.data = new Date(data.getTime());
+		this.totalVendas = totalVendas;
+		this.totalFaturado = totalFaturado;
+	}
 }

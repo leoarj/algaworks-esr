@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +47,7 @@ public class VendaQueryServiceImpl implements VendaQueryService {
 				builder.sum(root.get("valorTotal")));
 		
 		if (Objects.nonNull(filtro.getRestauranteId())) {
-			predicates.add(builder.equal(root.get("restaurante"), filtro.getRestauranteId()));
+			predicates.add(builder.equal(root.get("restaurante").get("id"), filtro.getRestauranteId()));
 		}
 		
 		if (Objects.nonNull(filtro.getDataCriacaoInicio())) {
