@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.v2.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;

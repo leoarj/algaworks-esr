@@ -11,10 +11,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -56,7 +56,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@Override
 	protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		return ResponseEntity.status(status).headers(headers).build();
 	}
 
@@ -80,7 +80,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
 		
@@ -102,7 +102,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		
 		if (ex instanceof MethodArgumentTypeMismatchException) {
 			return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
@@ -112,7 +112,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 	
 		String parametroNome = ex.getParameter().getParameterName();
 		Object parametroValor = ex.getValue();
@@ -136,7 +136,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		
 		// Para obter a causa raíz da exceção
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
@@ -161,7 +161,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * a fim de obter maiores detalhes, como os campos com dados em formato inválido.
 	 */
 	private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		
 		// Obtém a lista de campos (em hierarquia) com formato inválido e os concatena
 		String path = joinPath(ex.getPath());
@@ -185,7 +185,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * Para tratar propriedades inexistentes ou ignoradas (UnrecognizedPropertyException, IgnoredPropertyException).
 	 */
 	private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		
 		String path = joinPath(ex.getPath());
 		
@@ -202,15 +202,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
-			WebRequest request) {
-		
-		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
-	}
-	
-	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		
 		return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
 	}
@@ -225,7 +218,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 * Para reutilização de código comum, referente ao tratamento de validações de propriedades.
 	 */
 	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
 		String detail = "Um ou mais campos estão inválidos. "
@@ -323,11 +316,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+			HttpStatusCode status, WebRequest request) {
 		
 		if (body == null) {
 			body = Problem.builder()
-					.title(status.getReasonPhrase())
+					.title(HttpStatus.valueOf(status.value()).getReasonPhrase())
 					.status(status.value())
 					.timestamp(OffsetDateTime.now())
 					.userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
@@ -357,7 +350,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	/**
 	 * Para facilitar a criação de um Problem, especificando melhor o builder.
 	 */
-	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status,
+	private Problem.ProblemBuilder createProblemBuilder(HttpStatusCode status,
 			ProblemType problemType, String detail) {
 		
 		return Problem.builder()
