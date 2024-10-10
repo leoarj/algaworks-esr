@@ -1,0 +1,34 @@
+package com.algaworks.algafood.core.io;
+
+import java.util.Base64;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ProtocolResolver;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
+/**
+ * Resolvedor para prover decodificação do recurso informado como base64: no arquivo application.properties.<br>
+ * No caso, será usado para carregar o arquivo .jks codificado em base64, dessa forma, deixando a configuração
+ * em ambiente de desenvolvimento/produção flexível, devido a possibilidade de uso de variáveis de ambiente.
+ * */
+public class Base64ProtocolResolver implements ProtocolResolver,
+	ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+	@Override
+	public Resource resolve(String location, ResourceLoader resourceLoader) {
+		if (location.startsWith("base64:")) {
+			byte[] decodedResource = Base64.getDecoder().decode(location.substring(7));
+			return new ByteArrayResource(decodedResource);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void initialize(ConfigurableApplicationContext applicationContext) {
+		applicationContext.addProtocolResolver(this);
+	}
+}

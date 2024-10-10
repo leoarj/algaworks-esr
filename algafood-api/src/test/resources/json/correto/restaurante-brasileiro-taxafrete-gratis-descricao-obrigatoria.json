@@ -1,0 +1,7 @@
+{
+    "nome": "Comida Brasileira - Frete Grátis",
+    "taxaFrete": 0.00,
+    "cozinha": {
+        "id": 3
+    }
+}
