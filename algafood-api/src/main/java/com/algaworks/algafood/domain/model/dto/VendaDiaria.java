@@ -25,6 +25,7 @@ public class VendaDiaria {
 		// Spring Boot 3 e Jakarta EE9
 		// porque sendo compativeis, o Jakarta EE 9 tenta transformar
 		// o java.sql.Date com toInstant(), o qual não ele não suporta.
+		// Causaria erro no PdfVendaReportService.
 		this.data = new Date(data.getTime());
 		this.totalVendas = totalVendas;
 		this.totalFaturado = totalFaturado;
