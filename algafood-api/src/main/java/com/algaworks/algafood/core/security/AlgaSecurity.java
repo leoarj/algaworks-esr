@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
+import com.algaworks.algafood.domain.repository.UsuarioRepository;
 
 /**
  * Componente para obter informações do contexto de segurança,<br>
@@ -22,6 +23,10 @@ public class AlgaSecurity {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
+	// Bean necessário para testes de integração
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
 	/**
 	 * Retorna autenticação referente ao contexto atual.
 	 */
@@ -33,18 +38,23 @@ public class AlgaSecurity {
 	 * Recupera claim customizada do objeto/token referente a autenticação atual.
 	 */
 	public Long getUsuarioId() {
-		Jwt jwt = (Jwt) getAuthentication().getPrincipal();
-		
-		// Long.parseLong devido a nova customização do JWT
-		//return Long.parseLong(jwt.getClaim("usuario_id"));
-		
-		Object usuarioId = jwt.getClaim("usuario_id");
-		
-		if (usuarioId == null) {
-			return null;
+		if (getAuthentication().getPrincipal() instanceof Jwt) {
+			Jwt jwt = (Jwt) getAuthentication().getPrincipal();
+			
+			// Long.parseLong devido a nova customização do JWT
+			//return Long.parseLong(jwt.getClaim("usuario_id"));
+			
+			Object usuarioId = jwt.getClaim("usuario_id");
+			
+			if (usuarioId == null) {
+				return null;
+			}
+			
+			return Long.valueOf(usuarioId.toString());
 		}
-		
-		return Long.valueOf(usuarioId.toString());
+		// Para testes de integração
+		String userName = getAuthentication().getName();
+		return this.usuarioRepository.findByEmail(userName).get().getId();
 	}
 	
 	public boolean isAutenticado() {
