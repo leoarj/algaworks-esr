@@ -2,6 +2,8 @@ package com.algaworks.algafood.api.v1.model.input;
 
 import java.math.BigDecimal;
 
+import com.algaworks.algafood.core.validation.ValorZeroIncluirDescricao;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,8 +17,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 //Anotação customizada a nível de classe para validar mais de uma propriedade conforme condições impostas.
-//@ValorZeroIncluirDescricao(valorField = "taxaFrete",
-//		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
+@ValorZeroIncluirDescricao(valorField = "taxaFrete",
+		descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Setter
 @Getter
 public class RestauranteInput {

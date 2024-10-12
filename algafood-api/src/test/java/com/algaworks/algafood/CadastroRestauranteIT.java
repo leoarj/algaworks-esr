@@ -1,6 +1,7 @@
 package com.algaworks.algafood;
 
-import static io.restassured.RestAssured.given;
+import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+//import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -9,28 +10,42 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
+import com.algaworks.algafood.core.io.Base64ProtocolResolver;
+import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.model.Restaurante;
+import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.domain.repository.EstadoRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.util.DatabaseCleaner;
 import com.algaworks.algafood.util.ResourceUtils;
 
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 /**
  * Classe de teste para consulta e cadastro de restaurantes.
  */
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
+@ContextConfiguration(initializers = Base64ProtocolResolver.class)
 public class CadastroRestauranteIT {
 	
 	private static final String RESTAURANTE_FRETE_GRATIS_DESCRICAO = "frete grátis";
@@ -41,8 +56,8 @@ public class CadastroRestauranteIT {
 
     private static final String DADOS_INVALIDOS_PROBLEM_TITLE = "Dados inválidos";
 	
-	@LocalServerPort
-	private int port;
+//	@LocalServerPort
+//	private int port;
 	
 	@Autowired
 	private DatabaseCleaner databaseCleaner;
@@ -52,6 +67,18 @@ public class CadastroRestauranteIT {
 	
 	@Autowired
 	private RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private WebApplicationContext webApplicationContext;
+	
+	@Autowired
+	private MockMvc mockMvc;
 	
 	private int quantidadeRestaurantesCadastrados;
 	private Restaurante restauranteMarrocos;
@@ -68,9 +95,11 @@ public class CadastroRestauranteIT {
 	
 	@BeforeEach
 	public void setup() {
-		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-		RestAssured.port = port;
-		RestAssured.basePath = "/restaurantes";
+		RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
+//		RestAssuredMockMvc.port = port;
+		RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
+		RestAssuredMockMvc.mockMvc(mockMvc);
+		RestAssuredMockMvc.basePath = "/v1/restaurantes";
 		
 		databaseCleaner.clearTables();
 		prepararDados();
@@ -100,6 +129,13 @@ public class CadastroRestauranteIT {
 	
 	// Status 200 quando consultar cozinhas
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarStatus200_QuandoConsultarRestaurantes() {
 		given()
 			.accept(ContentType.JSON)
@@ -111,18 +147,34 @@ public class CadastroRestauranteIT {
 	
 	// Quantidade correta de restaurantes
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarQuantidadeCorretaDeRestaurantes_QuandoConsultarRestaurantes() {
 		given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.body("", hasSize(quantidadeRestaurantesCadastrados));
+			// No projeto foi implementado HATEOAS com HAL
+			// Para evitar: java.lang.AssertionError: 1 expectation failed. JSON path doesn't match.
+			.body("_embedded.restaurantes", hasSize(quantidadeRestaurantesCadastrados));
 	}
 	
 	
 	// Status 201 quando cadastro restaurante correto
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornar201_QuandoCadastrarRestaurante() {
 		given()
 			.body(jsonRestauranteCorreto)
@@ -136,6 +188,13 @@ public class CadastroRestauranteIT {
 	
 	// Status 201 quando cadastro restaurante correto com taxa de frete grátis e descrição obrigatória
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornar201_QuandoCadastrarRestauranteComTaxaFreteGratisComDescricaoObrigatoria() {
 		given()
 			.body(jsonRestauranteFreteGratisCorreto)
@@ -151,12 +210,20 @@ public class CadastroRestauranteIT {
 	
 	// Status 200 quando consultar restaurante existente
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarRespostaEStatusCorretos_QuandoConsultarRestauranteExistente() {
 		given()
-			.pathParam("restauranteId", restauranteMarrocos.getId())
+//			.pathParam("restauranteId", restauranteMarrocos.getId())
 			.accept(ContentType.JSON)
 		.when()
-			.get("/{restauranteId}")
+//			.get("/{restauranteId}")
+			.get(restauranteMarrocos.getId().toString())
 		.then()
 			.statusCode(HttpStatus.OK.value())
 			.body("nome", equalTo(restauranteMarrocos.getNome()));
@@ -164,18 +231,33 @@ public class CadastroRestauranteIT {
 	
 	// Status 404 quando restaurante inexistente
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarStatus404_QuandoConsultarRestauranteInexistente() {
 		given()
-			.pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
+//			.pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
 			.accept(ContentType.JSON)
 		.when()
-			.get("/{restauranteId}")
+//			.get("/{restauranteId}")
+			.get(String.valueOf(RESTAURANTE_ID_INEXISTENTE))
 		.then()
 			.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 	
 	// Status 400 quando cadastrar restaurante com cozinha inexistente
 	@Test 
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarStatus400_QuandoCadastrarRestauranteComCozinhaInexistente() {
 		given()
 			.body(jsonRestauranteCozinhaInexistente)
@@ -190,6 +272,13 @@ public class CadastroRestauranteIT {
 	
 	// Status 400 quando cadastrar restaurante com taxa de frete negativa
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarStatus400_QuandoCadastrarRestauranteComTaxaFreteNegativa() {
 		given()
 			.body(jsonRestauranteTaxaFreteNegativa)
@@ -203,7 +292,15 @@ public class CadastroRestauranteIT {
 	}
 	
 	// Status 400 quando cadastrar restaurante com taxa de frete grátis sem descrição obrigatória
+	// habilitar annotation no model de input
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
 	public void deveRetornarStatus400_QuandoCadastrarRestauranteComFreteGratisSemDescricaoObrigatoria() {
 		given()
 			.body(jsonRestauranteTaxaFreteGratisSemDescricaoObrigatoria)
@@ -217,8 +314,16 @@ public class CadastroRestauranteIT {
 			.body("objects[0].userMessage", equalTo("descrição obrigatória inválida"));
 	}
 	
+	
 	// Testes fornecidos de exemplo
 	@Test
+	@WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
     public void deveRetornarStatus400_QuandoCadastrarRestauranteSemTaxaFrete() {
         given()
             .body(jsonRestauranteSemFrete)
@@ -232,6 +337,13 @@ public class CadastroRestauranteIT {
     }
 
     @Test
+    @WithMockUser(
+			username = "joao.ger@algafood.com",
+			authorities = {
+					"SCOPE_READ",
+					"SCOPE_WRITE",
+					"EDITAR_RESTAURANTES"
+			})
     public void deveRetornarStatus400_QuandoCadastrarRestauranteSemCozinha() {
         given()
             .body(jsonRestauranteSemCozinha)
@@ -270,6 +382,16 @@ public class CadastroRestauranteIT {
 		restauranteMarrocos = restauranteRepository.save(restauranteMarrocos);
 		
 		quantidadeRestaurantesCadastrados = (int) restauranteRepository.count();
+		
+		// Devido a obrigatoriedade Endereco.Cidade
+		Estado estado = new Estado();
+		estado.setNome("MT");
+		estadoRepository.save(estado);
+		
+		Cidade cidade = new Cidade();
+		cidade.setNome("Cuiabá");
+		cidade.setEstado(estado);
+		cidadeRepository.save(cidade);
 	}
 
 }
