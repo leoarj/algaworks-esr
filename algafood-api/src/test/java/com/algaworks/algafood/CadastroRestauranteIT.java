@@ -160,7 +160,8 @@ public class CadastroRestauranteIT {
 		.when()
 			.get()
 		.then()
-			// java.lang.AssertionError: 1 expectation failed. JSON path doesn't match.
+			// No projeto foi implementado HATEOAS com HAL
+			// Para evitar: java.lang.AssertionError: 1 expectation failed. JSON path doesn't match.
 			.body("_embedded.restaurantes", hasSize(quantidadeRestaurantesCadastrados));
 	}
 	
