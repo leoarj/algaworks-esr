@@ -1,0 +1,6 @@
+services:
+  algafood-api:
+    image: leoarj/algafood-api
+
+  algafood-proxy:
+    image: leoarj/algafood-proxy
