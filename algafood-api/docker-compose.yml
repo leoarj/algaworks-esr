@@ -14,14 +14,13 @@ services:
     # em caso de Erro: Unable to load authentication plugin 'caching_sha2_password'.
     #command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: "root123456"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "13306:3306"
+      - "3306:3306"
     networks:
       - algafood-network
     healthcheck:
-      test: ["CMD", "mysql", "-u", "root", "-proot123456", "--execute", "SHOW DATABASES;"]
-      #test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-proot1234"]
+      test: ["CMD", "mysql", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "--execute", "SHOW DATABASES;"]
       interval: 5s
       retries: 3
       start_period: 30s
@@ -40,8 +39,9 @@ services:
       DB_HOST: algafood-mysql
       # Para habilitar o armazenamento de sessão (Authorization Server HTTP Session (Spring oAuth2)) no Redis
       SPRING_SESSION_STORE_TYPE: redis
-      SPRING_REDIS_HOST: algafood-redis
+      SPRING_DATA_REDIS_HOST: algafood-redis
       SPRING_PROFILES_ACTIVE: development
+    #  Habilitar mapeamento de portas em ambiente de desenvolvimento (IDE)
     #ports:
      # - "8080:8080"
     networks:
