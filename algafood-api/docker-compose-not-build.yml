@@ -1,0 +1,5 @@
+# https://docs.docker.com/compose/how-tos/multiple-compose-files/include/
+include:
+  - path : 
+      - docker-compose.yml
+      - not-build-override.yml

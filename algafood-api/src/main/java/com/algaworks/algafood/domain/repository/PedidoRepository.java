@@ -14,6 +14,7 @@ import com.algaworks.algafood.domain.model.Pedido;
 public interface PedidoRepository extends CustomJpaRepository<Pedido, Long>,
 	JpaSpecificationExecutor<Pedido> {
 	
+	@Query("from Pedido p join fetch p.itens ip join fetch ip.produto join fetch p.cliente join fetch p.restaurante r join fetch r.cozinha join fetch p.enderecoEntrega.cidade ce join fetch ce.estado join fetch p.formaPagamento where p.codigo = :codigo")
 	Optional<Pedido> findByCodigo(String codigo);
 	
 	// Consulta otimizad para findAll (evitar problema N+1)
