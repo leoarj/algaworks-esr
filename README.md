@@ -63,106 +63,106 @@ de entrega de comida, como as listadas abaixo:
 ##### Recursos e Sub-recursos
 
 - ***Root Entry Point (/v1)***
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem dos *endpoints* disponíveis na API**
+	- ![GET](files/badges/get.svg) - **Listagem dos *endpoints* disponíveis na API**
 - ***Host Check (/v1/hostcheck)***
-	- ![GET](../workspace/files/badges/get.svg) - **Verificação de integridade com retorno de status `200-OK` com endereço IP do host**
+	- ![GET](files/badges/get.svg) - **Verificação de integridade com retorno de status `200-OK` com endereço IP do host**
 - ***Estados (/v1/estados)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Remoção**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![DELETE](files/badges/delete.svg) - **Remoção**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
 - ***Cidades (/v1/cidades)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Remoção**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![DELETE](files/badges/delete.svg) - **Remoção**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
 - ***Permissões (/v1/permissoes)***
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![GET](files/badges/get.svg) - **Listagem**
 - ***Grupos (/v1/grupos)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Remoção**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![DELETE](files/badges/delete.svg) - **Remoção**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
     - ***Grupos - Permissões (/v1/restaurantes/{grupoId}/permissoes)***
-		- ![PUT](../workspace/files/badges/put.svg) - **Associação**
-		- ![DELETE](../workspace/files/badges/delete.svg) - **Desassociação**
-		- ![GET](../workspace/files/badges/get.svg) - **Listagem com base no ID do grupo**
+		- ![PUT](files/badges/put.svg) - **Associação**
+		- ![DELETE](files/badges/delete.svg) - **Desassociação**
+		- ![GET](files/badges/get.svg) - **Listagem com base no ID do grupo**
 - ***Usuários (/v1/usuarios)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![PUT](../workspace/files/badges/put.svg) - **Alteração de senha**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![PUT](files/badges/put.svg) - **Alteração de senha**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
     - ***Usuários - Grupos (/v1/restaurantes/{usuarioId}/grupos)***
-		- ![PUT](../workspace/files/badges/put.svg) - **Associação**
-		- ![DELETE](../workspace/files/badges/delete.svg) - **Desassociação**
-		- ![GET](../workspace/files/badges/get.svg) - **Listagem com base no ID do usuário**
+		- ![PUT](files/badges/put.svg) - **Associação**
+		- ![DELETE](files/badges/delete.svg) - **Desassociação**
+		- ![GET](files/badges/get.svg) - **Listagem com base no ID do usuário**
 - ***Cozinhas (/v1/cozinhas)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Remoção**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![DELETE](files/badges/delete.svg) - **Remoção**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
 - ***Formas de pagamento (/v1/formas-pagamento)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Remoção**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![DELETE](files/badges/delete.svg) - **Remoção**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
 - ***Restaurantes (/v1/restaurantes)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem (Todos e por projeção de nome)**
-	- ![PUT](../workspace/files/badges/put.svg) - **Ativação (Individual/Múltiplos)**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Desativação (Individual/Múltiplos)**
-	- ![PUT](../workspace/files/badges/put.svg) - **Abertura**
-	- ![DELETE](../workspace/files/badges/delete.svg) - **Fechamento**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![PUT](files/badges/put.svg) - **Atualização**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem (Todos e por projeção de nome)**
+	- ![PUT](files/badges/put.svg) - **Ativação (Individual/Múltiplos)**
+	- ![DELETE](files/badges/delete.svg) - **Desativação (Individual/Múltiplos)**
+	- ![PUT](files/badges/put.svg) - **Abertura**
+	- ![DELETE](files/badges/delete.svg) - **Fechamento**
     - ***Formas de Pagamento (/v1/restaurantes/{restauranteId}/formas-pagamento)***
-		- ![PUT](../workspace/files/badges/put.svg) - **Associação**
-		- ![DELETE](../workspace/files/badges/delete.svg) - **Desassociação**
-		- ![GET](../workspace/files/badges/get.svg) - **Listagem com base no ID do restaurante**
+		- ![PUT](files/badges/put.svg) - **Associação**
+		- ![DELETE](files/badges/delete.svg) - **Desassociação**
+		- ![GET](files/badges/get.svg) - **Listagem com base no ID do restaurante**
     - ***Usuários responsáveis (/v1/restaurantes/{restauranteId}/responsaveis)***
-		- ![PUT](../workspace/files/badges/put.svg) - **Associação**
-		- ![DELETE](../workspace/files/badges/delete.svg) - **Desassociação**
-		- ![GET](../workspace/files/badges/get.svg) - **Listagem com base no ID do restaurante**
+		- ![PUT](files/badges/put.svg) - **Associação**
+		- ![DELETE](files/badges/delete.svg) - **Desassociação**
+		- ![GET](files/badges/get.svg) - **Listagem com base no ID do restaurante**
     - ***Produtos (/v1/restaurantes/{restauranteId}/produtos)***
-		- ![POST](../workspace/files/badges/post.svg) - **Criação**
-		- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-		- ![GET](../workspace/files/badges/get.svg) - **Busca**
-		- ![GET](../workspace/files/badges/get.svg) - **Listagem com base no ID do restaurante**
+		- ![POST](files/badges/post.svg) - **Criação**
+		- ![PUT](files/badges/put.svg) - **Atualização**
+		- ![GET](files/badges/get.svg) - **Busca**
+		- ![GET](files/badges/get.svg) - **Listagem com base no ID do restaurante**
         - ***Produtos - Fotos (/v1/restaurantes/{restauranteId}/produtos{produtoId}/foto)***
-			- ![PUT](../workspace/files/badges/put.svg) - **Atualização**
-			- ![DELETE](../workspace/files/badges/delete.svg) - **Remoção**
-			- ![GET](../workspace/files/badges/get.svg) - **Busca (representação com link ou download do arquivo)**
+			- ![PUT](files/badges/put.svg) - **Atualização**
+			- ![DELETE](files/badges/delete.svg) - **Remoção**
+			- ![GET](files/badges/get.svg) - **Busca (representação com link ou download do arquivo)**
 - ***Pedidos (/v1/pedidos)***
-	- ![POST](../workspace/files/badges/post.svg) - **Criação**
-	- ![GET](../workspace/files/badges/get.svg) - **Busca**
-	- ![GET](../workspace/files/badges/get.svg) - **Listagem**
-	- ![PUT](../workspace/files/badges/put.svg) - **Confirmação**
-	- ![PUT](../workspace/files/badges/put.svg) - **Cancelamento**
-	- ![PUT](../workspace/files/badges/put.svg) - **Entrega**
+	- ![POST](files/badges/post.svg) - **Criação**
+	- ![GET](files/badges/get.svg) - **Busca**
+	- ![GET](files/badges/get.svg) - **Listagem**
+	- ![PUT](files/badges/put.svg) - **Confirmação**
+	- ![PUT](files/badges/put.svg) - **Cancelamento**
+	- ![PUT](files/badges/put.svg) - **Entrega**
 - ***OAuth2 - Authorization Server (Autenticação e Autorização)***
     - ***Token (/oauth2/token)***
-		- ![POST](../workspace/files/badges/post.svg) - **Token via client_credentials**
-		- ![POST](../workspace/files/badges/post.svg) - **Token via authorization_code PKCE**
-		- ![POST](../workspace/files/badges/post.svg) - **Token via refresh_token**
+		- ![POST](files/badges/post.svg) - **Token via client_credentials**
+		- ![POST](files/badges/post.svg) - **Token via authorization_code PKCE**
+		- ![POST](files/badges/post.svg) - **Token via refresh_token**
     - ***Authorize (/oauth2/authorize)***
-		- ![GET](../workspace/files/badges/get.svg) - **Pedido autorização para obter um token em nome do usuário**
+		- ![GET](files/badges/get.svg) - **Pedido autorização para obter um token em nome do usuário**
     - ***Revoke (oauth2/revoke)*** = *[Pedido de revogação de token]*
-		- ![POST](../workspace/files/badges/post.svg) - **Pedido de revogação de token**
+		- ![POST](files/badges/post.svg) - **Pedido de revogação de token**
     - ***Instrospect (/oauth2/introspect)***
-		- ![POST](../workspace/files/badges/post.svg) - **Verificação de informações do token**
+		- ![POST](files/badges/post.svg) - **Verificação de informações do token**
     - ***JWKS (JSON Web Key Set) (oauth2/jwks)***
-		- ![GET](../workspace/files/badges/get.svg) - **Informações de chaves criptográficas do servidor (apenas pública)**
+		- ![GET](files/badges/get.svg) - **Informações de chaves criptográficas do servidor (apenas pública)**
 
 ## Modelos EER (Banco de dados)
 ### AlgaFood API
 
-![db-mysql-err-diagram.png](../workspace/files/db-mysql-err-diagram.png)
+![db-mysql-err-diagram.png](files/db-mysql-err-diagram.png)
 
 - Entidades:
 	- **estado**
@@ -202,7 +202,7 @@ de entrega de comida, como as listadas abaixo:
 
 ### *Authorization Server (OAuth2)*
 
-![db-mysql-err-diagram-oauth2.png](../workspace/files/db-mysql-err-diagram-oauth2.png)
+![db-mysql-err-diagram-oauth2.png](files/db-mysql-err-diagram-oauth2.png)
 
 - Entidades:
 	- **oauth2_registered_client**
@@ -3048,7 +3048,7 @@ será repassado o *code verifier* para que o *authorization server* verifique se
 https://tonyxu-io.github.io/pkce-generator/
 
 #### Qual fluxo OAuth2 usar?
-![oauth2-flow-decision.jpg](../workspace/files/oauth2-flow-decision.jpg)
+![oauth2-flow-decision.jpg](files/oauth2-flow-decision.jpg)
 
 - Tipos do cliente:
 	- Público
