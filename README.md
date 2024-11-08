@@ -22,8 +22,8 @@ Projeto MVP de uma API REST para um sistema de *delivery*, baseado no curso ESR,
     - [Executar a partir das imagens do *Docker Hub*](#executar-a-partir-das-imagens-do-docker-hub)
     - [Executar a partir de compilação do projeto e construção das imagens *Docker*](#executar-a-partir-de-compilação-do-projeto-e-construção-das-imagens-docker)
 - [Resumo de tópicos explorados](#resumo-de-tópicos-explorados)
-- [Autor] (#autor)
-- [Agradecimentos] (#agradecimentos)
+- [Autor](#autor)
+- [Agradecimentos](#agradecimentos)
 - [Licença](#licença)
 
 ## Sobre
