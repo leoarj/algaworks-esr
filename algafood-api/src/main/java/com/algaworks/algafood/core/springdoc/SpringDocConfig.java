@@ -4,10 +4,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.utils.SpringDocUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,7 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.tags.Tag;
 
 @Configuration
@@ -53,6 +56,9 @@ public class SpringDocConfig {
     private static final String NOT_FOUND_RESPONSE = "NotFoundResponse";
     private static final String NOT_ACCEPTABLE_RESPONSE = "NotAcceptableResponse";
     private static final String INTERNAL_SERVER_ERROR_RESPONSE = "InternalServerErrorResponse";
+    
+    @Autowired
+    private SpringDocCustomProperties springDocCustomProperties;
 	
 	@Bean
 	public OpenAPI openAPI() {
@@ -142,6 +148,12 @@ public class SpringDocConfig {
 			// responses.addApiResponse("406", apiResponseSemRepresentacao);
 			// responses.addApiResponse("500", apiResponseErroInterno);
 			// });
+			
+			List<Server> servers = springDocCustomProperties.getResourceServersUrls().stream()
+					.map(severUrl -> new Server().url(severUrl))
+					.toList();
+			
+			openApi.servers(servers);
 		};
 	}
 	
