@@ -21,6 +21,7 @@ Projeto MVP de uma API REST para um sistema de *delivery*, baseado no curso ESR,
     - [Pré-requisitos](#pré-requisitos)
     - [Executar a partir das imagens do *Docker Hub*](#executar-a-partir-das-imagens-do-docker-hub)
     - [Executar a partir de compilação do projeto e construção das imagens *Docker*](#executar-a-partir-de-compilação-do-projeto-e-construção-das-imagens-docker)
+	- [Testar e acessar a documentação](#testar-e-acessar-a-documentação)
 - [Resumo de tópicos explorados](#resumo-de-tópicos-explorados)
 - [Autor](#autor)
 - [Agradecimentos](#agradecimentos)
@@ -281,10 +282,14 @@ Devido ser uma aplicação containerizada, a forma mais fácil de executar este 
 			- MacOS/Linux
 				```bash
 				export MYSQL_ROOT_PASSWORD="uma_senha_escolhida"
+				export SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_ID="algafood-web"
+				export SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_SECRET="web123"
 				```
 			- Windows
 				```bat
 				set MYSQL_ROOT_PASSWORD="uma_senha_escolhida"
+				set SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_ID="algafood-web"
+				set SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_SECRET="web123"
 				```
 		- Por meio de um arquivo `.env`
 			- Criar um arquivo `.env` na raíz do projeto com o seguinte conteúdo
@@ -293,6 +298,23 @@ Devido ser uma aplicação containerizada, a forma mais fácil de executar este 
 				```
 		>Obs.: Para facilidade de execução em ambiente de **testes**.<br>
 		Em **produção** não é utilizado o usuário ***root***, mas sim um usuário específico, com permissões apenas para *schema* da aplicação.
+	4. Execução por meio de docker-compose, com proxy reverso, será necessário indicar hosts para o SpringDoc/Swagger
+		- Variáveis temporárias no *shell* do sistema (a partir de um terminal/cmd)
+			- MacOS/Linux
+				```bash
+				export SPRINGDOC_SWAGGER_UI_BEHIND_PROXY_DEFAULT_HOST="http://127.0.0.1:80"
+				```
+			- Windows
+				```bat
+				set SPRINGDOC_SWAGGER_UI_BEHIND_PROXY_DEFAULT_HOST="http://127.0.0.1:80"
+				```
+		- Por meio de um arquivo `.env`
+			- Adicionar no mesmo arquivo `.env` na raíz do projeto o seguinte conteúdo
+				```env
+				SPRINGDOC_SWAGGER_UI_BEHIND_PROXY_DEFAULT_HOST="http://127.0.0.1:80"
+				```
+	>Expondo na porta `80` pois em ambiente de desenvolvimento o Nginx atenderá nessa porta<br>
+	e os containers do *algafood-api* não estão acessíveis externamente pela porta `8080`.
 
 ### Executar a partir das imagens do *Docker Hub*
 - Executar via *docker-compose* baixando diretamente as imagens (sem *build* local)
@@ -300,6 +322,12 @@ Devido ser uma aplicação containerizada, a forma mais fácil de executar este 
 	 docker compose -f docker-compose-not-build.yml up -d
 	```
 	>O comando acima vai baixar as imagens ***algafood-api*** e ***algafood-proxy*** prontas.
+
+	- Para executar mais de uma instância do serviço da API, passar o argumento `--scale`
+	```console
+	docker compose -f docker-compose-not-build.yml up -d --scale algafood-api=2
+	```
+
 - Parar execução
 	```console
 	docker compose -f docker-compose-not-build.yml down
@@ -314,14 +342,23 @@ Devido ser uma aplicação containerizada, a forma mais fácil de executar este 
 	```console
 	docker-compose up -d
 	```
-	- Para executar mais de uma instância do serviço da API, passar o argumento `--scale`
-	```console
-	docker-compose up -d --scale algafood-api=2
-	```
 - Parar execução
 	```console
 	docker-compose down
 	```
+
+### Testar e acessar a documentação]
+Dependendo da forma que a aplicação foi configurada, a URL para acessar da documentação da API pode mudar.
+
+- Com proxy reverso (Nginx), via docker compose:
+```console
+http://127.0.0.1/swagger-ui/index.html
+```
+
+- Sem proxy reverso (Nginx), ou execução na IDE:
+```console
+http://127.0.0.1:8080/swagger-ui/index.html
+```
 
 ## Resumo de tópicos explorados
 
